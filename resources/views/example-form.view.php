@@ -1,4 +1,4 @@
-<?php layout('footer') ?>
+<?php layout('header') ?>
 
 <form action="/loginForm" method="POST">
     <!-- In every post method, you need too add this to prevent CSRF attacks -->

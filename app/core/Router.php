@@ -110,7 +110,7 @@ class Router
      */
     public function renderOnlyView($view, $data = [])
     {
-        $path = Application::$ROOT_DIR . "/app/views/$view.view.php";
+        $path = Application::$ROOT_DIR . "/resources/views/$view.view.php";
 
         foreach ($data as $key => $value) {
             $$key = $value;
@@ -134,7 +134,7 @@ class Router
      */
     public function getErrorView($code)
     {
-        $path = Application::$ROOT_DIR . "/public/errors/_$code.view.php";
+        $path = Application::$ROOT_DIR . "/public/errors/_$code.html";
 
         ob_start();
         include_once $path;

@@ -16,7 +16,7 @@
 - **Migration System**: Simple migration classes for database schema management, with CLI commands.
 - **Helpers**: Utility functions for views, forms, and authentication.
 - **Modern UI**: Tailwind CSS and Flowbite integration for rapid UI development.
-- **Error Handling**: Custom error views for common HTTP errors (403, 404, 405, 419, 500).
+- **Error Handling**: Custom static HTML error views for common HTTP errors (403, 404, 405, 419, 500).
 
 ---
 
@@ -30,8 +30,6 @@ Project_root/
 │   ├── core/             # Framework core (Application, Router, Request, etc.)
 │   │   └── middlewares/  # Built-in middlewares (Auth, Guest, CSRF)
 │   ├── models/           # Models (e.g., User)
-│   └── views/            # Views and layouts
-│       └── layouts/      # Layout partials (header, footer)
 │
 ├── bootstrap/            # Bootstrap and helper files
 ├── config/               # Configuration (e.g., database.php)
@@ -41,7 +39,12 @@ Project_root/
 │   ├── assets/
 │   │   ├── css/          # Tailwind and custom CSS
 │   │   └── js/           # JS libraries (e.g., Flowbite)
-│   └── errors/           # Error views (403, 404, 405, 419, 500)
+│   └── errors/           # Static HTML error views (403, 404, 405, 419, 500)
+├── resources/
+│   ├── css/              # Source CSS (Tailwind entrypoint)
+│   ├── js/               # Source JS
+│   └── views/            # Views and layouts
+│       └── layouts/      # Layout partials (header, footer)
 ├── routes/               # Route definitions (web.php)
 ├── runtime/              # Runtime files (cache, logs, etc.)
 ├── composer.json         # Composer dependencies
@@ -172,9 +175,9 @@ If using Apache, the included `.htaccess` in `public/` enables pretty URLs:
 - Use `insert()`, `update()`, and `findOne()` for database operations
 
 ### Views
-- PHP files in `app/views/`
+- PHP view files in `resources/views/`
 - Use helper functions: `old()`, `isInvalid()`, `error()`, `flash()`, `csrf_token()`
-- Layouts in `app/views/layouts/`
+- Layouts in `resources/views/layouts/`
 
 ### Helpers
 - **layout($layout)**: Loads a layout file
@@ -183,7 +186,7 @@ If using Apache, the included `.htaccess` in `public/` enables pretty URLs:
 - **auth() / guest()**: User authentication helpers
 
 ### Error Handling
-- Custom error views for 403, 404, 405, 419 (CSRF), and 500 errors in `public/errors/`
+- Custom static HTML error views for 403, 404, 405, 419 (CSRF), and 500 errors in `public/errors/`
 
 ### CSRF Protection
 - All POST forms should include `<?= csrf_token() ?>`.

@@ -10,7 +10,7 @@ class AuthController extends Controller
 {
     public function register()
     {
-        return $this->view('auth/register', [
+        return $this->view('example-form', [
             'title' => 'Register Page',
         ]);
     }
@@ -67,4 +67,3 @@ class AuthController extends Controller
         }
     }
 }
-

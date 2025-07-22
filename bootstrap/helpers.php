@@ -19,7 +19,7 @@ function layout(string $layout)
         extract($GLOBALS['__layoutData__']);
     }
 
-    include Application::$ROOT_DIR . "/app/views/layouts/$layout.view.php";
+    include Application::$ROOT_DIR . "/resources/views/layouts/$layout.view.php";
 }
 
 /**
