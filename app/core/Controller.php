@@ -2,8 +2,6 @@
 
 namespace app\core;
 
-use app\core\middlewares\BaseMiddleware;
-
 /**
  * Class Controller
  *
