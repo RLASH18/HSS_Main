@@ -65,7 +65,7 @@ class Application
 
         if ($userId) {
             $key = $this->userClass::primaryKey();
-            $this->user = $this->userClass::findOne([$key => $userId]) ?: null;
+            $this->user = $this->userClass::where([$key => $userId]) ?: null;
         }
     }
 

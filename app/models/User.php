@@ -6,10 +6,6 @@ use app\core\Model;
 
 class User extends Model
 {
-    public string $email = '';
-    public string $password = '';
-    public string $confirmPassword = '';
-
     public static function tableName(): string
     {
         return 'users';
