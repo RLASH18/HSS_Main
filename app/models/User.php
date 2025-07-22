@@ -20,7 +20,7 @@ class User extends Model
         return 'id';
     }
 
-    public function attributes(): array
+    public static function fillable(): array
     {
         return [
             'email',
@@ -30,17 +30,16 @@ class User extends Model
 
     public static function create($data)
     {
-        $user = new self();
-        $user->email = $data['email'];
-        $user->password = password_hash($data['password'], PASSWORD_DEFAULT);
-
-        return $user->insert();
+        return static::insert([
+            'email' => $data['email'],
+            'password' => password_hash($data['password'], PASSWORD_DEFAULT)
+        ]);
     }
 
     public static function attempt($credentials)
     {
         // gets the user by email
-        $user = self::findOne(['email' => $credentials['email']]);
+        $user = self::where(['email' => $credentials['email']]);
 
         // verifies the user and password
         if (!$user || !password_verify($credentials['password'], $user->password)) {

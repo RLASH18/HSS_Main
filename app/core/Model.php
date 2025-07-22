@@ -3,71 +3,142 @@
 namespace app\core;
 
 /**
- * Abstract base class for database-backed models (ORM).
+ * Abstract base model class for all database entities.
+ *
+ * This class provides a Laravel-inspired static ORM structure with reusable
+ * methods for interacting with database records such as insert, update, delete,
+ * fetch all, find by conditions, and count.
  *
  * Responsibilities:
- * - Defines required structure for child models (must implement `tableName`, `attributes`, `primaryKey`)
- * - Provides reusable methods for inserting, updating, and finding records
+ * - Enforces table, fillable, and primary key structure in child models
+ * - Provides static helper methods for common CRUD operations
  */
 abstract class Model
 {
     /**
-     * Must return the table name associated with the model.
+     * Returns the name of the database table associated with the model.
      */
     abstract public static function tableName(): string;
 
     /**
-     * Must return the list of fillable attributes for the model.
+     * Returns the list of fillable columns allowed for insert/update.
      */
-    abstract public function attributes(): array;
+    abstract public static function fillable(): array;
 
     /**
-     * Must return the name of the primary key column.
+     * Returns the name of the table's primary key column.
      */
     abstract public static function primaryKey(): string;
 
     /**
-     * Inserts the current model instance into the database.
+     * Inserts a new record into the database using the provided data.
+     * Only fillable fields are used.
+     *
+     * @param array $data
+     * @return bool True if insert was successful
      */
-    public function insert()
+    public static function insert(array $data): bool
     {
-        $table = $this->tableName();
-        $columns = $this->attributes();
-        $placeholders = array_map(fn($column) => ":$column", $columns);
+        $data = static::filterFillable($data);
+        $table = static::tableName();
+        $columns = array_keys($data);
+        $placeholders = array_map(fn($col) => ":$col", $columns);
 
-        $stmt = self::prepare("INSERT INTO $table (" . implode(', ', $columns) . ") VALUES (" . implode(',', $placeholders) . ")");
+        $sql = "INSERT INTO $table (" . implode(', ', $columns) . ") VALUES (" . implode(', ', $placeholders) . ")";
+        $stmt = self::prepare($sql);
 
-        foreach ($columns as $column) {
-            $stmt->bindValue(":$column", $this->{$column});
+        foreach ($data as $key => $value) {
+            $stmt->bindValue(":$key", $value);
         }
 
         return $stmt->execute();
     }
 
     /**
-     * Updates the existing model instance in the database based on its ID.
+     * Updates an existing record in the database by primary key.
+     * Only fillable fields are used.
+     *
+     * @param mixed $id The value of the primary key
+     * @param array $data Key-value pairs to update
+     * @return bool True if update was successful
      */
-    public function update()
+    public static function update($id, array $data): bool
     {
-        $table = $this->tableName();
-        $columns = $this->attributes();
-        $primaryKey =static::primaryKey();
+        $data = static::filterFillable($data);
+        $table = static::tableName();
+        $primaryKey = static::primaryKey();
+        $columns = array_keys($data);
         $setClause = implode(', ', array_map(fn($col) => "$col = :$col", $columns));
 
-        $stmt = self::prepare("UPDATE $table SET $setClause WHERE $primaryKey = :$primaryKey");
+        $sql = "UPDATE $table SET $setClause WHERE $primaryKey = :$primaryKey";
+        $stmt = self::prepare($sql);
 
-        foreach ($columns as $column) {
-            $stmt->bindValue(":$column", $this->{$column});
+        foreach ($data as $key => $value) {
+            $stmt->bindValue(":$key", $value);
         }
 
-        $stmt->bindValue(":$primaryKey", $this->{$primaryKey});
+        $stmt->bindValue(":$primaryKey", $id);
         return $stmt->execute();
     }
 
     /**
-     * Finds a single record that matches the provided conditions.
+     * Deletes a record from the database by its primary key.
+     *
+     * @param mixed $id
+     * @return bool True if delete was successful
      */
-    public static function findOne(array $conditions)
+    public static function delete($id): bool
+    {
+        $table = static::tableName();
+        $primaryKey = static::primaryKey();
+
+        $sql = "DELETE FROM $table WHERE $primaryKey = :id";
+        $stmt = static::prepare($sql);
+        $stmt->bindValue(':id', $id);
+        
+        return $stmt->execute();
+    }
+
+    /**
+     * Fetches all records from the model's table.
+     *
+     * @return array List of model objects
+     */
+    public static function all(): array
+    {
+        $table = static::tableName();
+        
+        $sql = "SELECT * FROM $table";
+        $stmt = static::prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
+    }
+
+    /**
+     * Returns the total number of records in the model's table.
+     *
+     * @return int
+     */
+    public static function count(): int
+    {
+        $table = static::tableName();
+
+        $sql = "SELECT COUNT(*) FROM $table";
+        $stmt = static::prepare($sql);
+        $stmt->execute();
+
+        return (int) $stmt->fetchColumn();
+    }
+
+    /**
+     * Finds a single record matching the given conditions.
+     * Useful for fetching one user by email, etc.
+     *
+     * @param array $conditions ['column' => 'value']
+     * @return static|null The matched model object or null
+     */
+    public static function where(array $conditions)
     {
         $table = static::tableName();
         $columns = array_keys($conditions);
@@ -84,7 +155,22 @@ abstract class Model
     }
 
     /**
-     * Utility method to prepare a PDO statement using the application's DB instance.
+     * Filters incoming data to allow only fillable fields.
+     *
+     * @param array $data
+     * @return array
+     */
+    public static function filterFillable(array $data): array
+    {
+        $allowed = static::fillable();
+        return array_filter($data, fn($key) => in_array($key, $allowed), ARRAY_FILTER_USE_KEY);
+    }
+
+    /**
+     * Prepares a PDO statement using the shared application DB connection.
+     *
+     * @param string $sql
+     * @return \PDOStatement
      */
     public static function prepare(string $sql): \PDOStatement
     {
