@@ -20,7 +20,7 @@ class AuthController extends Controller
         if ($request->isPost()) {
 
             $data = $request->validate([
-                'username' => 'required',
+                'username' => 'required|unique:users,username',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:6',
                 'confirmPassword' => 'required|match:password'
