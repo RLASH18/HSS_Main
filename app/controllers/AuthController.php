@@ -10,7 +10,7 @@ class AuthController extends Controller
 {
     public function register()
     {
-        return $this->view('example-form', [
+        return $this->view('auth/register', [
             'title' => 'Register Page',
         ]);
     }
@@ -20,7 +20,8 @@ class AuthController extends Controller
         if ($request->isPost()) {
 
             $data = $request->validate([
-                'email' => 'required|email',
+                'username' => 'required',
+                'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:6',
                 'confirmPassword' => 'required|match:password'
             ]);

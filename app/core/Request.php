@@ -112,40 +112,49 @@ class Request
                 $ruleName = $rule;
                 $param = null;
 
+                // Check if the rule has a parameter (e.g., min:6, match:password)
                 if (str_contains($rule, ':')) {
                     [$ruleName, $param] = explode(':', $rule);
                 }
 
+                // Rule: required – field must not be empty
                 if ($ruleName === 'required' && !$value) {
                     $errors[$field][] = 'This field is required.';
                 }
 
+                // Rule: email – must be a valid email address format
                 if ($ruleName === 'email' && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
                     $errors[$field][] = 'Invalid email address.';
                 }
 
+                // Rule: min – string must be at least X characters long
                 if ($ruleName === 'min' && strlen($value) < (int)$param) {
                     $errors[$field][] = "Minimum of {$param} characters required.";
                 }
 
+                // Rule: max – string must not exceed X characters
                 if ($ruleName === 'max' && strlen($value) > (int)$param) {
                     $errors[$field][] = "Maximum of {$param} characters exceeded.";
                 }
 
+                // Rule: match – field must match another field (e.g., confirmPassword = password)
                 if ($ruleName === 'match' && $value !== ($data[$param] ?? '')) {
                     $errors[$field][] = "This field must match $param.";
                 }
 
+                // Rule: nullable – if empty, skip further validation for this rule
                 if ($ruleName === 'nullable' && empty($value)) {
                     continue;
                 }
 
+                // Rule: file – ensure a file is uploaded with no errors
                 if ($ruleName === 'file') {
                     if (!isset($_FILES[$field]) || $_FILES[$field]['error'] !== UPLOAD_ERR_OK) {
                         $errors[$field][] = 'Please upload a valid file.';
                     }
                 }
 
+                // Rule: unique – value must not already exist in the specified table and column
                 if ($ruleName === 'unique') {
                     [$table, $column] = explode(',', $param);
 
