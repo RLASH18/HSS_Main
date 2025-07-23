@@ -2,11 +2,6 @@
 
 namespace app\core;
 
-use app\core\middlewares\AuthMiddleware;
-use app\core\middlewares\CsrfMiddleware;
-use app\core\middlewares\GuestMiddleware;
-use Exception;
-
 /**
  * Class Application
  *
@@ -27,45 +22,46 @@ class Application
     public static Application $app;
 
     // Core components
-    public Router $router;
     public Request $request;
     public Response $response;
+    public Router $router;
     public Session $session;
     public Database $db;
+
+    /** @var Controller|null Currently resolved controller */
     public ?Controller $controller = null;
 
     /** @var string Class name used to represent the authenticated user */
-    public string $userClass;
+    public string $userModel;
 
     /** @var Model|null The currently authenticated user (null if guest) */
     public ?Model $user = null;
 
     /** @var array Map of middleware aliases to their class implementations */
-    public array $middlewareAliases = [
-        'auth' => AuthMiddleware::class,
-        'guest' => GuestMiddleware::class,
-        'csrf' => CsrfMiddleware::class
-    ];
+    public array $middlewareAliases = [];
 
     public function __construct($rootPath, array $config)
     {
-        self::$ROOT_DIR = $rootPath;            // Set global root path
-        self::$app = $this;                     // Store singleton instance
+        self::$ROOT_DIR = $rootPath;                // Set global root path
+        self::$app = $this;                         // Store singleton instance
 
-        // Initialize core services
-        $this->userClass = $config['userClass'];
-        $this->request = new Request();
+        // Load config
+        $this->userModel         = $config['userModel'];
+        $this->middlewareAliases = $config['middleware'];
+
+        // Core services
+        $this->request  = new Request();
         $this->response = new Response();
-        $this->session = new Session();
-        $this->router = new Router($this->request, $this->response);
-        $this->db = new Database($config['db']);
+        $this->session  = new Session();
+        $this->router   = new Router($this->request, $this->response);
+        $this->db       = new Database($config['db']);
 
-        // Load logged-in user from session, if available
+        // Load logged-in user if session exists
         $userId = $this->session->get('user');
 
         if ($userId) {
-            $key = $this->userClass::primaryKey();
-            $this->user = $this->userClass::where([$key => $userId]) ?: null;
+            $key = $this->userModel::primaryKey();
+            $this->user = $this->userModel::where([$key => $userId]) ?: null;
         }
     }
 
@@ -77,7 +73,7 @@ class Application
     {
         try {
             echo $this->router->resolve();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             if ($e->getCode() === 403) {
                 $this->response->setStatusCode(403);
                 echo $this->router->renderErrorPage('403');

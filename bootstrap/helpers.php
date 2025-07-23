@@ -1,12 +1,14 @@
 <?php
 
-// ------------------------------------------------------
-// GLOBAL HELPER FUNCTIONS
-// ------------------------------------------------------
-// Contains commonly used utility functions for views,
-// authentication, form handling, flash messaging, and CSRF.
-// These helpers simplify repetitive tasks across the app.
-// ------------------------------------------------------
+/*-----------------------------------------------------------
+ | GLOBAL HELPER FUNCTIONS
+ |-----------------------------------------------------------
+ | 
+ | Contains commonly used utility functions for views,
+ | authentication, form handling, flash messaging, and CSRF.
+ | These helpers simplify repetitive tasks across the app.
+ |
+ */
 
 use app\core\Application;
 
