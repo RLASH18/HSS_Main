@@ -144,7 +144,8 @@ abstract class Model
         $columns = array_keys($conditions);
         $whereClause = implode(' AND ', array_map(fn($col) => "$col = :$col", $columns));
 
-        $stmt = self::prepare("SELECT * FROM $table WHERE $whereClause");
+        $sql = "SELECT * FROM $table WHERE $whereClause";
+        $stmt = self::prepare($sql);
 
         foreach ($conditions as $key => $value) {
             $stmt->bindValue(":$key", $value);
