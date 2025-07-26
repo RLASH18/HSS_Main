@@ -45,7 +45,7 @@ function old(string $field)
  */
 function isInvalid(string $field)
 {
-    return isset($_SESSION['errors'][$field]) ? 'style="border: 1px solid #ff6666 !important; outline: none;"' : '';
+    return isset($_SESSION['errors'][$field]) ? 'style="border-color: #ef4444; outline: none; box-shadow: 0 0 0 1px #fca5a5;"' : '';
 }
 
 /**
