@@ -24,14 +24,6 @@ class User extends Model
         ];
     }
 
-    public static function create($data)
-    {
-        return static::insert([
-            'email' => $data['email'],
-            'password' => password_hash($data['password'], PASSWORD_DEFAULT)
-        ]);
-    }
-
     public static function attempt($credentials)
     {
         // gets the user by email

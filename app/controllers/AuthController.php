@@ -19,6 +19,7 @@ class AuthController extends Controller
     {
         if ($request->isPost()) {
 
+            // validate
             $data = $request->validate([
                 'username' => 'required',
                 'email' => 'required|email|unique:users,email',
@@ -26,7 +27,14 @@ class AuthController extends Controller
                 'confirmPassword' => 'required|match:password'
             ]);
 
-            if (User::create($data)) {
+            // remove the confirm password field after validation
+            unset($data['confirmPassword']);
+
+            // hash the password
+            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+
+            // insert data and show success or error message accordingly
+            if (User::insert($data)) {
                 setFlash('success', 'Registration successful');
                 redirect('/login');
             } else {
