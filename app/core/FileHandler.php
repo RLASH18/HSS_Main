@@ -51,10 +51,10 @@ class FileHandler
      * @param string|null $name  Optional custom filename.
      * @return string|null  The saved filename, or null on failure.
      */
-    public function store(string $folder = 'storage/public', ?string $name = null): ?string
+    public function store(string $folder = 'public/storage', ?string $name = null): ?string
     {
         $ext = strtolower(pathinfo($this->file['name'], PATHINFO_EXTENSION));       // Get file extension
-        $safeName = $name ?: uniqid($this->field . '_') . '.' . $ext;      // Generate unique filename if none provided
+        $safeName = $name ?: uniqid($this->field . '_') . '.' . $ext;               // Generate unique filename if none provided
         $folderPath = dirname(__DIR__, 2) . '/' . trim($folder, '/');               // Build the full path to the target folder
 
         // Create the folder if it doesn't exist

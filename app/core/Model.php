@@ -95,7 +95,7 @@ abstract class Model
         $sql = "DELETE FROM $table WHERE $primaryKey = :id";
         $stmt = static::prepare($sql);
         $stmt->bindValue(':id', $id);
-        
+
         return $stmt->execute();
     }
 
@@ -107,7 +107,7 @@ abstract class Model
     public static function all(): array
     {
         $table = static::tableName();
-        
+
         $sql = "SELECT * FROM $table";
         $stmt = static::prepare($sql);
         $stmt->execute();
@@ -129,6 +129,25 @@ abstract class Model
         $stmt->execute();
 
         return (int) $stmt->fetchColumn();
+    }
+
+    /**
+     * Finds a record by primary key.
+     *
+     * @param mixed $id
+     * @return static|null
+     */
+    public static function find($id)
+    {
+        $table = static::tableName();
+        $primaryKey = static::primaryKey();
+
+        $sql = "SELECT * FROM $table WHERE $primaryKey = :id LIMIT 1";
+        $stmt = static::prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+
+        return $stmt->fetchObject(static::class) ?: null;
     }
 
     /**
