@@ -147,10 +147,10 @@ class Request
                     continue;
                 }
 
-                // Rule: file – ensure a file is uploaded with no errors
-                if ($ruleName === 'file') {
+                // Rule: image – ensure a image is uploaded with no errors
+                if ($ruleName === 'image') {
                     if (!isset($_FILES[$field]) || $_FILES[$field]['error'] !== UPLOAD_ERR_OK) {
-                        $errors[$field][] = 'Please upload a valid file.';
+                        $errors[$field][] = 'Please upload a valid image.';
                     }
                 }
 
