@@ -1,0 +1,63 @@
+#!/usr/bin/env php
+<?php
+
+// -------------------------------
+// CLI ENTRY POINT FOR THE APP
+// -------------------------------
+
+/**
+ * The line above (#!/usr/bin/env php) is called a "shebang".
+ * It tells the operating system to run this file using the PHP interpreter,
+ * allowing you to execute it directly from the terminal like: ./console
+ */
+
+// Load the Composer autoloader and initialize the application instance.
+$app = require_once __DIR__ . '/bootstrap/app.php';
+
+// -------------------------------
+// HANDLE TERMINAL COMMAND
+// -------------------------------
+
+/**
+ * Fetch command-line arguments (e.g. `php console migrate`)
+ * $_SERVER['argv'] is an array of CLI arguments, where [0] is the script name.
+ */
+$argv = $_SERVER['argv'];
+$command = $argv[1] ?? null; // Get the first argument as the command (or null if not provided)
+
+// -------------------------------
+// CLI COMMAND ROUTING
+// -------------------------------
+
+switch ($command) {
+    // Start a local development server
+    case 'serve':
+        echo "Starting dev server at http://localhost:8080...\n";
+        $host = 'localhost';
+        $port = 8000;
+        $docRoot = __DIR__ . '/public';
+
+        // Build the command
+        $command = sprintf('php -S %s:%d -t %s', $host, $port, $docRoot);
+
+        // Run the built-in PHP server
+        passthru($command);
+        break;
+
+    // Run all new migrations (applyMigrations() reads migration files and executes them)
+    case 'migrate':
+        $app->db->applyMigrations();
+        break;
+
+    // Roll back the last applied migrations (calls `down()` method in migration classes)
+    case 'migrate:rollback':
+        $app->db->rollbackMigrations();
+        break;
+
+    // Show help message if command is not recognized or missing
+    default:
+        echo "Available commands:\n";
+        echo "  migrate             Run database migrations\n";
+        echo "  migrate:rollback    Rollback the latest migration(s)\n";
+        break;
+}
