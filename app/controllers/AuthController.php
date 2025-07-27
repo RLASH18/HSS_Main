@@ -68,7 +68,7 @@ class AuthController extends Controller
             // logs in if user valid
             if ($user) {
                 setFlash('success', 'Okairi');
-                redirect('/home');
+                redirect('/admin/inventory');
             } else {
                 setFlash('error', 'User does not exists.');
                 redirect('/login');
