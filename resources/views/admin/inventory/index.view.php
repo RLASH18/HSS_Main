@@ -1,4 +1,4 @@
-<?php layout('header') ?>
+ <?php layout('auth/header') ?>
 
 <a href="/admin/inventory/add">Add an Item</a>
 
@@ -11,6 +11,7 @@
             <th>Unit price</th>
             <th>Quantity</th>
             <th>Restock Threshold</th>
+            <th>Status</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -24,15 +25,22 @@
                 <td><?= htmlspecialchars($item->quantity) ?></td>
                 <td><?= htmlspecialchars($item->restock_threshold) ?></td>
                 <td>
+                    <?php if ($item->quantity < $item->restock_threshold): ?>
+                        <p>Low stock</p>
+                    <?php elseif ($item->quantity <= $item->restock_threshold * 1.5): ?>
+                        <p>Medium</p>
+                    <?php else: ?>
+                        <p>In stock</p>
+                    <?php endif ?>
+                </td>
+                <td>
                     <a href="/admin/inventory/show/<?= $item->id ?>">Show</a>
                     <a href="/admin/inventory/edit/<?= $item->id ?>">Edit</a>
-                    <a href=""></a>
+                    <a href="/admin/inventory/delete/<?= $item->id ?>">Delete</a>
                 </td>
             </tr>
         <?php endforeach ?>
     </tbody>
 </table>
 
-
-
-<?php layout('footer') ?>
+<?php layout('auth/footer') ?>

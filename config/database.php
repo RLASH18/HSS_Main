@@ -12,7 +12,7 @@
  */
 
 return [
-    'dsn'      => $_ENV['DB_CONNECTION'] . ":host=" . $_ENV['DB_HOST'] . ";port=" . $_ENV['DB_PORT'] . ";dbname=" . $_ENV['DB_DATABASE'],
-    'user'     => $_ENV['DB_USERNAME'],
-    'password' => $_ENV['DB_PASSWORD']
+    'dsn'      => env('DB_CONNECTION') . ":host=" . env('DB_HOST') . ";port=" . env('DB_PORT') . ";dbname=" . env('DB_DATABASE'),
+    'user'     => env('DB_USERNAME'),
+    'password' => env('DB_PASSWORD')
 ];

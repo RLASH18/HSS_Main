@@ -7,7 +7,7 @@ use app\core\FileHandler;
 use app\core\Request;
 use app\models\Inventory;
 
-class AdminController extends Controller
+class InventoryController extends Controller
 {
     public function index()
     {
@@ -50,10 +50,10 @@ class AdminController extends Controller
 
             // insert
             if (Inventory::insert($items)) {
-                setFlash('success', 'Item has been added successfully.');
+                setSweetAlert('success', 'Success!', 'Item has been added successfully.');
                 redirect('/admin/inventory');
             } else {
-                setFlash('error', 'Something went wrong. Please try again.');
+                setSweetAlert('error', 'Error!', 'Something went wrong. Please try again.');
                 redirect('/admin/inventory');
             }
         }
@@ -93,14 +93,32 @@ class AdminController extends Controller
         ]);
 
         if (Inventory::update($id, $items)) {
-            setFlash('success', 'Item updated successfully.');
+            setSweetAlert('success', 'Success!', 'Item updated successfully.');
         } else {
-            setFlash('error', 'Something went wrong. Please try again.');
+            setSweetAlert('error', 'Error!', 'Something went wrong. Please try again.');
         }
 
         return redirect('/admin/inventory');
-
     }
 
-    public function destroy() {}
+    public function delete($id)
+    {
+        $data = [
+            'title' => 'Delete Item',
+            'inventory' => Inventory::find($id)
+        ];
+
+        return $this->view('/admin/inventory/delete', $data);
+    }
+
+    public function destroy($id)
+    {
+        if (Inventory::delete($id)) {
+            setSweetAlert('success', 'Success!', 'Item deleted successfully.');
+        } else {
+            setSweetAlert('error', 'Error!', 'Failed to delete item.');
+        }
+
+        redirect('/admin/inventory');
+    }
 }

@@ -23,7 +23,7 @@ class Inventory extends Model
             'item_name',
             'description',
             'category',
-            'image',
+            'item_image',
             'unit_price',
             'quantity',
             'restock_threshold',

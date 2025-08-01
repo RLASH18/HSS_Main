@@ -1,4 +1,4 @@
-<?php layout('header') ?>
+<?php layout('auth/header') ?>
 
 <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <form action="/admin/inventory/store" method="post" enctype="multipart/form-data"
@@ -88,4 +88,4 @@
     </form>
 </div>
 
-<?php layout('footer') ?>
+<?php layout('auth/footer') ?>

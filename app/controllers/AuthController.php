@@ -46,9 +46,11 @@ class AuthController extends Controller
 
     public function login()
     {
-        return $this->view('auth/login', [
-            'title' => 'Login Page',
-        ]);
+        $data = [
+            'title' => 'Login Page'
+        ];
+
+        return $this->view('auth/login', $data);
     }
 
     public function loginForm(Request $request)

@@ -1,11 +1,11 @@
-<?php layout('header') ?>
+<?php layout('auth/header') ?>
 
 <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <form action="/admin/inventory/update/<?= $inventory->id ?>" method="post" enctype="multipart/form-data"
         class="w-full max-w-2xl p-6 space-y-6 bg-white rounded-lg shadow">
 
         <?= csrf_token() ?>
-        
+
         <!-- Supplier Name -->
         <div>
             <label for="supplier_name" class="block text-sm font-medium text-gray-700">Supplier Name</label>
@@ -85,7 +85,16 @@
             </button>
         </div>
 
+        <div>
+            <a href="/admin/inventory">
+                <button
+                    class="w-full px-4 py-2 text-white transition bg-blue-600 rounded-md hover:bg-blue-700">
+                    Back
+                </button>
+            </a>
+        </div>
+
     </form>
 </div>
 
-<?php layout('footer') ?>
+<?php layout('auth/footer') ?>

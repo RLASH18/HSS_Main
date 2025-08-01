@@ -13,6 +13,14 @@
 use app\core\Application;
 
 /**
+ * Get a value from the environment, with optional default.
+ */
+function env(string $key, $default = null)
+{
+    return $_ENV[$key] ?? $default;
+}
+
+/**
  * Loads the specified layout file and shares view data like $title, $name, etc.
  */
 function layout(string $layout)
@@ -26,7 +34,6 @@ function layout(string $layout)
 
 /**
  * Returns the previously submitted form input value, if available.
- * Useful for repopulating form fields after validation failure.
  */
 function old(string $field)
 {
@@ -45,7 +52,9 @@ function old(string $field)
  */
 function isInvalid(string $field)
 {
-    return isset($_SESSION['errors'][$field]) ? 'style="border-color: #ef4444; outline: none; box-shadow: 0 0 0 1px #fca5a5;"' : '';
+    return isset($_SESSION['errors'][$field]) 
+        ? 'style="border-color: #ef4444; outline: none; box-shadow: 0 0 0 1px #fca5a5;"' 
+        : '';
 }
 
 /**
@@ -68,14 +77,6 @@ function error(string $field)
 }
 
 /**
- * Redirects the browser to a given URL.
- */
-function redirect(string $url)
-{
-    return Application::$app->response->redirect($url);
-}
-
-/**
  * Stores a flash message in session.
  */
 function setFlash(string $key, string $message)
@@ -95,6 +96,39 @@ function flash(string $key, $class = 'alert alert-success')
     }
 
     return '';
+}
+
+/**
+ * Stores a SweetAlert message in session for display after redirect.
+ */
+function setSweetAlert(string $type, string $title, string $message)
+{
+    $_SESSION['swal'] = [
+        'type' => $type,
+        'title' => $title,
+        'message' => $message
+    ];
+}
+
+/**
+ * Renders and clears any pending SweetAlert message from session.
+ */
+function renderSweetAlert()
+{
+    if (isset($_SESSION['swal'])) {
+        $swal = $_SESSION['swal'];
+        unset($_SESSION['swal']);
+
+        echo "<script>
+            Swal.fire({
+                icon: '{$swal['type']}',
+                title: '{$swal['title']}',
+                text: '{$swal['message']}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>";
+    }
 }
 
 /**
@@ -142,4 +176,12 @@ function csrf_token(): string
 
     $token = $_SESSION['_csrf'];
     return '<input type="hidden" name="_token" value="' . htmlspecialchars($token) . '">';
+}
+
+/**
+ * Redirects the browser to a given URL.
+ */
+function redirect(string $url)
+{
+    return Application::$app->response->redirect($url);
 }

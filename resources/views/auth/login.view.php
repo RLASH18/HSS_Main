@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php layout('auth/header') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?></title>
-</head>
-
-<body>
     <form action="/loginForm" method="post">
 
         <?= csrf_token() ?>
@@ -38,6 +30,5 @@
         </div>
 
     </form>
-</body>
 
-</html>
+<?php layout('auth/footer') ?>
