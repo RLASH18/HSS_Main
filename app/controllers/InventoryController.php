@@ -30,32 +30,29 @@ class InventoryController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->isPost()) {
+        // validate
+        $items = $request->validate([
+            'supplier_name' => 'required',
+            'item_name' => 'required',
+            'description' => 'nullable',
+            'category' => 'required',
+            'item_image' => 'nullable|image',
+            'unit_price' => 'required',
+            'quantity' => 'required',
+            'restock_threshold' => 'required'
+        ]);
 
-            // validate
-            $items = $request->validate([
-                'supplier_name' => 'required',
-                'item_name' => 'required',
-                'description' => 'nullable',
-                'category' => 'required',
-                'image' => 'nullable|image',
-                'unit_price' => 'required',
-                'quantity' => 'required',
-                'restock_threshold' => 'required'
-            ]);
+        // image upload
+        $image = FileHandler::fromRequest('item_image');
+        $items['item_image'] = $image ? $image->store('public/storage/items-img') : null;
 
-            // image upload
-            $image = FileHandler::fromRequest('image');
-            $items['image'] = $image ? $image->store('public/storage/items-img') : null;
-
-            // insert
-            if (Inventory::insert($items)) {
-                setSweetAlert('success', 'Success!', 'Item has been added successfully.');
-                redirect('/admin/inventory');
-            } else {
-                setSweetAlert('error', 'Error!', 'Something went wrong. Please try again.');
-                redirect('/admin/inventory');
-            }
+        // insert
+        if (Inventory::insert($items)) {
+            setSweetAlert('success', 'Success!', 'Item has been added successfully.');
+            redirect('/admin/inventory');
+        } else {
+            setSweetAlert('error', 'Error!', 'Something went wrong. Please try again.');
+            redirect('/admin/inventory');
         }
     }
 
@@ -86,7 +83,7 @@ class InventoryController extends Controller
             'item_name' => 'required',
             'description' => 'nullable',
             'category' => 'required',
-            'image' => 'nullable',
+            'item_image' => 'nullable',
             'unit_price' => 'required',
             'quantity' => 'required',
             'restock_threshold' => 'required'

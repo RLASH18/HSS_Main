@@ -1,89 +1,98 @@
 <?php layout('auth/header') ?>
 
-<div class="flex items-center justify-center min-h-screen bg-gray-100">
-    <form action="/admin/inventory/store" method="post" enctype="multipart/form-data"
-        class="w-full max-w-2xl p-6 space-y-6 bg-white rounded-lg shadow">
+<div>
+    <form action="/admin/inventory/store" method="post" enctype="multipart/form-data">
 
         <?= csrf_token() ?>
 
         <!-- Supplier Name -->
         <div>
-            <label for="supplier_name" class="block text-sm font-medium text-gray-700">Supplier Name</label>
+            <label for="supplier_name">Supplier Name</label>
             <input type="text" name="supplier_name" id="supplier_name"
                 value="<?= old('supplier_name') ?>"
-                class="block w-full mt-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" <?= isInvalid('supplier_name') ?>>
+                <?= isInvalid('supplier_name') ?>>
             <p class="mt-1 text-sm text-red-500"><?= error('supplier_name') ?></p>
         </div>
 
         <!-- Item Name -->
         <div>
-            <label for="item_name" class="block text-sm font-medium text-gray-700">Item Name</label>
+            <label for="item_name">Item Name</label>
             <input type="text" name="item_name" id="item_name"
                 value="<?= old('item_name') ?>"
-                class="block w-full mt-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" <?= isInvalid('item_name') ?>>
+                <?= isInvalid('item_name') ?>>
             <p class="mt-1 text-sm text-red-500"><?= error('item_name') ?></p>
         </div>
 
         <!-- Description -->
         <div>
-            <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+            <label for="description">Description</label>
             <input type="text" name="description" id="description"
                 value="<?= old('description') ?>"
-                class="block w-full mt-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" <?= isInvalid('description') ?>>
+                <?= isInvalid('description') ?>>
             <p class="mt-1 text-sm text-red-500"><?= error('description') ?></p>
         </div>
 
         <!-- Category -->
         <div>
-            <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-            <input type="text" name="category" id="category"
-                value="<?= old('category') ?>"
-                class="block w-full mt-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" <?= isInvalid('category') ?>>
+            <label for="category">Category</label>
+            <select name="category" id="category" <?= isInvalid('category') ?>>
+                <option value="" disabled selected>-- Select a category --</option>
+                <option value="Hand Tools">Hand Tools</option>
+                <option value="Power Tools">Power Tools</option>
+                <option value="Construction Materials">Construction Materials</option>
+                <option value="Locks and Security">Locks and Security</option>
+                <option value="Plumbing">Plumbing</option>
+                <option value="Electrical">Electrical</option>
+                <option value="Paint and Finishes">Paint and Finishes</option>
+                <option value="Chemicals">Chemicals</option>
+            </select>
             <p class="mt-1 text-sm text-red-500"><?= error('category') ?></p>
         </div>
 
         <!-- Image -->
         <div>
-            <label for="image" class="block text-sm font-medium text-gray-700">Image</label>
-            <input type="file" name="image" id="image" accept="image/*"
-                class="block w-full mt-1 text-sm text-gray-700 border rounded-md cursor-pointer bg-gray-50 focus:outline-none" <?= isInvalid('image') ?>>
-            <p class="mt-1 text-sm text-red-500"><?= error('image') ?></p>
+            <label for="image">Item Image</label>
+            <input type="file" name="item_image" id="image" accept="image/*"
+                <?= isInvalid('item_image') ?>>
+            <p class="mt-1 text-sm text-red-500"><?= error('item_image') ?></p>
         </div>
 
         <!-- Unit Price -->
         <div>
-            <label for="unit_price" class="block text-sm font-medium text-gray-700">Unit Price</label>
+            <label for="unit_price">Unit Price</label>
             <input type="number" name="unit_price" id="unit_price" step="0.01"
                 value="<?= old('unit_price') ?>"
-                class="block w-full mt-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" <?= isInvalid('unit_price') ?>>
+                <?= isInvalid('unit_price') ?>>
             <p class="mt-1 text-sm text-red-500"><?= error('unit_price') ?></p>
         </div>
 
         <!-- Quantity -->
         <div>
-            <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
+            <label for="quantity">Quantity</label>
             <input type="number" name="quantity" id="quantity"
                 value="<?= old('quantity') ?>"
-                class="block w-full mt-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" <?= isInvalid('quantity') ?>>
+                <?= isInvalid('quantity') ?>>
             <p class="mt-1 text-sm text-red-500"><?= error('quantity') ?></p>
         </div>
 
         <!-- Restock Threshold -->
         <div>
-            <label for="restock_threshold" class="block text-sm font-medium text-gray-700">Restock Threshold</label>
+            <label for="restock_threshold">Restock Threshold</label>
             <input type="number" name="restock_threshold" id="restock_threshold"
                 value="<?= old('restock_threshold') ?>"
-                class="block w-full mt-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" <?= isInvalid('restock_threshold') ?>>
+                <?= isInvalid('restock_threshold') ?>>
             <p class="mt-1 text-sm text-red-500"><?= error('restock_threshold') ?></p>
         </div>
 
         <!-- Submit Button -->
         <div>
-            <button type="submit"
-                class="w-full px-4 py-2 text-white transition bg-blue-600 rounded-md hover:bg-blue-700">
+            <button type="submit">
                 Add item
             </button>
         </div>
+
+        <!-- Back Button -->
+        <a href="/admin/inventory">Go back</a>
 
     </form>
 </div>

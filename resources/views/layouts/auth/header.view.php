@@ -10,3 +10,5 @@
 </head>
 
 <body>
+
+    <!-- sidebar and navbar will go here -->

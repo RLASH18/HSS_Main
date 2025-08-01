@@ -1,4 +1,4 @@
-
+    <!-- shows SweetAlert -->
     <?php renderSweetAlert() ?>
 </body>
 

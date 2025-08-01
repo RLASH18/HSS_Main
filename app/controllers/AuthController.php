@@ -17,30 +17,26 @@ class AuthController extends Controller
 
     public function registerForm(Request $request)
     {
-        if ($request->isPost()) {
+        $data = $request->validate([
+            'username' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+            'confirmPassword' => 'required|match:password'
+        ]);
 
-            // validate
-            $data = $request->validate([
-                'username' => 'required',
-                'email' => 'required|email|unique:users,email',
-                'password' => 'required|min:6',
-                'confirmPassword' => 'required|match:password'
-            ]);
+        // remove the confirm password field after validation
+        unset($data['confirmPassword']);
 
-            // remove the confirm password field after validation
-            unset($data['confirmPassword']);
+        // hash the password
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
-            // hash the password
-            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-
-            // insert data and show success or error message accordingly
-            if (User::insert($data)) {
-                setFlash('success', 'Registration successful');
-                redirect('/login');
-            } else {
-                setFlash('error', 'Something went wrong');
-                redirect('/register');
-            }
+        // insert data and show success or error message accordingly
+        if (User::insert($data)) {
+            setFlash('success', 'Registration successful');
+            redirect('/login');
+        } else {
+            setFlash('error', 'Something went wrong');
+            redirect('/register');
         }
     }
 
@@ -55,26 +51,22 @@ class AuthController extends Controller
 
     public function loginForm(Request $request)
     {
-        // request method
-        if ($request->isPost()) {
+        // validate
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
-            // validate
-            $credentials = $request->validate([
-                'email' => 'required|email',
-                'password' => 'required'
-            ]);
+        // find the user
+        $user = User::attempt($credentials);
 
-            // attempt
-            $user = User::attempt($credentials);
-
-            // logs in if user valid
-            if ($user) {
-                setFlash('success', 'Okairi');
-                redirect('/admin/inventory');
-            } else {
-                setFlash('error', 'User does not exists.');
-                redirect('/login');
-            }
+        // logs in if user valid
+        if ($user) {
+            setFlash('success', 'Okairi');
+            redirect('/admin/inventory');
+        } else {
+            setFlash('error', 'User does not exists.');
+            redirect('/login');
         }
     }
 }
