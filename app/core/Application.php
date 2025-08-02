@@ -40,10 +40,14 @@ class Application
     /** @var array Map of middleware aliases to their class implementations */
     public array $middlewareAliases = [];
 
+    /** @var array Application configuration */
+    public array $config = [];
+
     public function __construct($rootPath, array $config)
     {
         self::$ROOT_DIR = $rootPath;                // Set global root path
         self::$app = $this;                         // Store singleton instance
+        $this->config = $config;                    // Store config
 
         // Load config
         $this->userModel         = $config['userModel'];

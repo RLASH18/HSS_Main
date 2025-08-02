@@ -151,23 +151,35 @@ abstract class Model
     }
 
     /**
-     * Finds a single record matching the given conditions.
-     * Useful for fetching one user by email, etc.
+     * Finds one record with conditions (supports null).
+     * Example: find user by email or id.
      *
      * @param array $conditions ['column' => 'value']
-     * @return static|null The matched model object or null
+     * @return static|null
      */
     public static function where(array $conditions)
     {
         $table = static::tableName();
         $columns = array_keys($conditions);
-        $whereClause = implode(' AND ', array_map(fn($col) => "$col = :$col", $columns));
+        $whereParts = [];
+
+        foreach ($conditions as $key => $value) {
+            if ($value === null) {
+                $whereParts[] = "$key IS NULL";
+            } else {
+                $whereParts[] = "$key = :$key";
+            }
+        }
+
+        $whereClause = implode(' AND ', $whereParts);
 
         $sql = "SELECT * FROM $table WHERE $whereClause";
         $stmt = self::prepare($sql);
 
         foreach ($conditions as $key => $value) {
-            $stmt->bindValue(":$key", $value);
+            if ($value !== null) {
+                $stmt->bindValue(":$key", $value);
+            }
         }
 
         $stmt->execute();

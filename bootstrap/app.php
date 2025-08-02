@@ -5,8 +5,9 @@
  |-----------------------------------------------------------
  | 
  | Initializes the core Application instance with essential
- | configuration such as database, middleware, and user model.
- | Loads environment variables and helper functions as needed.
+ | configuration such as database, middleware, mail,
+ | and user model. Loads environment variables and 
+ | helper functions as needed.
  |
  */
 
@@ -19,6 +20,7 @@ $dotenv->load();
 $config = [
     'userModel'  => app\models\User::class,
     'db'         => require __DIR__ . '/../config/database.php',
+    'mail'       => require __DIR__ . '/../config/mail.php',
     'middleware' => require __DIR__ . '/../config/middleware.php'
 ];
 

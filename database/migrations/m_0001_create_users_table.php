@@ -18,6 +18,9 @@ class m_0001_create_users_table
                     contact_number VARCHAR(20),
                     birthdate DATE,
                     gender ENUM('male', 'female'),
+                    email_verified_at TIMESTAMP NULL,
+                    verification_code VARCHAR(6) NULL,
+                    verification_code_expires_at TIMESTAMP NULL,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
                 ) ENGINE=INNODB;";

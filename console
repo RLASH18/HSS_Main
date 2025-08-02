@@ -32,7 +32,7 @@ $command = $argv[1] ?? null; // Get the first argument as the command (or null i
 switch ($command) {
     // Start a local development server
     case 'serve':
-        echo "Starting dev server at http://localhost:8080...\n";
+        echo "Starting dev server at http://localhost:8000...\n";
         $host = 'localhost';
         $port = 8000;
         $docRoot = __DIR__ . '/public';

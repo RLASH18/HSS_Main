@@ -10,6 +10,8 @@ Route::group(['middleware' => 'guest'], function () {
         Route::post('/loginForm', 'loginForm');
         Route::get('/register', 'register');
         Route::post('/registerForm', 'registerForm');
+        Route::get('/verify-email', 'showVerifyEmail');
+        Route::post('/verify-email-code', 'verifyEmail');
     });
 });
 
