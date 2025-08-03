@@ -10,8 +10,11 @@ namespace app\core;
  */
 class FileHandler
 {
-    protected $file;        // Uploaded file array
-    protected $field;       // Name of the input field (e.g., 'image')
+    /** Uploaded file array */
+    protected $file;
+
+    /** Name of the input field (e.g., 'image') */
+    protected $field;      
 
     /**
      * Initializes a new FileHandler instance.
@@ -68,5 +71,35 @@ class FileHandler
         }
 
         return null;
+    }
+
+    /**
+     * Deletes a file from the specified folder.
+     * Safely checks if the file exists before attempting to remove it.
+     *
+     * @param string $folder   Folder path relative to the project root.
+     * @param string $filename Name of the file to be deleted.
+     * @return bool            True if deletion was successful, false otherwise.
+     */
+    public static function delete(string $folder, string $filename): bool
+    {
+        // Return false if there's no filename provided
+        if (empty($filename)) {
+            return false;
+        }
+
+        // Build the absolute path to the folder
+        $folderPath = dirname(__DIR__, 2) . '/' . trim($folder, '/');
+
+        // Build the full path to the specific file
+        $filePath = $folderPath . '/' . $filename;
+
+        // Check if the file exists, then delete it
+        if (file_exists($filePath)) {
+            return unlink($filePath);
+        }
+
+        // File doesn't exist or cannot be deleted
+        return false;
     }
 }

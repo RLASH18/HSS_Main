@@ -1,4 +1,4 @@
-<?php layout('auth/header') ?>
+<?php layout('admin/header') ?>
 
 <form action="/admin/inventory/update/<?= $inventory->id ?>" method="post" enctype="multipart/form-data">
 
@@ -92,4 +92,4 @@
 
 </form>
 
-<?php layout('auth/footer') ?>
+<?php layout('admin/footer') ?>

@@ -1,4 +1,4 @@
-<?php layout('auth/header') ?>
+<?php layout('admin/header') ?>
 
 <div>
     <form action="/admin/inventory/store" method="post" enctype="multipart/form-data">
@@ -97,4 +97,4 @@
     </form>
 </div>
 
-<?php layout('auth/footer') ?>
+<?php layout('admin/footer') ?>

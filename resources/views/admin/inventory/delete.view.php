@@ -1,4 +1,4 @@
-<?= layout('auth/header') ?>
+<?= layout('admin/header') ?>
 
 <h2>Delete Inventory Item</h2>
 
@@ -90,4 +90,4 @@
 </div>
 
 
-<?= layout('auth/footer') ?>
+<?= layout('admin/footer') ?>

@@ -9,6 +9,9 @@ use app\models\Inventory;
 
 class InventoryController extends Controller
 {
+    /**
+     * Display all inventory items
+     */
     public function index()
     {
         $data = [
@@ -19,18 +22,20 @@ class InventoryController extends Controller
         return $this->view('admin/inventory/index', $data);
     }
 
+    /**
+     * Show the add item form
+     */
     public function create()
     {
-        $data = [
+        return $this->view('admin/inventory/create', [
             'title' => 'Add Item'
-        ];
-
-        return $this->view('admin/inventory/create', $data);
+        ]);
     }
 
+    // Handle item creation
     public function store(Request $request)
     {
-        // validate
+        // Validate form inputs
         $items = $request->validate([
             'supplier_name' => 'required',
             'item_name' => 'required',
@@ -42,20 +47,23 @@ class InventoryController extends Controller
             'restock_threshold' => 'required'
         ]);
 
-        // image upload
+        // Handle image upload
         $image = FileHandler::fromRequest('item_image');
         $items['item_image'] = $image ? $image->store('public/storage/items-img') : null;
 
-        // insert
+        // Save to database
         if (Inventory::insert($items)) {
-            setSweetAlert('success', 'Success!', 'Item has been added successfully.');
+            setSweetAlert('success', 'Added!', 'New item saved successfully.');
             redirect('/admin/inventory');
         } else {
-            setSweetAlert('error', 'Error!', 'Something went wrong. Please try again.');
+            setSweetAlert('error', 'Oops!', 'Couldn’t save the item. Try again.');
             redirect('/admin/inventory');
         }
     }
 
+    /**
+     * Show a single inventory item
+     */
     public function show($id)
     {
         $data = [
@@ -66,6 +74,9 @@ class InventoryController extends Controller
         return $this->view('admin/inventory/show', $data);
     }
 
+    /**
+     * Show the edit form for an item
+     */
     public function edit($id)
     {
         $data = [
@@ -76,8 +87,12 @@ class InventoryController extends Controller
         return $this->view('admin/inventory/update', $data);
     }
 
+    /**
+     * Handle item update
+     */
     public function update(Request $request, $id)
     {
+        // Validate update inputs
         $items = $request->validate([
             'supplier_name' => 'required',
             'item_name' => 'required',
@@ -89,15 +104,37 @@ class InventoryController extends Controller
             'restock_threshold' => 'required'
         ]);
 
-        if (Inventory::update($id, $items)) {
-            setSweetAlert('success', 'Success!', 'Item updated successfully.');
+        // Get existing inventory record
+        $existing = Inventory::find($id);
+
+        // Handle image upload if a new image is provided
+        $image = FileHandler::fromRequest('item_image');
+
+        if ($image) {
+            // delete the old image if exist
+            if (!empty($existing->item_image)) {
+                FileHandler::delete('public/storage/items-img/', $existing->item_image);
+            }
+            // Store the new image
+            $items['item_image'] = $image->store('public/storage/items-img');
         } else {
-            setSweetAlert('error', 'Error!', 'Something went wrong. Please try again.');
+            // keep the old image
+            $items['item_image'] = $existing->item_image;
+        }
+
+        // Update in database
+        if (Inventory::update($id, $items)) {
+            setSweetAlert('success', 'Updated!', 'Item info has been updated.');
+        } else {
+            setSweetAlert('error', 'Oops!', 'Couldn’t update the item.');
         }
 
         return redirect('/admin/inventory');
     }
 
+    /**
+     * Show the delete confirmation page
+     */
     public function delete($id)
     {
         $data = [
@@ -108,12 +145,24 @@ class InventoryController extends Controller
         return $this->view('/admin/inventory/delete', $data);
     }
 
+    /**
+     * Handle the actual deletion
+     */
     public function destroy($id)
     {
+        // Find the inventory item by ID
+        $item = Inventory::find($id);
+
+        // If item exists and has an image, delete the image file
+        if (!empty($item->item_image)) {
+            FileHandler::delete('public/storage/items-img/', $item->item_image);
+        }
+
+        // Delete the inventory record from the database
         if (Inventory::delete($id)) {
-            setSweetAlert('success', 'Success!', 'Item deleted successfully.');
+            setSweetAlert('success', 'Deleted!', 'Item removed from inventory.');
         } else {
-            setSweetAlert('error', 'Error!', 'Failed to delete item.');
+            setSweetAlert('error', 'Oops!', 'Failed to remove the item.');
         }
 
         redirect('/admin/inventory');

@@ -1,6 +1,7 @@
 <?php
 
 use app\core\Application;
+use database\seeders\UserSeeder;
 
 class m_0001_create_users_table
 {
@@ -27,6 +28,9 @@ class m_0001_create_users_table
 
         $db = Application::$app->db;
         $db->pdo->exec($SQL);
+
+        // Seed default admin
+        UserSeeder::seedAdmin();
     }
 
     public function down()

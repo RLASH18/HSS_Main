@@ -30,26 +30,31 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        // Attempt to authenticate
-        $authenticated = User::attempt($credentials);
+        // find the user by email
+        $user = User::where(['email' => $credentials['email']]);
 
-        if ($authenticated) {
-            // Get the currently logged-in user
-            $user = auth();
-
-            // Check if user is email verified
-            if (!$user->isEmailVerified) {
-                // Log out the user since they're not verified
-                logout();
-                setFlash('error', 'Your email is not verified. Please check your inbox.');
-                redirect('/verify-email');
-            }
-
-            setFlash('success', 'Okairi');
-            redirect('/admin/inventory');
-        } else {
-            setFlash('error', 'User does not exist or credentials are incorrect.');
+        // check if user exists and password is correct
+        if (!$user || !password_verify($credentials['password'], $user->password)) {
+            setFlash('error', 'User does not exist. Please try again.');
             redirect('/login');
+            return;
+        } 
+
+        // check if user is email verified
+        if (!$user->isEmailVerified()) {
+            setFlash('error', 'Your email is not verified yet. Please check you inbox');
+            redirect('/login');
+            return;
+        }
+
+        // log the user in
+        login($user);
+
+        // redirect based on role
+        if ($user->role === 'admin') {
+            redirect('/admin/dashboard');
+        } else {
+            redirect('/customer/home');
         }
     }
 

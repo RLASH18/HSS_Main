@@ -15,7 +15,7 @@ Route::group(['middleware' => 'guest'], function () {
     });
 });
 
-Route::group(['middleware' => 'auth', 'prefix' => '/admin'], function () {
+Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
     Route::controller(InventoryController::class, function () {
         Route::get('/inventory', 'index');
         Route::get('/inventory/add', 'create');
@@ -27,3 +27,7 @@ Route::group(['middleware' => 'auth', 'prefix' => '/admin'], function () {
         Route::post('/inventory/destroy/{id}', 'destroy');
     });
 });
+
+Route::group(['middleware' => 'auth'], function () {
+    
+}); 

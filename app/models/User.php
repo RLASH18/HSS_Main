@@ -38,22 +38,6 @@ class User extends Model
     }
 
     /**
-     * Attempt to authenticate a user by email and password.
-     * Returns true on success, or null on failure.
-     */
-    public static function attempt(array $credentials): ?bool
-    {
-        $user = self::where(['email' => $credentials['email']]);
-
-        if (!$user || !password_verify($credentials['password'], $user->password)) {
-            return null;
-        }
-
-        login($user); // Log the user into the session
-        return true;
-    }
-
-    /**
      * Mark the user's email as verified and clear the verification code.
      */
     public function markEmailAsVerified(): bool

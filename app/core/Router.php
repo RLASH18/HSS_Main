@@ -69,14 +69,34 @@ class Router
         }
 
         // Attempt to match dynamic route (e.g., /item/{id})
-        foreach ($this->routes[$method] as $routePath => $routeEntry) {
-            // Convert {param} to regex group
-            $pattern = preg_replace('#\{[a-zA-Z_][a-zA-Z0-9_]*\}#', '([^/]+)', $routePath);
-            $pattern = "#^" . $pattern . "$#";
+        if (isset($this->routes[$method])) {
+            foreach ($this->routes[$method] as $routePath => $routeEntry) {
+                // Convert {param} to regex group
+                $pattern = preg_replace('#\{[a-zA-Z_][a-zA-Z0-9_]*\}#', '([^/]+)', $routePath);
+                $pattern = "#^" . $pattern . "$#";
 
-            if (preg_match($pattern, $path, $matches)) {
-                array_shift($matches);
-                return $this->callRoute($routeEntry, $matches);
+                if (preg_match($pattern, $path, $matches)) {
+                    array_shift($matches);
+                    return $this->callRoute($routeEntry, $matches);
+                }
+            }
+        }
+
+        // Check if the path exists with another method (405 Method Not Allowed)
+        foreach ($this->routes as $registeredMethod => $routes) {
+            if (isset($routes[$path])) {
+                $this->response->setStatusCode(405);
+                return $this->renderErrorPage('405');
+            }
+
+            foreach ($routes as $routePath => $_) {
+                $pattern = preg_replace('#\{[a-zA-Z_][a-zA-Z0-9_]*\}#', '([^/]+)', $routePath);
+                $pattern = "#^" . $pattern . "$#";
+
+                if (preg_match($pattern, $path)) {
+                    $this->response->setStatusCode(405);
+                    return $this->renderErrorPage('405');
+                }
             }
         }
 

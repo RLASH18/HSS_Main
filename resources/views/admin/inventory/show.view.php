@@ -1,4 +1,4 @@
-<?php layout('auth/header') ?>
+<?php layout('admin/header') ?>
 
 <h1><?= htmlspecialchars($inventory->item_name) ?></h1>
 <p>Supplier: <?= htmlspecialchars($inventory->supplier_name) ?></p>
@@ -10,4 +10,4 @@
 </a>
 
 
-<?php layout('auth/footer') ?>
+<?php layout('admin/footer') ?>

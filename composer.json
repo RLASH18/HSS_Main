@@ -2,7 +2,8 @@
     "name": "lacdang/hss_main",
     "autoload": {
         "psr-4": {
-            "app\\": "app/"
+            "app\\": "app/",
+            "database\\": "database/"
         }
     },
     "authors": [

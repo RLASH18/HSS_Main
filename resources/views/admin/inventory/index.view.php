@@ -1,4 +1,4 @@
- <?php layout('auth/header') ?>
+ <?php layout('admin/header') ?>
 
 <a href="/admin/inventory/add">Add an Item</a>
 
@@ -43,4 +43,4 @@
     </tbody>
 </table>
 
-<?php layout('auth/footer') ?>
+<?php layout('admin/footer') ?>
