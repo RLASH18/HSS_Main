@@ -38,6 +38,14 @@ class User extends Model
     }
 
     /**
+     * Get all orders for this user
+     */
+    public function orders()
+    {
+        return $this->hasMany(Orders::class, 'user_id');
+    }
+
+    /**
      * Mark the user's email as verified and clear the verification code.
      */
     public function markEmailAsVerified(): bool

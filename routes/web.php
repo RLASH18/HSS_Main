@@ -2,6 +2,7 @@
 
 use app\controllers\InventoryController;
 use app\controllers\AuthController;
+use app\controllers\OrdersController;
 use app\core\Route;
 
 Route::group(['middleware' => 'guest'], function () {
@@ -26,8 +27,12 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
         Route::get('/inventory/delete/{id}', 'delete');
         Route::post('/inventory/destroy/{id}', 'destroy');
     });
+
+    Route::controller(OrdersController::class, function () {
+        Route::get('/orders', 'index');
+        Route::post('/orders/{id}/update-status', 'updateStatus');
+        Route::post('/orders/{id}/cancel', 'cancel');
+    });
 });
 
-Route::group(['middleware' => 'auth'], function () {
-    
-}); 
+Route::group(['middleware' => 'auth'], function () {});

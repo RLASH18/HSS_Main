@@ -31,4 +31,12 @@ class Inventory extends Model
             'updated_at'
         ];
     }
+
+    /**
+     * Get all order items for this inventory item
+     */
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItems::class, 'item_id');
+    }
 }
