@@ -66,9 +66,16 @@ class InventoryController extends Controller
      */
     public function show($id)
     {
+        $inventory = Inventory::find($id);
+
+        if (!$inventory) {
+            setSweetAlert('error', 'Oops!', 'Item not found.');
+            redirect('/admin/inventory');
+        }
+
         $data = [
             'title' => 'Inventory Item',
-            'inventory' => Inventory::find($id)
+            'inventory' => $inventory
         ];
 
         return $this->view('admin/inventory/show', $data);

@@ -29,7 +29,7 @@ class OrderItems extends Model
     /**
      * Get the inventory item details
      */
-    public function item()
+    public function items()
     {
         return $this->belongsTo(Inventory::class, 'item_id');
     }

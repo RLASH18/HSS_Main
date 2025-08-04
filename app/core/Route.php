@@ -6,7 +6,8 @@ namespace app\core;
  * Class Route
  *
  * Static helper for registering GET and POST routes to the main router.
- * Supports controller binding, route grouping, and middleware attachment.
+ * Supports direct view rendering, controller binding, route grouping,
+ * and middleware attachment.
  */
 class Route
 {
@@ -14,6 +15,30 @@ class Route
      * Temporarily stores the current controller class for grouped routes.
      */
     protected static ?string $currentController = null;
+
+    /**
+     * Registers a GET route that renders a view file directly.
+     *
+     * @param string $path The route URL path
+     * @param string $viewName The view name using dot or slash notation
+     * @return RouteEntry
+     */
+    public static function view(string $path, string $viewName): RouteEntry
+    {
+        $callback = function () use ($viewName) {
+            $viewFile = Application::$ROOT_DIR . "/resources/views/$viewName.view.php";
+
+            if (!file_exists($viewFile)) {
+                Application::$app->response->setStatusCode(404);
+                echo Application::$app->router->renderErrorPage('404');
+                exit;
+            }
+
+            require $viewFile;
+        };
+
+        return self::registerRoute('get', $path, $callback);
+    }
 
     /**
      * Registers a GET route.

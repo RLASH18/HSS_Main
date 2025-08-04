@@ -33,7 +33,7 @@ class Controller
      * @param array $data       Data to inject into the template
      * @return string           Rendered email HTML content
      */
-    public function renderEmail(string $template, array $data = []): string
+    public function mailView(string $template, array $data = []): string
     {
         extract($data);
         ob_start();

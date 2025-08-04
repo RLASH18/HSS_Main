@@ -6,6 +6,7 @@ use app\controllers\OrdersController;
 use app\core\Route;
 
 Route::group(['middleware' => 'guest'], function () {
+    Route::view('/', 'welcome');
     Route::controller(AuthController::class, function () {
         Route::get('/login', 'login');
         Route::post('/loginForm', 'loginForm');
@@ -30,6 +31,7 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
 
     Route::controller(OrdersController::class, function () {
         Route::get('/orders', 'index');
+        Route::get('/orders/{id}', 'show');
         Route::post('/orders/{id}/update-status', 'updateStatus');
         Route::post('/orders/{id}/cancel', 'cancel');
     });

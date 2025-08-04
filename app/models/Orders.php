@@ -40,4 +40,22 @@ class Orders extends Model
     {
         return $this->hasMany(OrderItems::class, 'order_id');
     }
+
+    /**
+     * Load the order's items and their related inventory item.
+     * Useful when we need full details about the order contents.
+     */
+    public function loadItems()
+    {
+        // Load all items in this order
+        $this->orderItems = $this->orderItems();
+
+        // For each order item, load the associated inventory item
+        foreach ($this->orderItems as $item) {
+            // Assign item relation manually
+            $item->item = $item->items();
+        }
+
+        return $this;
+    }
 }

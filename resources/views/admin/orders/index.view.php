@@ -10,7 +10,8 @@
                 <p><strong>Customer:</strong> <?= $order->user->name ?></p>
 
                 <?php foreach ($order->orderItems as $orderItem): ?>
-                    <p><strong>Item name:</strong><?= $orderItem->item->item_name ?></p>
+                    <p><strong>Item name:</strong><?= $orderItem->items->item_name ?></p>
+                    <p><strong>Item quantity:</strong><?= $orderItem->quantity ?></p>
                 <?php endforeach ?>
 
                 <p><strong>Amount:</strong> ₱<?= number_format($order->total_amount, 2) ?></p>
@@ -19,18 +20,31 @@
 
                 <form method="POST" action="/admin/orders/<?= $order->id ?>/update-status">
                     <?= csrf_token() ?>
-                    <select name="status" class="mt-2 border rounded p-1">
-                        <option value="pending" <?= $order->status === 'pending' ? 'selected' : '' ?>>Pending</option>
-                        <option value="confirmed" <?= $order->status === 'confirmed' ? 'selected' : '' ?>>Confirmed</option>
-                        <option value="assembled" <?= $order->status === 'assembled' ? 'selected' : '' ?>>Assembled</option>
-                        <option value="shipped" <?= $order->status === 'shipped' ? 'selected' : '' ?>>Shipped</option>
-                        <option value="delivered" <?= $order->status === 'delivered' ? 'selected' : '' ?>>Delivered</option>
-                    </select>
-                    <button type="submit" class="ml-2 bg-yellow-500 text-white px-4 py-1 rounded">Update</button>
+
+                    <?php if ($order->status === 'pending'): ?>
+                        <input type="hidden" name="status" value="confirmed">
+                        <button type="submit" class="ml-2 bg-yellow-500 text-white px-4 py-1 rounded">Confirmed</button>
+                    <?php elseif ($order->status === 'confirmed'): ?>
+                        <input type="hidden" name="status" value="assembled">
+                        <button type="submit" class="ml-2 bg-yellow-500 text-white px-4 py-1 rounded">Assembled</button>
+                    <?php elseif ($order->status === 'assembled'): ?>
+                        <input type="hidden" name="status" value="shipped">
+                        <button type="submit" class="ml-2 bg-yellow-500 text-white px-4 py-1 rounded">Shipped</button>
+                    <?php elseif ($order->status === 'shipped'): ?>
+                        <input type="hidden" name="status" value="delivered">
+                        <button type="submit" class="ml-2 bg-yellow-500 text-white px-4 py-1 rounded">Delivered</button>
+                    <?php elseif ($order->status === 'delivered'): ?>
+                        <input type="hidden" name="status" value="paid">
+                        <button type="submit" class="ml-2 bg-yellow-500 text-white px-4 py-1 rounded">Paid</button>
+                    <?php endif ?>
                 </form>
 
                 <form method="POST" action="/admin/orders/<?= $order->id ?>/cancel" class="mt-2">
-                    <button type="submit" class="bg-red-500 text-white px-4 py-1 rounded">Cancel Order</button>
+                    <?= csrf_token() ?>
+                    
+                    <?php if ($order->status === 'pending'): ?>
+                        <button type="submit" class="bg-red-500 text-white px-4 py-1 rounded">Cancel Order</button>
+                    <?php endif ?>
                 </form>
             </div>
         <?php endforeach; ?>

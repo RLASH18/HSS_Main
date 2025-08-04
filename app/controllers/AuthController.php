@@ -95,7 +95,7 @@ class AuthController extends Controller
         if (User::insert($data)) {
             // Send verification email
             $subject = 'Verify your email address';
-            $body = $this->renderEmail('verification', [
+            $body = $this->mailView('verification', [
                 'code' => $data['verification_code']
             ]);
 
