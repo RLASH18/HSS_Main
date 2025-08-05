@@ -33,7 +33,7 @@ class UserSeeder
             ':username' => $username,
             ':email' => $email,
             ':password' => $password,
-            'role' => $role,
+            ':role' => $role,
             ':email_verified_at' => $verified
         ]);
     }
