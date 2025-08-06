@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\core\Controller;
 use app\core\Request;
+use app\models\Billings;
 use app\models\Inventory;
 use app\models\Orders;
 use app\services\MailService;
@@ -15,9 +16,12 @@ class OrdersController extends Controller
      */
     public function index()
     {
+        // Eager-load user and nested item info
+        $order = Orders::with(['user', 'orderItems.items']);
+
         $data = [
             'title' => 'Customer Orders',
-            'orders' => Orders::with(['user', 'orderItems.items']) // Eager-load user and nested item info
+            'orders' => $order
         ];
 
         return $this->view('admin/orders/index', $data);
@@ -28,13 +32,7 @@ class OrdersController extends Controller
      */
     public function show($id)
     {
-        $order = Orders::find($id);
-
-        if (!$order) {
-            setSweetAlert('error', 'Oops!', 'Order not found.');
-            redirect('/admin/orders/');
-            return;
-        }
+        $order = $this->findOrderOrFail($id);
 
         $data = [
             'title' => 'Order Details',
@@ -55,13 +53,7 @@ class OrdersController extends Controller
         ]);
 
         // Fetch order
-        $order = Orders::find($id);
-
-        if (!$order) {
-            setSweetAlert('error', 'Oops!', 'Order not found.');
-            redirect('/admin/orders/');
-            return;
-        }
+        $order = $this->findOrderOrFail($id);
 
         // Check if this is a new order confirmation
         $isConfirmingOrder = ($status['status'] === 'confirmed' && $order->status !== 'confirmed');
@@ -70,9 +62,13 @@ class OrdersController extends Controller
         if ($isConfirmingOrder) {
             foreach ($order->orderItems() as $orderItem) {
                 $inventory = Inventory::find($orderItem->item_id);
-                
+
                 if (!$inventory || $inventory->quantity < $orderItem->quantity) {
-                    setSweetAlert('error', 'Insufficient Stock!', "Only " . ($inventory ? $inventory->quantity : 0) . " items available, but customer ordered {$orderItem->quantity}.");
+                    setSweetAlert(
+                        'error',
+                        'Insufficient Stock!',
+                        "Only " . ($inventory ? $inventory->quantity : 0) . " items available, but customer ordered {$orderItem->quantity}."
+                    );
                     redirect('/admin/orders');
                     return;
                 }
@@ -81,10 +77,11 @@ class OrdersController extends Controller
 
         // Update order status
         if (Orders::update($id, $status)) {
-            // If confirming the order for the first time, deduct inventory and send email
+            // On first confirmation: update inventory, notify customer, and generate billing
             if ($isConfirmingOrder) {
                 $this->updateInventoryQuantities($order);
                 $this->sendOrderConfirmationEmail($order);
+                $this->generateBilling($order);
             }
             setSweetAlert('success', 'Updated!', 'Order status updated successfully.');
         } else {
@@ -99,11 +96,13 @@ class OrdersController extends Controller
      */
     public function cancel($id)
     {
+        $order = $this->findOrderOrFail($id);
+
         $status = [
-            'status' => 'cancelled'
+            'status' => 'cancelled',
         ];
 
-        if (Orders::update($id, $status)) {
+        if (Orders::update($order->id, $status)) {
             setSweetAlert('success', 'Cancelled!', 'Order cancelled successfully.');
         } else {
             setSweetAlert('error', 'Oops!', 'Failed to cancel order.');
@@ -138,6 +137,21 @@ class OrdersController extends Controller
     }
 
     /**
+     * Finds an order by ID or redirects with an error if not found.
+     */
+    private function findOrderOrFail($id)
+    {
+        $order = Orders::find($id);
+
+        if (!$order) {
+            setSweetAlert('error', 'Oops!', 'Order not found.');
+            redirect('/admin/orders');
+        }
+
+        return $order;
+    }
+
+    /**
      * Send order confirmation email to customer
      */
     private function sendOrderConfirmationEmail($order)
@@ -152,13 +166,33 @@ class OrdersController extends Controller
         $items = $order->orderItems;
 
         $subject = 'Order Confirmed - Your purchase details';
-
-        $body = $this->mailView('order-confirmed', [
+        $body = $this->view('emails/order-confirmed', [
             'user' => $user,
             'items' => $items,
             'order' => $order
         ]);
 
         MailService::send($user->email, $subject, $body);
+    }
+
+    /**
+     * Creates a billing record for the given order.
+     */
+    private function generateBilling($order)
+    {
+        // Check if a billing already exists for the given order
+        $existingBilling = Billings::whereMany(['order_id' => $order->id]);
+
+        if (empty($existingBilling)) {
+            $billings = [
+                'order_id'       => $order->id,
+                'payment_method' => 'cash',
+                'payment_status' => 'unpaid',
+                'amount_paid'    => $order->total_amount,
+                'issued_at'      => date('Y-m-d H:i:s')
+            ];
+
+            Billings::insert($billings);
+        }
     }
 }

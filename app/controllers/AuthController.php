@@ -26,19 +26,23 @@ class AuthController extends Controller
     {
         // Validate login fields
         $credentials = $request->validate([
-            'email' => 'required|email',
+            'login' => 'required',
             'password' => 'required'
         ]);
 
-        // find the user by email
-        $user = User::where(['email' => $credentials['email']]);
+        // Try finding by email first, then by username
+        if (filter_var($credentials['login'], FILTER_VALIDATE_EMAIL)) {
+            $user = User::where(['email' => $credentials['login']]);
+        } else {
+            $user = User::where(['username' => $credentials['login']]);
+        }
 
-        // check if user exists and password is correct
+        // Validate user existence and password
         if (!$user || !password_verify($credentials['password'], $user->password)) {
-            setFlash('error', 'User does not exist. Please try again.');
+            setFlash('error', 'Invalid username/email or password.');
             redirect('/login');
             return;
-        } 
+        }
 
         // check if user is email verified
         if (!$user->isEmailVerified()) {
@@ -47,7 +51,6 @@ class AuthController extends Controller
             return;
         }
 
-        // log the user in
         login($user);
 
         // redirect based on role
@@ -81,10 +84,7 @@ class AuthController extends Controller
             'confirmPassword' => 'required|match:password'
         ]);
 
-        // Remove confirmPassword from validated data
         unset($data['confirmPassword']);
-
-        // Hash the password before storing
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
         // Generate a 6-digit verification code with expiry time
@@ -94,23 +94,15 @@ class AuthController extends Controller
         // Insert new user
         if (User::insert($data)) {
             // Send verification email
-            $subject = 'Verify your email address';
-            $body = $this->mailView('verification', [
-                'code' => $data['verification_code']
-            ]);
-
-            // Attempt to send the verification email
-            $mailSent = MailService::send($data['email'], $subject, $body);
-
-            if ($mailSent) {
-                setFlash('success', 'Registration successful! Check your email to verify.');
+            if ($this->sendVerificationEmail($data['email'], $data['verification_code'])) {
+                setFlash('success', 'Registration successful! Please check your email to verify your account.');
                 redirect('/verify-email');
             } else {
-                setFlash('error', 'Something went wrong while sending the email.');
+                setFlash('error', 'Account created, but failed to send verification email.');
                 redirect('/register');
             }
         } else {
-            setFlash('error', 'Something went wrong while saving your account.');
+            setFlash('error', 'Failed to create your account. Please try again.');
             redirect('/register');
         }
     }
@@ -141,17 +133,33 @@ class AuthController extends Controller
         if (!$user) {
             setFlash('error', 'Invalid verification code.');
             redirect('/verify-email');
+            return;
         }
 
         // Check if code has expired
         if (strtotime($user->verification_code_expires_at) < time()) {
             setFlash('error', 'Verification code has expired. Please request a new one.');
             redirect('/verify-email');
+            return;
         }
 
         // Mark email as verified
         $user->markEmailAsVerified();
         setFlash('success', 'Email verified successfully. You can now login.');
         redirect('/login');
+    }
+
+    /**
+     * Send the verification email.
+     */
+    private function sendVerificationEmail($email, $code)
+    {
+        $subject = 'Verify your email address';
+        $body = $this->view('emails/verification', [
+            'code' => $code
+        ]);
+
+        // Attempt to send the verification email
+        return MailService::send($email, $subject, $body);
     }
 }

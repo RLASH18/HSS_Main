@@ -58,4 +58,12 @@ class Orders extends Model
 
         return $this;
     }
+
+    /**
+     * Get all billing records linked to this order.
+     */
+    public function billings()
+    {
+        return $this->hasMany(Billings::class, 'order_id');
+    }
 }

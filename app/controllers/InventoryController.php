@@ -14,9 +14,11 @@ class InventoryController extends Controller
      */
     public function index()
     {
+        $inventory = Inventory::all();
+
         $data = [
             'title' => 'Inventory',
-            'inventory' => Inventory::all()
+            'inventory' => $inventory
         ];
 
         return $this->view('admin/inventory/index', $data);
@@ -36,7 +38,7 @@ class InventoryController extends Controller
     public function store(Request $request)
     {
         // Validate form inputs
-        $items = $request->validate([
+        $inventory = $request->validate([
             'supplier_name' => 'required',
             'item_name' => 'required',
             'description' => 'nullable',
@@ -49,16 +51,16 @@ class InventoryController extends Controller
 
         // Handle image upload
         $image = FileHandler::fromRequest('item_image');
-        $items['item_image'] = $image ? $image->store('public/storage/items-img') : null;
+        $inventory['item_image'] = $image ? $image->store('public/storage/items-img') : null;
 
         // Save to database
-        if (Inventory::insert($items)) {
+        if (Inventory::insert($inventory)) {
             setSweetAlert('success', 'Added!', 'New item saved successfully.');
-            redirect('/admin/inventory');
         } else {
             setSweetAlert('error', 'Oops!', 'Couldn’t save the item. Try again.');
-            redirect('/admin/inventory');
         }
+
+        redirect('/admin/inventory');
     }
 
     /**
@@ -66,12 +68,7 @@ class InventoryController extends Controller
      */
     public function show($id)
     {
-        $inventory = Inventory::find($id);
-
-        if (!$inventory) {
-            setSweetAlert('error', 'Oops!', 'Item not found.');
-            redirect('/admin/inventory');
-        }
+        $inventory = $this->findInventoryOrFail($id);
 
         $data = [
             'title' => 'Inventory Item',
@@ -86,9 +83,11 @@ class InventoryController extends Controller
      */
     public function edit($id)
     {
+        $inventory = $this->findInventoryOrFail($id);
+
         $data = [
             'title' => 'Edit Inventory',
-            'inventory' => Inventory::find($id)
+            'inventory' => $inventory
         ];
 
         return $this->view('admin/inventory/update', $data);
@@ -100,7 +99,7 @@ class InventoryController extends Controller
     public function update(Request $request, $id)
     {
         // Validate update inputs
-        $items = $request->validate([
+        $inventory = $request->validate([
             'supplier_name' => 'required',
             'item_name' => 'required',
             'description' => 'nullable',
@@ -112,7 +111,7 @@ class InventoryController extends Controller
         ]);
 
         // Get existing inventory record
-        $existing = Inventory::find($id);
+        $existing = $this->findInventoryOrFail($id);
 
         // Handle image upload if a new image is provided
         $image = FileHandler::fromRequest('item_image');
@@ -123,14 +122,14 @@ class InventoryController extends Controller
                 FileHandler::delete('public/storage/items-img/', $existing->item_image);
             }
             // Store the new image
-            $items['item_image'] = $image->store('public/storage/items-img');
+            $inventory['item_image'] = $image->store('public/storage/items-img');
         } else {
             // keep the old image
-            $items['item_image'] = $existing->item_image;
+            $inventory['item_image'] = $existing->item_image;
         }
 
         // Update in database
-        if (Inventory::update($id, $items)) {
+        if (Inventory::update($id, $inventory)) {
             setSweetAlert('success', 'Updated!', 'Item info has been updated.');
         } else {
             setSweetAlert('error', 'Oops!', 'Couldn’t update the item.');
@@ -144,9 +143,11 @@ class InventoryController extends Controller
      */
     public function delete($id)
     {
+        $inventory = $this->findInventoryOrFail($id);
+
         $data = [
             'title' => 'Delete Item',
-            'inventory' => Inventory::find($id)
+            'inventory' => $inventory
         ];
 
         return $this->view('/admin/inventory/delete', $data);
@@ -157,8 +158,7 @@ class InventoryController extends Controller
      */
     public function destroy($id)
     {
-        // Find the inventory item by ID
-        $item = Inventory::find($id);
+        $item = $this->findInventoryOrFail($id);
 
         // If item exists and has an image, delete the image file
         if (!empty($item->item_image)) {
@@ -173,5 +173,20 @@ class InventoryController extends Controller
         }
 
         redirect('/admin/inventory');
+    }
+
+    /**
+     * Finds inventory by ID or redirects with an error if not found
+     */
+    private function findInventoryOrFail($id)
+    {
+        $inventory = Inventory::find($id);
+
+        if (!$inventory) {
+            setSweetAlert('error', 'Oops!', 'Item not found.');
+            redirect('/admin/inventory');
+        }
+
+        return $inventory;
     }
 }

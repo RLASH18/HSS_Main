@@ -2,6 +2,7 @@
 
 use app\controllers\InventoryController;
 use app\controllers\AuthController;
+use app\controllers\BillingController;
 use app\controllers\OrdersController;
 use app\core\Route;
 
@@ -34,6 +35,10 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
         Route::get('/orders/{id}', 'show');
         Route::post('/orders/{id}/update-status', 'updateStatus');
         Route::post('/orders/{id}/cancel', 'cancel');
+    });
+
+    Route::controller(BillingController::class, function () {
+        Route::get('/billings', 'index');
     });
 });
 

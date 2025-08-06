@@ -10,10 +10,10 @@
 
 
         <div>
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" value="<?= old('email') ?>" <?= isInvalid('email') ?>>
+            <label for="login">login</label>
+            <input type="text" name="login" id="login" value="<?= old('login') ?>" <?= isInvalid('login') ?>>
             <div class="text-red-500">
-                <p><?= error('email') ?></p>
+                <p><?= error('login') ?></p>
             </div>
         </div>
 
