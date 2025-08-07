@@ -31,6 +31,24 @@ abstract class Model
     abstract public static function primaryKey(): string;
 
     /**
+     * Magic getter for relationship properties.
+     * 
+     * @param string $name Property name
+     * @return mixed Relationship result or null
+     */
+    public function __get($name)
+    {
+        // If trying to access a relationship method as a property
+        if (method_exists($this, $name)) {
+            $result = $this->$name();
+            $this->$name = $result; // Cache the result
+            return $result;
+        }
+
+        return null;
+    }
+
+    /**
      * Inserts a new record into the database using the provided data.
      * Only fillable fields are used.
      *
@@ -233,15 +251,20 @@ abstract class Model
             $foreignKey = strtolower(self::getClassName($relatedModel)) . '_id';
         }
 
+        // Return empty object if foreign key isn't set
+        if (empty($this->$foreignKey)) {
+            return new $relatedModel();
+        }
+
         $relatedTable = $relatedModel::tableName();
         $relatedPrimaryKey = $relatedModel::primaryKey();
 
-        $sql = "SELECT * FROM $relatedTable WHERE $relatedPrimaryKey = :foreign_key";
+        $sql = "SELECT * FROM $relatedTable WHERE $relatedPrimaryKey = :foreign_key LIMIT 1";
         $stmt = self::prepare($sql);
         $stmt->bindValue(':foreign_key', $this->$foreignKey);
         $stmt->execute();
 
-        return $stmt->fetchObject($relatedModel) ?: null;
+        return $stmt->fetchObject($relatedModel) ?: new $relatedModel();
     }
 
     /**
@@ -280,37 +303,43 @@ abstract class Model
         $result = [];
 
         foreach ($models as $model) {
-            foreach ($relations as $relation) {
-                $segments = explode('.', $relation);
-                $currentModel = $model;
-
-                foreach ($segments as $index => $segment) {
-                    if (!method_exists($currentModel, $segment)) {
-                        break;
-                    }
-
-                    $related = $currentModel->$segment();
-                    $currentModel->$segment = $related;
-
-                    if (is_array($related)) {
-                        // For array relationships, load nested relationships on each item
-                        if ($index < count($segments) - 1) {
-                            $nextSegment = $segments[$index + 1];
-                            foreach ($related as $item) {
-                                if ($item && method_exists($item, $nextSegment)) {
-                                    $item->$nextSegment = $item->$nextSegment();
-                                }
-                            }
-                        }
-                        break;
-                    } else {
-                        $currentModel = $related;
-                    }
-                }
+            foreach ($relations as $relationPath) {
+                self::eagerLoadRelation($model, explode('.', $relationPath));
             }
             $result[] = $model;
         }
+
         return $result;
+    }
+
+    /**
+     * Recursively eager-load nested relationships on a model.
+     *
+     * @param object $model       The model instance.
+     * @param array  $segments    Relationship path split by dot notation.
+     */
+    private static function eagerLoadRelation(&$model, array $segments)
+    {
+        if (!$model || empty($segments)) return;
+
+        $relationName = array_shift($segments);
+
+        if (!method_exists($model, $relationName)) return;
+
+        // Get and attach the relationship
+        $related = $model->$relationName();
+        $model->$relationName = $related;
+
+        // Continue loading nested relationships if they exist
+        if (!empty($segments) && $related) {
+            if (is_array($related)) {
+                foreach ($related as &$relatedItem) {
+                    self::eagerLoadRelation($relatedItem, $segments);
+                }
+            } elseif (is_object($related)) {
+                self::eagerLoadRelation($related, $segments);
+            }
+        }
     }
 
     /**

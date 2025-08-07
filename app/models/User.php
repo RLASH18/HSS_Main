@@ -28,6 +28,7 @@ class User extends Model
     public static function fillable(): array
     {
         return [
+            'name',
             'username',
             'email',
             'password',

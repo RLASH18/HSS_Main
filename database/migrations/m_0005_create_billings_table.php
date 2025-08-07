@@ -1,7 +1,6 @@
 <?php
 
 use app\core\Application;
-use database\seeders\UserSeeder;
 
 class m_0005_create_billings_table
 {

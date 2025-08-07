@@ -66,4 +66,9 @@ class Orders extends Model
     {
         return $this->hasMany(Billings::class, 'order_id');
     }
+
+    public function delivery()
+    {
+        return $this->hasMany(Delivery::class, 'order_id');
+    }
 }

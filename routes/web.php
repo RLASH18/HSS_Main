@@ -3,6 +3,7 @@
 use app\controllers\InventoryController;
 use app\controllers\AuthController;
 use app\controllers\BillingController;
+use app\controllers\DeliveryController;
 use app\controllers\OrdersController;
 use app\core\Route;
 
@@ -39,6 +40,18 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
 
     Route::controller(BillingController::class, function () {
         Route::get('/billings', 'index');
+        Route::get('/billings/show/{id}', 'show');
+    });
+
+    Route::controller(DeliveryController::class, function () {
+        Route::get('/delivery', 'index');
+        Route::get('/delivery/create', 'create');
+        Route::post('/delivery/store', 'store');
+        Route::get('/delivery/show/{id}', 'show');
+        Route::get('/delivery/edit/{id}', 'edit');
+        Route::post('/delivery/update/{id}', 'update');
+        Route::get('/delivery/delete/{id}', 'delete');
+        Route::post('/delivery/destroy/{id}', 'destroy');
     });
 });
 

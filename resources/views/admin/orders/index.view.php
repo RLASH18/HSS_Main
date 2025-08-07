@@ -8,12 +8,8 @@
             <div class="p-4 bg-white shadow rounded-lg">
                 <h2 class="text-lg font-semibold mb-2">Order #<?= $order->id ?></h2>
                 <p><strong>Customer:</strong> <?= $order->user->name ?></p>
-
-                <?php foreach ($order->orderItems as $orderItem): ?>
-                    <p><strong>Item name:</strong><?= $orderItem->items->item_name ?></p>
-                    <p><strong>Item quantity:</strong><?= $orderItem->quantity ?></p>
-                <?php endforeach ?>
-
+                <p><strong>Item name:</strong><?= $order->orderItems[0]->items->item_name ?></p>
+                <p><strong>Item quantity:</strong><?= $order->orderItems[0]->quantity ?></p>
                 <p><strong>Amount:</strong> ₱<?= number_format($order->total_amount, 2) ?></p>
                 <p><strong>Status:</strong> <span class="badge"><?= ucfirst($order->status) ?></span></p>
                 <p><strong>Date:</strong> <?= date('M d, Y h:i A', strtotime($order->created_at)) ?></p>
@@ -41,7 +37,7 @@
 
                 <form method="POST" action="/admin/orders/<?= $order->id ?>/cancel" class="mt-2">
                     <?= csrf_token() ?>
-                    
+
                     <?php if ($order->status === 'pending'): ?>
                         <button type="submit" class="bg-red-500 text-white px-4 py-1 rounded">Cancel Order</button>
                     <?php endif ?>
