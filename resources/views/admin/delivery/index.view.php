@@ -26,8 +26,9 @@
                 <td><?= $delivery->driver_name ?></td>
                 <td><?= $delivery->scheduled_date ?></td>
                 <td>
-                    <a href="">Show</a>
-                    <a href="">Delete</a>
+                    <a href="/admin/delivery/show/<?= $delivery->id ?>">Show</a>
+                    <a href="/admin/delivery/edit/<?= $delivery->id ?>">Edit</a>
+                    <a href="/admin/delivery/delete/<?= $delivery->id ?>">Delete</a>
                 </td>
             </tr>
         <?php endforeach ?>

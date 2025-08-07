@@ -135,7 +135,7 @@ class InventoryController extends Controller
             setSweetAlert('error', 'Oops!', 'Couldn’t update the item.');
         }
 
-        return redirect('/admin/inventory');
+        redirect('/admin/inventory');
     }
 
     /**
