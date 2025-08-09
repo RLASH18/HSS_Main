@@ -5,7 +5,7 @@
  |-----------------------------------------------------------
  | 
  | Initializes the core Application instance with essential
- | configuration such as database, middleware, mail,
+ | configuration such as database, middleware, mail, sms,
  | and user model. Loads environment variables and 
  | helper functions as needed.
  |
@@ -21,6 +21,7 @@ $config = [
     'userModel'  => app\models\User::class,
     'db'         => require __DIR__ . '/../config/database.php',
     'mail'       => require __DIR__ . '/../config/mail.php',
+    'sms'        => require __DIR__ . '/../config/sms.php',
     'middleware' => require __DIR__ . '/../config/middleware.php'
 ];
 

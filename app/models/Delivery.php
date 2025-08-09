@@ -29,6 +29,9 @@ class Delivery extends Model
         ];  
     }
 
+    /**
+     * Get the order linked to this delivery record
+     */
     public function order()
     {
         return $this->belongsTo(Orders::class, 'order_id');

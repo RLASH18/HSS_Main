@@ -34,7 +34,9 @@ class InventoryController extends Controller
         ]);
     }
 
-    // Handle item creation
+    /**
+     * Handle item creation
+     */
     public function store(Request $request)
     {
         // Validate form inputs

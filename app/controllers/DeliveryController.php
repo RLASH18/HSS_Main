@@ -6,6 +6,7 @@ use app\core\Controller;
 use app\core\Request;
 use app\models\Delivery;
 use app\models\Orders;
+use app\services\SmsService;
 
 class DeliveryController extends Controller
 {
@@ -32,7 +33,9 @@ class DeliveryController extends Controller
         $orders = Orders::whereMany(['status' => 'assembled']);
 
         // Load user data for each order
-        $orders = Orders::with(['user']);
+        foreach ($orders as $o) {
+            $o->user = $o->user();
+        }
 
         return $this->view('admin/delivery/create', [
             'title' => 'Add Delivery',
@@ -55,6 +58,12 @@ class DeliveryController extends Controller
         ]);
 
         if (Delivery::insert($deliveries)) {
+            $this->notifyDeliveryDay(
+                $deliveries['order_id'],
+                $deliveries['scheduled_date'],
+                $deliveries['delivery_method'],
+                $deliveries['driver_name']
+            );
             setSweetAlert('success', 'Success', 'Delivery added successfully.');
         } else {
             setSweetAlert('error', 'Error', 'Failed to add delivery. Please try again.');
@@ -104,6 +113,12 @@ class DeliveryController extends Controller
         ]);
 
         if (Delivery::update($id, $deliveries)) {
+            $this->notifyDeliveryDay(
+                $deliveries['order_id'],
+                $deliveries['scheduled_date'],
+                $deliveries['delivery_method'],
+                $deliveries['driver_name']
+            );
             setSweetAlert('success', 'Updated', 'Delivery details have been updated.');
         } else {
             setSweetAlert('error', 'Error', 'Couldn’t update delivery. Try again.');
@@ -139,6 +154,36 @@ class DeliveryController extends Controller
         }
 
         redirect('/admin/delivery');
+    }
+
+    /**
+     *  Sends scheduled delivery/pickup SMS on the morning of the set date.
+     */
+    private function notifyDeliveryDay($orderId, $scheduledDate, $deliveryMethod, $driverName)
+    {
+        $today = date('Y-m-d');
+        $currentHour = (int) date('H'); // 24-hour format
+
+        // Only run if today is the scheduled day and it's between 7AM–8AM
+        if ($today === $scheduledDate && $currentHour >= 7 && $currentHour < 9) {
+            $order = Orders::find($orderId);
+            if (!$order) return;
+
+            $user = $order->user();
+            if (!$user || empty($user->contact_number)) return;
+
+            $phone = $user->contact_number;
+
+            if ($deliveryMethod === 'delivery') {
+                $msg = "Hi {$user->name}, your order #{$order->id} is scheduled for delivery today. Driver: {$driverName}. Thank you for building with us!\n\n🚚 [ABG Prime Builders Supplies Inc.]";
+            } elseif ($deliveryMethod === 'pickup') {
+                $msg = "Hi {$user->name}, your order #{$order->id} is ready for pickup today. We look forward to seeing you!\n\n📦 [ABG Prime Builders Supplies Inc.]";
+            } else {
+                return;
+            }
+
+            SmsService::sendSms($phone, $msg);
+        }
     }
 
     /**

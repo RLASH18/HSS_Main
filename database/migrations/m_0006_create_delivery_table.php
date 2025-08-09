@@ -15,8 +15,6 @@ class m_0006_create_delivery_table
                     actual_delivery_date DATE,
                     remarks TEXT,
                     driver_name VARCHAR(100),
-                    delivery_code VARCHAR(10),
-                    qr_token VARCHAR(64),
                     FOREIGN KEY (order_id) REFERENCES orders(id)
                 ) ENGINE=INNODB;";
 

@@ -137,21 +137,6 @@ class OrdersController extends Controller
     }
 
     /**
-     * Finds an order by ID or redirects with an error if not found.
-     */
-    private function findOrderOrFail($id)
-    {
-        $order = Orders::find($id);
-
-        if (!$order) {
-            setSweetAlert('error', 'Oops!', 'Order not found.');
-            redirect('/admin/orders');
-        }
-
-        return $order;
-    }
-
-    /**
      * Send order confirmation email to customer
      */
     private function sendOrderConfirmationEmail($order)
@@ -194,5 +179,20 @@ class OrdersController extends Controller
 
             Billings::insert($billings);
         }
+    }
+
+    /**
+     * Finds an order by ID or redirects with an error if not found.
+     */
+    private function findOrderOrFail($id)
+    {
+        $order = Orders::find($id);
+
+        if (!$order) {
+            setSweetAlert('error', 'Oops!', 'Order not found.');
+            redirect('/admin/orders');
+        }
+
+        return $order;
     }
 }

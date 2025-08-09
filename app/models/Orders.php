@@ -67,6 +67,9 @@ class Orders extends Model
         return $this->hasMany(Billings::class, 'order_id');
     }
 
+    /**
+     * Get all deliveries associated with this order
+     */
     public function delivery()
     {
         return $this->hasMany(Delivery::class, 'order_id');

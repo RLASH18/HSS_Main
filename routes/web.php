@@ -1,5 +1,6 @@
 <?php
 
+use app\controllers\AdminController;
 use app\controllers\InventoryController;
 use app\controllers\AuthController;
 use app\controllers\BillingController;
@@ -7,6 +8,10 @@ use app\controllers\DeliveryController;
 use app\controllers\OrdersController;
 use app\core\Route;
 
+
+/**
+ * Guest Routes
+ */
 Route::group(['middleware' => 'guest'], function () {
     Route::view('/', 'welcome');
     Route::controller(AuthController::class, function () {
@@ -19,7 +24,14 @@ Route::group(['middleware' => 'guest'], function () {
     });
 });
 
+/**
+ * Admin Routes
+ */
 Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
+    Route::controller(AdminController::class, function () {
+        Route::get('/dashboard', 'dashboard');
+    });
+    
     Route::controller(InventoryController::class, function () {
         Route::get('/inventory', 'index');
         Route::get('/inventory/add', 'create');
@@ -55,4 +67,7 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
     });
 });
 
+/**
+ * Auth Routes
+ */
 Route::group(['middleware' => 'auth'], function () {});

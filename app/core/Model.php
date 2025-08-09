@@ -149,6 +149,41 @@ abstract class Model
     }
 
     /**
+     * Counts records matching given conditions.
+     *
+     * @param array $conditions ['column' => 'value']
+     * @return int
+     */
+    public static function countWhere(array $conditions): int
+    {
+        $table = static::tableName();
+        $columns = array_keys($conditions);
+        $whereParts = [];
+
+        foreach ($conditions as $key => $value) {
+            if ($value === null) {
+                $whereParts[] = "$key IS NULL";
+            } else {
+                $whereParts[] = "$key = :$key";
+            }
+        }
+
+        $whereClause = implode(' AND ', $whereParts);
+
+        $sql = "SELECT COUNT(*) FROM $table WHERE $whereClause";
+        $stmt = static::prepare($sql);
+
+        foreach ($conditions as $key => $value) {
+            if ($value !== null) {
+                $stmt->bindValue(":$key", $value);
+            }
+        }
+
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
+    }
+
+    /**
      * Finds a record by primary key.
      *
      * @param mixed $id
@@ -165,6 +200,60 @@ abstract class Model
         $stmt->execute();
 
         return $stmt->fetchObject(static::class) ?: null;
+    }
+
+    /**
+     * Fetch recent records ordered by a column, with limit.
+     *
+     * @param string $orderBy Column to order by (e.g., created_at)
+     * @param string $direction Sort direction (ASC or DESC)
+     * @param int $limit Number of records to fetch
+     * @return array
+     */
+    public static function recent(string $orderBy = 'created_at', string $direction = 'DESC', int $limit = 5): array
+    {
+        $table = static::tableName();
+
+        $sql = "SELECT * FROM $table ORDER BY $orderBy $direction LIMIT :limit";
+        $stmt = static::prepare($sql);
+        $stmt->bindValue(':limit', \PDO::PARAM_INT);
+        $stmt->execute();
+
+        return  $stmt->fetchAll(\PDO::FETCH_CLASS . static::class);
+    }
+
+    /**
+     * Fetches recent records filtered by given conditions.
+     *
+     * @param array $conditions Key-value pairs for WHERE clause (e.g. ['role' => 'customer'])
+     * @param int $limit Number of recent records to fetch, defaults to 5
+     * @return array List of model objects ordered by 'created_at' descending
+     */
+    public static function recentWhere(array $conditions, string $orderBy = 'created_at', string $order = 'DESC', int $limit = 5): array
+    {
+        $table = static::tableName();
+        $whereParts = [];
+        foreach ($conditions as $key => $value) {
+            if ($value === null) {
+                $whereParts[] = "$key IS NULL";
+            } else {
+                $whereParts[] = "$key = :$key";
+            }
+        }
+        $whereClause = implode(' AND ', $whereParts);
+
+        $sql = "SELECT * FROM $table WHERE $whereClause ORDER BY $orderBy $order LIMIT :limit";
+        $stmt = self::prepare($sql);
+
+        foreach ($conditions as $key => $value) {
+            if ($value !== null) {
+                $stmt->bindValue(":$key", $value);
+            }
+        }
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 
     /**
@@ -236,6 +325,48 @@ abstract class Model
 
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
+    }
+
+    /**
+     * Get the sum of a column with optional conditions.
+     *
+     * @param string $column The column to sum.
+     * @param array $conditions Optional conditions ['column' => 'value'].
+     * @return float
+     */
+    public static function sum(string $column, array $conditions = []): float
+    {
+        $table = static::tableName();
+
+        $sql = "SELECT SUM($column) as total FROM $table";
+
+        if (!empty($conditions)) {
+            $whereParts = [];
+
+            foreach ($conditions as $key => $value) {
+                if ($value === null) {
+                    $whereParts[] = "$key IS NULL";
+                } else {
+                    $whereParts[] = "$key = :$key";
+                }
+            }
+
+            $whereClause = implode(' AND ', $whereParts);
+            $sql .= " WHERE $whereClause";
+        }
+
+        $stmt = self::prepare($sql);
+
+        foreach ($conditions as $key => $value) {
+            if ($value !== null) {
+                $stmt->bindValue(":$key", $value);
+            }
+        }
+
+        $stmt->execute();
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        return $result['total'] !== null ? (float)$result['total'] : 0.0;
     }
 
     /**
