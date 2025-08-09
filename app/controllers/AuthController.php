@@ -94,7 +94,8 @@ class AuthController extends Controller
         // Insert new user
         if (User::insert($data)) {
             // Send verification email
-            if ($this->sendVerificationEmail($data['email'], $data['verification_code'])) {
+            $sent = $this->sendVerificationEmail($data['email'], $data['verification_code']);
+            if ($sent) {
                 setFlash('success', 'Registration successful! Please check your email to verify your account.');
                 redirect('/verify-email');
             } else {
