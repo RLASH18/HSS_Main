@@ -2158,7 +2158,10 @@ input:checked + .toggle-bg {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
-.login-page-container {
+/* Log-in Page */
+
+.login-page-container,
+.register-page-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2166,8 +2169,9 @@ input:checked + .toggle-bg {
   background-color: #f8f9fa;
 }
 
-.login-container {
-  max-width: 400px;
+.login-container,
+.register-container {
+  width: 400px;
   text-align: center;
   padding: 30px;
   background-color: #fff;
@@ -2175,16 +2179,19 @@ input:checked + .toggle-bg {
   border: 1.5px solid #eceded;
 }
 
-.header-container {
+.header-container,
+.register-title {
   margin-bottom: 30px;
 }
 
-.header-container div + p {
+.header-container div + p,
+.register-title div + p {
   color: #8c7d73;
   font-size: 14px;
 }
 
-.sign-in-container {
+.sign-in-container,
+.signup-header {
   font-size: 30px;
   color: #815331;
   font-weight: bold;
@@ -2192,7 +2199,10 @@ input:checked + .toggle-bg {
 }
 
 .input-container input[type="text"],
-.input-container input[type="password"] {
+.input-container input[type="password"],
+.register-input-label input[type="text"],
+.register-input-label input[type="email"],
+.register-input-label input[type="password"] {
   margin-bottom: 10px;
   width: 95%;
   padding: 8px;
@@ -2286,6 +2296,10 @@ input[type="checkbox"] {
   margin-right: 5px;
   border-radius: 3px;
 }
+
+/* End of Log-in Page */
+
+/* Start Sign-Up Page */
 
 .hover\:border-gray-300:hover {
   --tw-border-opacity: 1;
