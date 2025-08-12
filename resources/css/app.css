@@ -2,4 +2,142 @@
 @tailwind components;
 @tailwind utilities;
 
-@import 'flowbite';
+@import "flowbite";
+
+/* Log-in Page */
+.login-page-container,
+.register-page-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.login-container,
+.register-container {
+  width: 400px;
+  text-align: center;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  border: 1.5px solid #eceded;
+}
+
+.header-container,
+.register-title {
+  margin-bottom: 30px;
+}
+
+.header-container div + p,
+.register-title div + p {
+  color: #8c7d73;
+  font-size: 14px;
+}
+
+.sign-in-container,
+.signup-header {
+  font-size: 30px;
+  color: #815331;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.input-container input[type="text"],
+.input-container input[type="password"],
+.register-input-label input[type="text"],
+.register-input-label input[type="email"],
+.register-input-label input[type="password"] {
+  margin-bottom: 10px;
+  width: 95%;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1.5px solid #eceded;
+  outline: none;
+}
+
+input::placeholder {
+  color: #8c7d73;
+}
+
+.header-container p {
+  font-size: 15px;
+}
+
+.remember {
+  text-align: left;
+  margin-bottom: 25px;
+}
+
+.remember input {
+  margin-right: 3px;
+  position: relative;
+  bottom: 2px;
+  margin-left: 5px;
+}
+
+.buttons button {
+  width: 100%;
+  padding: 8px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+h4 {
+  color: #bdbbbb;
+  text-align: center;
+  border-bottom: 1.2px solid #bdbbbb;
+  line-height: 0.1em;
+  margin: 25px 0;
+}
+
+h4 span {
+  background: #fff;
+  padding: 0 10px;
+}
+
+.buttons .sign-in {
+  background-color: #815331;
+  color: white;
+  width: 95%;
+}
+
+.buttons .sign-in:hover {
+  background-color: #643d21;
+  font-weight: bold;
+}
+
+.buttons .sign-up {
+  border: 1px solid #815331;
+  color: #815331;
+  background: #fff;
+  width: 95%;
+  margin-bottom: 5px;
+}
+
+.buttons .sign-up:hover {
+  background-color: #643d21;
+  color: white;
+  font-weight: bold;
+}
+
+.have-account {
+  font-size: 11px;
+  text-align: left;
+  width: 95%;
+  margin-left: 10px;
+  color: #8c7d73;
+}
+
+input[type="checkbox"] {
+  accent-color: black;
+  margin-right: 5px;
+  border-radius: 3px;
+}
+
+/* End of Log-in Page */
+
+/* Start Sign-Up Page */
