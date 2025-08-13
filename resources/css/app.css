@@ -26,11 +26,11 @@
 
 .header-container,
 .register-title {
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
-.header-container div + p,
-.register-title div + p {
+.header-container div+p,
+.register-title div+p {
   color: #8c7d73;
   font-size: 14px;
 }
@@ -86,6 +86,18 @@ input::placeholder {
   margin-bottom: 3px;
 }
 
+.buttons a {
+  display: inline-block;
+  padding: 8px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 3px;
+  text-decoration: none;
+  width: 100%;
+}
+
 h4 {
   color: #bdbbbb;
   text-align: center;
@@ -99,18 +111,18 @@ h4 span {
   padding: 0 10px;
 }
 
-.buttons .sign-in {
+.buttons .first {
   background-color: #815331;
   color: white;
   width: 95%;
 }
 
-.buttons .sign-in:hover {
+.buttons .first:hover {
   background-color: #643d21;
   font-weight: bold;
 }
 
-.buttons .sign-up {
+.buttons .second {
   border: 1px solid #815331;
   color: #815331;
   background: #fff;
@@ -118,7 +130,7 @@ h4 span {
   margin-bottom: 5px;
 }
 
-.buttons .sign-up:hover {
+.buttons .second:hover {
   background-color: #643d21;
   color: white;
   font-weight: bold;
@@ -141,3 +153,41 @@ input[type="checkbox"] {
 /* End of Log-in Page */
 
 /* Start Sign-Up Page */
+
+/* flash alert message */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  text-align: left;
+}
+
+.alert-success {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+.alert-error {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.alert-warning {
+  background: #fffbeb;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.alert-info {
+  background: #eff6ff;
+  color: #1e40af;
+  border-color: #bfdbfe;
+}
+/* end flash alert message */

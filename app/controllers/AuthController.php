@@ -46,7 +46,7 @@ class AuthController extends Controller
 
         // check if user is email verified
         if (!$user->isEmailVerified()) {
-            setFlash('error', 'Your email is not verified yet. Please check you inbox');
+            setFlash('info', 'Your email is not verified yet. Please check you inbox');
             redirect('/login');
             return;
         }

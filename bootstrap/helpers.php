@@ -87,14 +87,31 @@ function setFlash(string $key, string $message)
 /**
  * Retrieves and displays a flash message, styled with the given CSS class.
  */
-function flash(string $key, $class = 'alert alert-success')
+function flash(string $key, $class = null)
 {
     $message = Application::$app->session->getFlash($key);
 
     if ($message) {
-        return "<div class=\"$class\">$message</div>";
-    }
+		$icons = [
+			'success' => '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>',
+			'error'   => '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>',
+			'warning' => '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 19.07A10 10 0 1119.07 4.93 10 10 0 014.93 19.07z" /></svg>',
+			'info'    => '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 1010 10A10 10 0 0012 2z" /></svg>',
+		];
 
+		if ($class === null) {
+			$map = [
+				'success' => 'alert alert-success',
+				'error'   => 'alert alert-error',
+				'warning' => 'alert alert-warning',
+				'info'    => 'alert alert-info'
+			]; 
+			$class = $map[$key] ?? 'alert';
+		}
+
+		$icon = $icons[$key] ?? '';
+		return "<div class=\"$class\">$icon <span>$message</span></div>";
+    }
     return '';
 }
 

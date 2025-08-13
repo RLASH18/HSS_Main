@@ -1,54 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?></title>
-</head>
-
-<body>
-    <form action="/registerForm" method="post">
-
-        <?= csrf_token() ?>
-
-        <div>
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username" value="<?= old('username') ?>" <?= isInvalid('username') ?>>
-            <div class="text-red-500">
-                <p><?= error('username') ?></p>
+<?php layout('auth/header') ?>
+    <div class="register-page-container">
+        <div class="register-container">
+            <div class="register-title">
+                <div class="signup-header">
+                    <h1>Sign Up</h1>
+                </div>
+                <p>Create your account to get started.</p>
             </div>
+
+            <form action="/registerForm" method="post">
+                <?= csrf_token() ?>
+                <?= flash('success') ?>
+                <?= flash('error') ?>
+                <?= flash('info') ?>
+
+                <div class="register-input-label">
+                    <div>
+                        <input type="text" name="username" id="username" placeholder="Username" value="<?= old('username') ?>" <?= isInvalid('username') ?>>
+                        <div class="text-red-500 text-xs text-left mb-2">
+                            <p><?= error('username') ?></p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <input type="email" name="email" id="email" placeholder="Email" value="<?= old('email') ?>" <?= isInvalid('email') ?>>
+                        <div class="text-red-500 text-xs text-left mb-2">
+                            <p><?= error('email') ?></p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <input type="password" name="password" id="password" placeholder="Password" <?= isInvalid('password') ?>>
+                        <div class="text-red-500 text-xs text-left mb-2">
+                            <p><?= error('password') ?></p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" <?= isInvalid('confirmPassword') ?>>
+                        <div class="text-red-500 text-xs text-left mb-2">
+                            <p><?= error('confirmPassword') ?></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button class="first">Sign Up</button>
+                    <h4><span>OR</span></h4>
+                    <a href="/login" class="second">Sign In</a>
+
+                    <div class="have-account">
+                        <p>
+                            Already have an Account? Signin your account here
+                        </p>
+                    </div>
+                </div>
+            </form>
         </div>
+    </div>
 
-        <div>
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" value="<?= old('email') ?>" <?= isInvalid('email') ?>>
-            <div class="text-red-500">
-                <p><?= error('email') ?></p>
-            </div>
-        </div>
-
-        <div>
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" <?= isInvalid('password') ?>>
-            <div class="text-red-500">
-                <p><?= error('password') ?></p>
-            </div>
-        </div>
-
-        <div>
-            <label for="confirmPassword">Confirm Password</label>
-            <input type="password" name="confirmPassword" id="confirmPassword" <?= isInvalid('confirmPassword') ?>>
-            <div class="text-red-500">
-                <p><?= error('confirmPassword') ?></p>
-            </div>
-        </div>
-
-        <div>
-            <button type="submit">submit</button>
-        </div>
-
-    </form>
-</body>
-
-</html>
+<?php layout('auth/footer') ?>
