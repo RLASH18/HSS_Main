@@ -8,16 +8,16 @@
 </head>
 
 <body>
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px;">
-        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
-            <h2 style="color: #333;">Email Verification</h2>
-            <p style="color: #555;">
+    <div>
+        <div>
+            <h2>Email Verification</h2>
+            <p>
                 Thanks for registering! Please use the code below to verify your email:
             </p>
-            <div style="background-color: #007bff; color: white; padding: 15px; border-radius: 5px; font-size: 24px; font-weight: bold; letter-spacing: 4px; margin: 20px 0;">
+            <div>
                 <?= htmlspecialchars($code) ?>
             </div>
-            <p style="color: #888; font-size: 14px;">
+            <p>
                 This code will expire in 30 minutes. If you didn't request this, you can ignore the email.
             </p>
         </div>

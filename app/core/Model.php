@@ -216,10 +216,10 @@ abstract class Model
 
         $sql = "SELECT * FROM $table ORDER BY $orderBy $direction LIMIT :limit";
         $stmt = static::prepare($sql);
-        $stmt->bindValue(':limit', \PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
 
-        return  $stmt->fetchAll(\PDO::FETCH_CLASS . static::class);
+        return  $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 
     /**

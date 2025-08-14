@@ -8,7 +8,6 @@ use app\controllers\DeliveryController;
 use app\controllers\OrdersController;
 use app\core\Route;
 
-
 /**
  * Guest Routes
  */
@@ -30,11 +29,12 @@ Route::group(['middleware' => 'guest'], function () {
 Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
     Route::controller(AdminController::class, function () {
         Route::get('/dashboard', 'dashboard');
+        Route::post('/logout', 'logout');
     });
     
     Route::controller(InventoryController::class, function () {
         Route::get('/inventory', 'index');
-        Route::get('/inventory/add', 'create');
+        Route::get('/inventory/create', 'create');
         Route::post('/inventory/store', 'store');
         Route::get('/inventory/show/{id}', 'show');
         Route::get('/inventory/edit/{id}', 'edit');

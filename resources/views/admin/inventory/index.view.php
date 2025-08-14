@@ -1,6 +1,6 @@
  <?php layout('admin/header') ?>
 
-<a href="/admin/inventory/add">Add an Item</a>
+<a href="/admin/inventory/create">Add an Item</a>
 
 <table>
     <thead>
