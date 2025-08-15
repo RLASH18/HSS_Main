@@ -50,10 +50,23 @@
         }
         
         .logo-icon {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .logo-fallback {
+            width: 60px;
+            height: 60px;
             background-color: #815331;
-            border-radius: 50%;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -222,7 +235,7 @@
             <div class="logo-section">
                 <div class="logo">
                     <div class="logo-icon">
-                        ABG
+                        <img src="/assets/img/abg-logo.png" alt="ABG Prime Logo" onerror="this.parentElement.innerHTML='<div class=\'logo-fallback\'>ABG</div>'">
                     </div>
                     <div class="logo-text">
                         <h1>ABG Prime</h1>
