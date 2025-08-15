@@ -38,6 +38,9 @@ class MailService
             $mail->setFrom($config['from'], $config['from_name']);
             $mail->addAddress($to);
 
+            // Auto-embed local images
+            $body = self::embedLocalImages($mail, $body);
+
             // Set email content
             $mail->isHTML(true);
             $mail->Subject = $subject;
@@ -50,5 +53,40 @@ class MailService
             error_log("Mail sending failed: " . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Scans the email body for <img> tags with local file paths
+     * and embeds them into the email as inline images using CID.
+     * External HTTP(S) images are ignored.
+     * 
+     * @param          PHPMailer $mail The PHPMailer instance to attach images to
+     * @param string   $body The HTML body containing image references
+     * 
+     * @return string  The modified HTML body with CID-based image sources
+     */
+    private static function embedLocalImages(PHPMailer $mail, string $body): string
+    {
+        return preg_replace_callback(
+            '/<img\s+[^>]*src=["\']([^"\']+)["\']/i',
+
+            function ($matches) use ($mail) {
+                $src = $matches[1];
+                // Skip external images
+                if (preg_match('/^https?:\/\//i', $src)) {
+                    return $matches[0];
+                }
+
+                // Embed local image and replace src with CID
+                $path = Application::$ROOT_DIR . '/' . ltrim($src, '/');
+                if (file_exists($path)) {
+                    $cid = uniqid('img_');
+                    $mail->addEmbeddedImage($path, $cid);
+                    return str_replace($src, "cid:$cid", $matches[0]);
+                }
+                return $matches[0];
+            },
+            $body
+        );
     }
 }
