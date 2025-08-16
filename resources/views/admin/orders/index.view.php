@@ -8,8 +8,14 @@
             <div class="p-4 bg-white shadow rounded-lg">
                 <h2 class="text-lg font-semibold mb-2">Order #<?= $order->id ?></h2>
                 <p><strong>Customer:</strong> <?= $order->user->name ?></p>
-                <p><strong>Item name:</strong><?= $order->orderItems[0]->items->item_name ?></p>
-                <p><strong>Item quantity:</strong><?= $order->orderItems[0]->quantity ?></p>
+
+                <div class="my-3">
+                    <strong>Items Ordered</strong>
+                    <?php foreach ($order->orderItems as $orderItem): ?>
+                        <li><?= $orderItem->items->item_name ?> (<?= $orderItem->quantity ?>)</li>
+                    <?php endforeach ?>
+                </div>
+
                 <p><strong>Amount:</strong> ₱<?= number_format($order->total_amount, 2) ?></p>
                 <p><strong>Status:</strong> <span class="badge"><?= ucfirst($order->status) ?></span></p>
                 <p><strong>Date:</strong> <?= date('M d, Y h:i A', strtotime($order->created_at)) ?></p>

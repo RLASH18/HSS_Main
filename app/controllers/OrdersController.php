@@ -77,9 +77,13 @@ class OrdersController extends Controller
 
         // Update order status
         if (Orders::update($id, $status)) {
-            // On first confirmation: update inventory, notify customer, and generate billing
+            // On first confirmation: update inventory, calculate total, notify customer, and generate billing
             if ($isConfirmingOrder) {
                 $this->updateInventoryQuantities($order);
+
+                $total = $order->calculateTotal();
+                Orders::update($order->id, ['total_amount' => $total]);
+
                 $this->sendOrderConfirmationEmail($order);
                 $this->generateBilling($order);
             }

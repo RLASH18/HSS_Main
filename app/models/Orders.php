@@ -42,6 +42,18 @@ class Orders extends Model
     }
 
     /**
+     * Calculate the total amount of this order
+     */
+    public function calculateTotal()
+    {
+        $total = 0;
+        foreach ($this->orderItems() as $item) {
+            $total += $item->quantity * $item->unit_price;
+        }
+        return $total;
+    }
+
+    /**
      * Load the order's items and their related inventory item.
      * Useful when we need full details about the order contents.
      */
