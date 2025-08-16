@@ -36,9 +36,9 @@
                     <!-- Body -->
                     <tr>
                         <td style="padding:24px; background-color:#ECE5DF;">
-                            <p style="font-size:13px; margin:0;">Hi <strong><?= htmlspecialchars($user->name) ?></strong>,</p>
-                            <p style="font-size:13px; margin:10px 0 20px 0;">Your order #<?= htmlspecialchars($order->id) ?> has been successfully confirmed. Thank you for shopping with us!</p>
-                            <p style="font-size:14px; font-weight:bold; margin:0 0 10px 0;">Order Summary:</p>
+                            <p style="color: #000000; font-size:13px; margin:0;">Hi <strong><?= htmlspecialchars($user->name) ?></strong>,</p>
+                            <p style="color: #000000; font-size:13px; margin:10px 0 20px 0;">Your order #<?= htmlspecialchars($order->id) ?> has been successfully confirmed. Thank you for shopping with us!</p>
+                            <p style="color: #000000; font-size:14px; font-weight:bold; margin:0 0 10px 0;">Order Summary:</p>
                         </td>
                     </tr>
 
@@ -60,11 +60,11 @@
                                 <tbody style="background-color:#FFFFFF;">
                                     <?php foreach ($items as $item): ?>
                                     <tr>
-                                        <td style="padding:10px; border-bottom:1px solid #DDD; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="<?= htmlspecialchars($item->item->item_name) ?>">
+                                        <td style="color: #000000; padding:10px; border-bottom:1px solid #DDD; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="<?= htmlspecialchars($item->item->item_name) ?>">
                                             <?= htmlspecialchars($item->item->item_name) ?>
                                         </td>
-                                        <td style="padding:10px; border-bottom:1px solid #DDD; text-align:right;"><?= htmlspecialchars($item->quantity) ?></td>
-                                        <td style="padding:10px; border-bottom:1px solid #DDD; text-align:right;">&#8369;<?= number_format($item->unit_price * $item->quantity, 2) ?></td>
+                                        <td style="color: #000000; padding:10px; border-bottom:1px solid #DDD; text-align:right;"><?= htmlspecialchars($item->quantity) ?></td>
+                                        <td style="color: #000000; padding:10px; border-bottom:1px solid #DDD; text-align:right;">&#8369;<?= number_format($item->unit_price * $item->quantity, 2) ?></td>
                                     </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -83,9 +83,9 @@
                     <tr>
                         <td style="padding:24px; background-color:#ECE5DF;">
                             <ul style="margin:0; padding-left:20px; font-size:13px;">
-                                <li style="margin-bottom:15px;"><strong>Order Confirmed</strong><br>We have successfully confirmed your order and will begin processing it shortly.</li>
-                                <li style="margin-bottom:15px;"><strong>Preparation</strong><br>We will notify you once your order is ready for delivery.</li>
-                                <li><strong>Delivery</strong><br>Your order will be delivered to your specified location.</li>
+                                <li style="color: #000000; margin-bottom:15px;"><strong>Order Confirmed</strong><br>We have successfully confirmed your order and will begin processing it shortly.</li>
+                                <li style="color: #000000; margin-bottom:15px;"><strong>Preparation</strong><br>We will notify you once your order is ready for delivery.</li>
+                                <li style="color: #000000; margin-bottom:15px;"><strong>Delivery</strong><br>Your order will be delivered to your specified location.</li>
                             </ul>
                         </td>
                     </tr>

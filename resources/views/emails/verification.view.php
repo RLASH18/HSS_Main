@@ -36,7 +36,7 @@
                     <!-- Body -->
                     <tr>
                         <td style="padding:24px; background-color:#ECE5DF;">
-                            <p style="font-size:13px; margin-top:0; margin-bottom:20px;">Thanks for registering! Use the code below:</p>
+                            <p style="color: #000000; font-size:13px; margin-top:0; margin-bottom:20px;">Thanks for registering! Use the code below:</p>
                             <table align="center" cellpadding="0" cellspacing="0" border="0">
                                 <tr>
                                     <td style="background-color:#815331; color:#FFFFFF; font-size:22px; font-weight:bold; padding:10px 20px; border-radius:12px; letter-spacing:8px; text-align:center;">
@@ -44,7 +44,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <p style="font-size:13px; margin-top:20px;">This code will expire in 30 minutes. If you didn't request this, you can ignore the email.</p>
+                            <p style="color: #000000; font-size:13px; margin-top:20px;">This code will expire in 30 minutes. If you didn't request this, you can ignore the email.</p>
                         </td>
                     </tr>
 
