@@ -47,7 +47,7 @@
     </section>
 
     <section class="about-section" id="about">
-        <div class="about-container container my-5 mx-auto grid grid-cols-2 place-items-center gap-5">
+        <div class="about-container container my-5 mx-auto grid grid-cols-2 place-items-center gap-5 py-5">
             <div class="description-container max-w-150">
                 <div class="title-container">
                     <p>About Us</p>
@@ -304,7 +304,7 @@
     </section>
 
     <footer class="w-full">
-        <div class="container w-full mx-auto grid grid-cols-3 p-2 py-4">
+        <div class="container w-full mx-auto grid grid-cols-3 p-2 py-8">
             <div>
                 <p class="text-4xl font-bold">ABG Prime</p>
                 <p class="text-2xl mb-3 font-bold">Builders Supplies Inc.</p>
@@ -352,34 +352,34 @@
         </div>
     </footer>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const swiper = new Swiper(".swiper", {
-                // Optional parameters
-                //spaceBetween: 20,
-                slidesPerView: 5,
-                autoplay: {
-                    delay: 5000, // time in ms between swipes
-                    disableOnInteraction: false, // keep autoplay after user interaction
-                },
+    document.addEventListener('DOMContentLoaded', function() {
+        const swiper = new Swiper(".swiper", {
+            // Optional parameters
+            //spaceBetween: 20,
+            slidesPerView: 5,
+            autoplay: {
+                delay: 5000, // time in ms between swipes
+                disableOnInteraction: false, // keep autoplay after user interaction
+            },
 
-                // If we need pagination
-                pagination: {
-                    el: ".swiper-pagination",
-                    dynamicBullets: true,
-                },
+            // If we need pagination
+            pagination: {
+                el: ".swiper-pagination",
+                dynamicBullets: true,
+            },
 
-                // Navigation arrows
-                navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                },
+            // Navigation arrows
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
 
-                // And if we need scrollbar
-                scrollbar: {
-                    el: ".swiper-scrollbar",
-                },
-            });
+            // And if we need scrollbar
+            scrollbar: {
+                el: ".swiper-scrollbar",
+            },
         });
+    });
     </script>
 </body>
 

@@ -8,6 +8,10 @@
   font-family: "Outfit", sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Log-in Page */
 .login-page-container,
 .register-page-container {
@@ -179,7 +183,7 @@ input[type="checkbox"] {
   position: relative;
 }
 
-.navbar-links li a:focus {
+.navbar-links li a:hover {
   color: #815331;
 }
 
@@ -194,7 +198,7 @@ input[type="checkbox"] {
   transition: all 0.5s;
 }
 
-.navbar-links a:focus:before {
+.navbar-links a:hover:before {
   width: 100%;
 }
 
