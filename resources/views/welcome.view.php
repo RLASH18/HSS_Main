@@ -7,7 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    </body>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 
 <body>
@@ -22,20 +22,20 @@
         </div>
         <nav class="flex align-center justify-center">
             <ul class="navbar-links">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Products</a></li>
-                <li><a href="#">Team</a></li>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#team">Team</a></li>
             </ul>
         </nav>
     </header>
 
-    <section class="hero-banner-section">
+    <section class="hero-banner-section" id="hero">
         <div class="hero-banner-container">
             <div class="hero-details-container mx-auto">
                 <h1>Build smarter with ABG Prime Builders</h1>
                 <p>Shop high-quality tools and materials at unbeatable prices</p>
-                <button>Shop now</button>
+                <a href="/login">Shop now</a>
             </div>
             <div class="hero-image-container mx-auto">
                 <img src="assets/img/tools.png" alt="" />
@@ -43,7 +43,7 @@
         </div>
     </section>
 
-    <section class="about-section">
+    <section class="about-section" id="about">
         <div class="about-container container my-5 mx-auto grid grid-cols-2 place-items-center gap-5">
             <div class="description-container max-w-150">
                 <div class="title-container">
@@ -77,7 +77,7 @@
         </div>
     </section>
 
-    <section class="cards-section p-5">
+    <section class="cards-section p-5" id="products">
         <div class="container mx-auto flex justify-between">
             <div class="deals-container">
                 <p>Hot Deals</p>
@@ -255,7 +255,7 @@
 
     </section>
 
-    <section class="team-section">
+    <section class="team-section" id="team">
         <div class="container mx-auto p-5 mb-5">
             <div class="team-description mb-10 p-5">
                 <div class="team-description-title">
@@ -266,9 +266,9 @@
             </div>
             <div class="team-cards-container flex justify-center gap-10">
                 <div class="team-card">
-                    <img src="assets/img/team/ryan.png" alt="">
+                    <img src="assets/img/team/dingdong.png" alt="">
                     <div class="team-name">
-                        <p>Ryan Lester Lacdang</p>
+                        <p>Ray Lance Gregorio</p>
                     </div>
                     <p>Leader</p>
                 </div>
@@ -348,37 +348,36 @@
             </p>
         </div>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-    const swiper = new Swiper(".swiper", {
-        // Optional parameters
-        //spaceBetween: 20,
-        slidesPerView: 5,
-        autoplay: {
-            delay: 5000, // time in ms between swipes
-            disableOnInteraction: false, // keep autoplay after user interaction
-        },
+        document.addEventListener('DOMContentLoaded', function() {
+            const swiper = new Swiper(".swiper", {
+                // Optional parameters
+                //spaceBetween: 20,
+                slidesPerView: 5,
+                autoplay: {
+                    delay: 5000, // time in ms between swipes
+                    disableOnInteraction: false, // keep autoplay after user interaction
+                },
 
-        // If we need pagination
-        pagination: {
-            el: ".swiper-pagination",
-            dynamicBullets: true,
-        },
+                // If we need pagination
+                pagination: {
+                    el: ".swiper-pagination",
+                    dynamicBullets: true,
+                },
 
-        // Navigation arrows
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
+                // Navigation arrows
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                },
 
-        // And if we need scrollbar
-        scrollbar: {
-            el: ".swiper-scrollbar",
-        },
-    });
+                // And if we need scrollbar
+                scrollbar: {
+                    el: ".swiper-scrollbar",
+                },
+            });
+        });
     </script>
-
-
 </body>
 
 </html>
