@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
-
 @import "flowbite";
 
 * {
@@ -228,15 +227,17 @@ nav {
   color: #815331;
 }
 
-.hero-details-container button {
-  padding: 10px 30px;
+.hero-details-container .shop-now-button {
+  padding: 5px 10px;
   background-color: #815331;
   margin-block: 15px;
   border-radius: 12px;
   color: #fff;
+  width: 140px;
+  text-align: center;
 }
 
-.hero-details-container button:hover {
+.hero-details-container a:hover {
   cursor: pointer;
 }
 

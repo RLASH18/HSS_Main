@@ -35,7 +35,10 @@
             <div class="hero-details-container mx-auto">
                 <h1>Build smarter with ABG Prime Builders</h1>
                 <p>Shop high-quality tools and materials at unbeatable prices</p>
-                <a href="/login">Shop now</a>
+                <div class="shop-now-button">
+                    <a href="/login">Shop now</a>
+                </div>
+
             </div>
             <div class="hero-image-container mx-auto">
                 <img src="assets/img/tools.png" alt="" />
