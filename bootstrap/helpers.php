@@ -136,13 +136,55 @@ function renderSweetAlert()
         $swal = $_SESSION['swal'];
         unset($_SESSION['swal']);
 
-        echo "<script>
+        $type = htmlspecialchars($swal['type'], ENT_QUOTES, 'UTF-8');
+        $title = htmlspecialchars($swal['title'], ENT_QUOTES, 'UTF-8');
+        $message = htmlspecialchars($swal['message'], ENT_QUOTES, 'UTF-8');
+
+        echo "
+        <style>
+            /* Slide in from right with slight shake */
+            @keyframes slideInLeftShake {
+                0%   { transform: translateX(120%); opacity: 0; }
+                60%  { transform: translateX(-10px); opacity: 1; }
+                80%  { transform: translateX(5px); }
+                100% { transform: translateX(0); }
+            }
+            /* Slide up exit */
+            @keyframes slideUp {
+                from { transform: translateY(0); opacity: 1; }
+                to   { transform: translateY(-60px); opacity: 0; }
+            }
+            .pogi-toast {
+                border-radius: 10px !important;
+                backdrop-filter: blur(6px);
+                border: 1px solid rgba(0,0,0,0.08);
+                animation: slideInLeftShake 0.55s ease-out;
+            }
+            .swal2-hide.pogi-toast {
+                animation: slideUp 0.35s ease-in forwards;
+            }
+            .swal2-timer-progress-bar {
+                background: linear-gradient(90deg,#667eea,#764ba2) !important;
+                height: 3px !important;
+            }
+        </style>
+
+        <script>
             Swal.fire({
-                icon: '{$swal['type']}',
-                title: '{$swal['title']}',
-                text: '{$swal['message']}',
-                timer: 3000,
-                showConfirmButton: false
+                icon: '{$type}',
+                title: '{$title}',
+                html: '<p style=\"font-size:15px; margin:0;\">{$message}</p>',
+                timer: 3500,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timerProgressBar: true,
+                background: 'rgba(255,255,255,0.95)',
+                customClass: { popup: 'pogi-toast' },
+                didOpen: (t) => {
+                    t.addEventListener('mouseenter', Swal.stopTimer);
+                    t.addEventListener('mouseleave', Swal.resumeTimer);
+                }
             });
         </script>";
     }
