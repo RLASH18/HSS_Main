@@ -241,6 +241,10 @@ nav {
   text-align: center;
 }
 
+.hero-details-container .shop-now-button:hover {
+  background-color: #5f3e27;
+}
+
 .hero-details-container a:hover {
   cursor: pointer;
 }
