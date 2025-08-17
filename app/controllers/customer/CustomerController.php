@@ -18,4 +18,28 @@ class CustomerController extends Controller
 
         return $this->view('customer/index', $data);
     }
+
+    public function show($id)
+    {
+        $items = $this->findItemOrFail($id);
+
+        $data = [
+            'title' => 'ABG Prime Builders Supplies Inc. | ' . $items->item_name,
+            'items' => $items,
+        ];
+
+        return $this->view('customer/show', $data);
+    }
+
+    private function findItemOrFail($id)
+    {
+        $items = Inventory::find($id);
+
+        if (!$items) {
+            setSweetAlert('error', 'Oops!', 'Item not found.');
+            redirect('/customer/home');
+        }
+
+        return $items;
+    }
 }

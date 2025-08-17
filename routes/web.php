@@ -74,5 +74,6 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
 Route::group(['middleware' => 'auth', 'prefix' => '/customer'], function () {
     Route::controller(CustomerController::class, function () {
         Route::get('/home', 'index');
+        Route::get('/show/{id}', 'show');
     });
 });
