@@ -1,11 +1,12 @@
 <?php
 
-use app\controllers\AdminController;
-use app\controllers\InventoryController;
 use app\controllers\AuthController;
-use app\controllers\BillingController;
-use app\controllers\DeliveryController;
-use app\controllers\OrdersController;
+use app\controllers\admin\AdminController;
+use app\controllers\admin\BillingController;
+use app\controllers\admin\DeliveryController;
+use app\controllers\admin\InventoryController;
+use app\controllers\admin\OrdersController;
+use app\controllers\customer\CustomerController;
 use app\core\Route;
 
 /**
@@ -70,4 +71,8 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
 /**
  * Auth Routes
  */
-Route::group(['middleware' => 'auth'], function () {});
+Route::group(['middleware' => 'auth', 'prefix' => '/customer'], function () {
+    Route::controller(CustomerController::class, function () {
+        Route::get('/home', 'index');
+    });
+});

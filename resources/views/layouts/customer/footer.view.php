@@ -1,0 +1,5 @@
+
+    <?= renderSweetAlert() ?>
+</body>
+
+</html>
