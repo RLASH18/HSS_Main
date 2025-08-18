@@ -435,3 +435,61 @@ footer {
   border-color: #bfdbfe;
 }
 /* end flash alert message */
+
+/* Start Admin Dashboard */
+
+.sidebar {
+  background-color: #ece5df;
+  border-radius: 12px;
+}
+
+.sidebar-logo-container img {
+  width: 150px;
+  padding: 2px;
+}
+
+.sidebar-links-container ul li {
+  padding: 10px 20px;
+  display: flex;
+  font-size: 18px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-links-container ul li:hover {
+  background-color: #d4c7b8;
+  transform: translateX(4px);
+}
+
+.sidebar-links-container ul li.active {
+  background-color: #815331;
+  color: white;
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(129, 83, 49, 0.3);
+}
+
+.sidebar-links-container ul li.active a {
+  color: white;
+}
+
+.sidebar-links-container ul li.active .sidebar-icon svg {
+  color: white;
+}
+
+.sidebar-links-container ul li a {
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.sidebar-links-container ul li:hover a {
+  color: #fff;
+}
+
+.sidebar-icon svg {
+  margin-right: 8px;
+  transition: color 0.3s ease;
+}
+
+/* End Admin Dashboard */
