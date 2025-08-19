@@ -11,8 +11,9 @@
  */
 
 return [
-    'admin'  => app\core\middlewares\AdminMiddleware::class,
-    'auth'  => app\core\middlewares\AuthMiddleware::class,
-    'guest' => app\core\middlewares\GuestMiddleware::class,
-    'csrf'  => app\core\middlewares\CsrfMiddleware::class
+    'admin'    => app\core\middlewares\AdminMiddleware::class,
+    'auth'     => app\core\middlewares\AuthMiddleware::class,
+    'guest'    => app\core\middlewares\GuestMiddleware::class,
+    'csrf'     => app\core\middlewares\CsrfMiddleware::class,
+    'location' => app\core\middlewares\LocationMiddleware::class
 ];

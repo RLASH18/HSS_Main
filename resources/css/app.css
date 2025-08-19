@@ -12,7 +12,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Log-in Page */
+/* Log-in and Register Page */
 .login-page-container,
 .register-page-container {
   display: flex;
@@ -157,246 +157,7 @@ input[type="checkbox"] {
   margin-right: 5px;
   border-radius: 3px;
 }
-
-/* End of Log-in Page */
-
-/* Start Sign-Up Page */
-
-.brand-icon {
-  padding-block: 21px;
-  margin-left: 5px;
-}
-
-/* End of Sign-Up Page */
-
-/* Start of Header Section */
-.navbar-links {
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.navbar-links li a {
-  margin: 0 20px;
-  padding: 0 10px;
-  position: relative;
-}
-
-.navbar-links li a:hover {
-  color: #815331;
-}
-
-.navbar-links a:before {
-  content: "";
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0%;
-  height: 3px;
-  background-color: #815331;
-  transition: all 0.5s;
-}
-
-.navbar-links a:hover:before {
-  width: 100%;
-}
-
-nav {
-  padding: 15px;
-}
-/* End of Header Section */
-
-/* Start of Hero Banner Section */
-.hero-banner-container {
-  background-color: #ece5df;
-  height: 90vh;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  place-items: center;
-  /* justify-content: center;
-  align-items: center; */
-  flex-wrap: wrap;
-}
-.hero-details-container p {
-  color: #815331;
-}
-
-.hero-details-container h1 {
-  font-size: 60px;
-  width: 450px;
-  line-height: 60px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #815331;
-}
-
-.hero-details-container .shop-now-button {
-  padding: 5px 10px;
-  background-color: #815331;
-  margin-block: 15px;
-  border-radius: 12px;
-  color: #fff;
-  width: 140px;
-  text-align: center;
-}
-
-.hero-details-container .shop-now-button:hover {
-  background-color: #5f3e27;
-}
-
-.hero-details-container a:hover {
-  cursor: pointer;
-}
-
-/* End of Hero Banner Section */
-
-/* Start of About Section */
-.about-image-container img {
-  width: 500px;
-  height: 300px;
-}
-
-.title-container p {
-  font-weight: bold;
-  font-size: 40px;
-}
-
-.motto-container p {
-  font-style: italic;
-  font-size: 18px;
-}
-
-.about-details-container {
-  margin-top: 20px;
-}
-
-.about-details-container p {
-  margin-bottom: 10px;
-}
-
-.about-image-container img {
-  border-radius: 8px;
-}
-/* End of About Section */
-
-/* Team Section */
-
-.team-description .team-description-title p {
-  font-size: 24px;
-  margin-bottom: 5px;
-  color: #815331;
-  font-weight: bold;
-}
-
-.team-description {
-  color: #815331;
-}
-.team-card {
-  background: #ece5df;
-  border-radius: 15px;
-  text-align: center;
-  padding: 20px;
-  max-width: 220px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.team-card img {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 50%;
-  transform: translateX(22px);
-  margin-top: -60px; /* moves image up */
-  border: 4px solid #fff; /* nice border around image */
-}
-
-.team-name p {
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
-.team-card img {
-  margin-bottom: 20px;
-}
-
-/* End of Team Section */
-
-/* Footer */
-
-footer h1 {
-  color: red;
-}
-
-footer {
-  background-color: #ece5df;
-}
-
-.abg-footer {
-  color: #815331;
-  font-weight: bold;
-}
-
-/* End of Footer section */
-
-.cards-section {
-  background-color: #8c7d73;
-}
-
-/* Cards section */
-.cards-section {
-  background-color: #8c7d73;
-  position: relative;
-}
-
-.swiper-wrapper {
-  padding-left: 5px;
-}
-
-.card {
-  background-color: #fff;
-  max-width: 180px;
-  padding: 10px;
-  border-radius: 12px;
-  border: 1px solid black;
-}
-
-.swiper .card {
-  display: flex;
-  flex-direction: column;
-}
-
-.swiper-wrapper .card {
-  min-height: 270px;
-}
-
-.sold-container {
-  margin-top: auto;
-}
-
-.price-container p {
-  font-size: 20px;
-  color: green;
-  font-weight: bold;
-}
-
-.sold-container p {
-  text-align: right;
-}
-
-.swiper-wrapper {
-  margin: 10px 20px 30px 20px;
-}
-
-.deals-container p {
-  font-size: 20px;
-  color: #fff;
-  font-weight: bold;
-}
-
-.deals-container + p {
-  color: blue;
-}
+/* End of Log-in and Register Page */
 
 /* flash alert message */
 .alert {
@@ -434,4 +195,253 @@ footer {
   color: #1e40af;
   border-color: #bfdbfe;
 }
-/* end flash alert message */
+/* End of flash alert message */
+
+/* Start of Header Section */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.company-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.company-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: #815331;
+  margin: 0;
+}
+
+.company-subtitle {
+  font-size: 14px;
+  color: #8C7D73;
+  margin: 0;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-links li a {
+  font-size: 18px;
+  line-height: 28px;
+  margin: 0 10px;
+  position: relative;
+}
+
+.navbar-links li a:hover {
+  color: #815331;
+}
+
+.navbar-links a:before {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background-color: #815331;
+  transition: all 0.5s;
+}
+
+.navbar-links a:hover:before {
+  width: 100%;
+}
+/* End of Header Section */
+
+/* Start of Hero Banner Section */
+.hero-banner-container {
+  background-color: #ece5df;
+  height: 75vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  place-items: center;
+  /* justify-content: center;
+  align-items: center; */
+  flex-wrap: wrap;
+}
+
+.hero-details-container h1 {
+  font-size: 60px;
+  width: 450px;
+  line-height: 60px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #815331;
+}
+
+.hero-details-container p {
+  color: #815331;
+}
+
+.hero-details-container .shop-now-button .get-started-button {
+  margin-block: 15px;
+}
+
+.shop-now-button a {
+  display: inline-block;
+  background-color: #815331;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 12px;
+  text-align: center;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.shop-now-button a:hover {
+  background-color: #5f3e27;
+  cursor: pointer;
+}
+
+.get-started-button a {
+  display: inline-block;
+  border: 1px solid #815331;
+  color: #815331;
+  background: #ece5df;
+  padding: 9px 15px;
+  border-radius: 12px;
+  text-align: center;
+  white-space: nowrap;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+}
+
+.get-started-button a:hover {
+  background-color: #815331;
+  color: #fff;
+}
+/* End of Hero Banner Section */
+
+/* Start of About Section */
+.title-container p {
+  color: #815331;
+  font-weight: bold;
+  font-size: 40px;
+}
+
+.motto-container p {
+  font-style: italic;
+  font-size: 18px;
+}
+
+.about-details-container {
+  margin-top: 20px;
+}
+
+.about-details-container p {
+  margin-bottom: 10px;
+}
+
+.about-image-container img {
+  border-radius: 8px;
+  width: 500px;
+  max-width: 32rem;
+  height: auto;
+}
+/* End of About Section */
+
+/* Cards section */
+.cards-section {
+  background-color: #8c7d73;
+  position: relative;
+}
+
+.deals-container p {
+  font-size: 20px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.card {
+  background-color: #fff;
+  max-width: 180px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid black;
+}
+
+.swiper .card {
+  display: flex;
+  flex-direction: column;
+}
+
+.swiper-wrapper {
+  padding-left: 5px;
+  margin: 10px 20px 30px 20px;
+}
+
+.swiper-wrapper .card {
+  min-height: 270px;
+}
+
+.sold-container {
+  margin-top: auto;
+}
+
+.sold-container p {
+  text-align: right;
+}
+
+.price-container p {
+  font-size: 20px;
+  color: green;
+  font-weight: bold;
+}
+/* End of Cards section */
+
+/* Team Section */
+.team-description .team-description-title p {
+  font-size: 40px;
+  margin-bottom: 5px;
+  color: #815331;
+  font-weight: bold;
+}
+
+.team-card {
+  background: #ece5df;
+  border-radius: 15px;
+  text-align: center;
+  padding: 20px;
+  max-width: 220px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.team-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  transform: translateX(22px);
+  margin-top: -60px; /* moves image up */
+  border: 4px solid #fff; /* nice border around image */
+  margin-bottom: 20px;
+}
+
+.team-name p {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+/* End of Team Section */
+
+/* Footer */
+footer h1 {
+  color: red;
+}
+
+footer {
+  background-color: #ece5df;
+}
+
+.abg-footer {
+  color: #815331;
+  font-weight: bold;
+}
+/* End of Footer section */
