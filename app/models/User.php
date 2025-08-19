@@ -47,6 +47,14 @@ class User extends Model
     }
 
     /**
+     * Get all cart items for this user
+     */
+    public function carts()
+    {
+        return $this->hasMany(Cart::class, 'user_id');
+    }
+
+    /**
      * Mark the user's email as verified and clear the verification code.
      */
     public function markEmailAsVerified(): bool

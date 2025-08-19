@@ -14,13 +14,16 @@ use app\core\Route;
  */
 Route::group(['middleware' => 'guest'], function () {
     Route::view('/', 'welcome');
-    Route::controller(AuthController::class, function () {
-        Route::get('/login', 'login');
-        Route::post('/loginForm', 'loginForm');
-        Route::get('/register', 'register');
-        Route::post('/registerForm', 'registerForm');
-        Route::get('/verify-email', 'showVerifyEmail');
-        Route::post('/verify-email-code', 'verifyEmail');
+    Route::post('/set-location-session', [AuthController::class, 'setLocationSession']);
+    Route::group(['middleware' => 'location'], function () {
+        Route::controller(AuthController::class, function () {
+            Route::get('/login', 'login');
+            Route::post('/loginForm', 'loginForm');
+            Route::get('/register', 'register');
+            Route::post('/registerForm', 'registerForm');
+            Route::get('/verify-email', 'showVerifyEmail');
+            Route::post('/verify-email-code', 'verifyEmail');
+        });
     });
 });
 
@@ -32,7 +35,7 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
         Route::get('/dashboard', 'dashboard');
         Route::post('/logout', 'logout');
     });
-    
+
     Route::controller(InventoryController::class, function () {
         Route::get('/inventory', 'index');
         Route::get('/inventory/create', 'create');
@@ -74,5 +77,6 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
 Route::group(['middleware' => 'auth', 'prefix' => '/customer'], function () {
     Route::controller(CustomerController::class, function () {
         Route::get('/home', 'index');
+        Route::get('/show/{id}', 'show');
     });
 });

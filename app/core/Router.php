@@ -136,16 +136,33 @@ class Router
             $controller->action = $callback[1];
             $callback[0] = $controller;
 
-            // Use reflection to check if the controller method expects a Request parameter
+            // Reflection: check all parameters and inject what we know
             $refMethod = new \ReflectionMethod($callback[0], $callback[1]);
-            $expectsRequest = count($refMethod->getParameters()) > 0 &&
-                $refMethod->getParameters()[0]->getType() &&
-                $refMethod->getParameters()[0]->getType()->getName() === Request::class;
+            $dependencies = [];
 
-            // If the method expects a Request object, inject it as the first argument
-            if ($expectsRequest) {
-                return call_user_func_array($callback, array_merge([$this->request], $params));
+            foreach ($refMethod->getParameters() as $param) {
+                $type = $param->getType();
+
+                if ($type) {
+                    $typeName = $type->getName();
+
+                    if ($typeName === Request::class) {
+                        $dependencies[] = $this->request;
+                    } elseif ($typeName === Response::class) {
+                        $dependencies[] = $this->response;
+                    } elseif ($typeName === Session::class) {
+                        $dependencies[] = Application::$app->session;
+                    } else {
+                        // If unknown type, inject null
+                        $dependencies[] = null;
+                    }
+                } else {
+                    // If no type hint, try to use params from route placeholders
+                    $dependencies[] = array_shift($params) ?? null;
+                }
             }
+
+            return call_user_func_array($callback, $dependencies);
         }
 
         // Call the route's handler with any URL parameters

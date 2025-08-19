@@ -39,4 +39,12 @@ class Inventory extends Model
     {
         return $this->hasMany(OrderItems::class, 'item_id');
     }
+
+    /**
+     * Get all cart entries that include this inventory item
+     */
+    public function carts()
+    {
+        return $this->hasMany(Cart::class, 'item_id');
+    }
 }
