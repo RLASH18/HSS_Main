@@ -432,15 +432,9 @@ footer {
 }
 /* End of Footer section */
 
-/* Start Admin Dashboard */
+/* Start sidebar */
 .sidebar {
-  background-color: #ece5df;
-  border-radius: 12px;
-}
-
-.sidebar-logo-container img {
-  width: 150px;
-  padding: 2px;
+  background-color: #ECE5DF;
 }
 
 .sidebar-links-container ul li {
@@ -473,7 +467,7 @@ footer {
 }
 
 .sidebar-links-container ul li a {
-  color: #333;
+  color: #815331;
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -483,7 +477,15 @@ footer {
 }
 
 .sidebar-icon svg {
+  color: #815331;
   margin-right: 8px;
   transition: color 0.3s ease;
 }
-/* End Admin Dashboard */
+/* End sidebar */
+
+/* Start Main content */
+.main-content {
+  background-color: #F8F9FA;
+  min-height: 100vh;
+  overflow-y: auto;
+}

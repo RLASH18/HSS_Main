@@ -10,12 +10,14 @@
 </head>
 
 <body class="grid grid-cols-[250px_1fr]">
+
+    <!-- sidebar and navbar will go here -->
     <section class="sidebar row-span-full min-h-screen p-4">
-        <div class="sidebar-company-logo-container flex justify-center align-center mb-5">
-            <img src="/assets/img/abg_logo1.png" alt="">
-            <div class="flex flex-col justify-center align-center sidebar-logo-container">
-                <img src="/assets/img/abg_logo2.svg" alt="">
-                <img src="/assets/img/abg_logo3.svg" alt="">
+        <div class="sidebar-company-logo-container flex items-center justify-center mb-14">
+            <img src="/assets/img/abg-logo.png" alt="ABG Prime Logo" class="h-12 w-auto mr-2">
+            <div class="company-text">
+                <img src="/assets/img/abg-company-name.svg" alt="ABG Company Name" class="h-5 w-auto mt-1">
+                <img src="/assets/img/abg-company-subtitle.svg" alt="ABG Company Subtitle" class="h-4 w-auto mt-1">
             </div>
         </div>
 
@@ -81,7 +83,7 @@
                                 d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
                         </svg>
                     </span>
-                    <a href="#">Settings</a>
+                    <a href="/admin/settings">Settings</a>
                 </li>
                 <li class="group sidebar-item" data-route="/admin/logout">
                     <span class="sidebar-icon">
@@ -96,35 +98,6 @@
                 </li>
             </ul>
         </div>
-
     </section>
 
-    <!-- sidebar and navbar will go here -->
-
-    <script>
-        // Sidebar active link functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentPath = window.location.pathname;
-            const sidebarItems = document.querySelectorAll('.sidebar-item');
-            
-            sidebarItems.forEach(item => {
-                const route = item.getAttribute('data-route');
-                if (route && currentPath.startsWith(route)) {
-                    item.classList.add('active');
-                    
-                    // Remove conflicting Tailwind classes and ensure white color
-                    const svg = item.querySelector('.sidebar-icon svg');
-                    const link = item.querySelector('a');
-                    
-                    if (svg) {
-                        svg.classList.remove('text-gray-800', 'dark:text-white');
-                        svg.classList.add('text-white');
-                    }
-                    
-                    if (link) {
-                        link.classList.add('text-white');
-                    }
-                }
-            });
-        });
-    </script>
+    <main class="main-content p-6">
