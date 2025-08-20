@@ -1,5 +1,6 @@
 <?php layout('admin/header') ?>
 
+<?= $pageName = 'Dashboard' ?>
 
 <div class="admin-dashboard-container row-span-full">
     <h1>hello @<?= auth()->username ?>!</h1>
