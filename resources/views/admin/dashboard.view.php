@@ -1,7 +1,5 @@
 <?php layout('admin/header') ?>
 
-<?= $pageName = 'Dashboard' ?>
-
 <div class="admin-dashboard-container row-span-full">
     <div class="page-title-container my-3">
         <h1 class="page-title text-3xl text-gray-900 leading-tight mb-2">Dashboard</h1>
