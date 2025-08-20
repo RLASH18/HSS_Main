@@ -37,6 +37,11 @@ class AdminController extends Controller
         return $this->view('admin/dashboard', $data);
     }
 
+    public function settings()
+    {
+        
+    }
+
     public function logout() 
     {
         logout();
