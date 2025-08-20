@@ -205,22 +205,8 @@ input[type="checkbox"] {
 }
 
 .company-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-
-.company-name {
-  font-size: 24px;
-  font-weight: bold;
-  color: #815331;
-  margin: 0;
-}
-
-.company-subtitle {
-  font-size: 14px;
-  color: #8C7D73;
-  margin: 0;
+  align-items: center;
+  margin-left: -5px;
 }
 
 .navbar-links {

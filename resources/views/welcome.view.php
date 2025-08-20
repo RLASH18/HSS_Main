@@ -16,8 +16,8 @@
             <div class="logo-container">
                 <img src="/assets/img/abg-logo.png" alt="ABG Prime Logo" class="h-12 w-auto">
                 <div class="company-text">
-                    <p class="company-name">ABG Prime</p>
-                    <p class="company-subtitle">Builders Supplies Inc.</p>
+                    <img src="/assets/img/abg-company-name.svg" alt="ABG Company Name" class="h-5 w-auto mt-1">
+                    <img src="/assets/img/abg-company-subtitle.svg" alt="ABG Company Subtitle" class="h-4 w-auto mt-1">
                 </div>
             </div>
 
