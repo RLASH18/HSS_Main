@@ -3,7 +3,7 @@
 
 <div class="admin-dashboard-container row-span-full">
     <div class="page-title-container my-3">
-        <h1 class="page-title">Dashboard</h1>
+        <h1 class="page-title text-3xl text-gray-900 leading-tight mb-2">Dashboard</h1>
         <p>Welcome back, <span class="user">@<?= auth()->username ?>!</span></p>
     </div>
     <div class="admin-cards-container grid grid-cols-4 gap-5 my-4">
