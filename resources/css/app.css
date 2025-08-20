@@ -485,7 +485,104 @@ footer {
 
 /* Start Main content */
 .main-content {
-  background-color: #F8F9FA;
   min-height: 100vh;
   overflow-y: auto;
+}
+/* End of Main content */
+
+/* DataTable Custom style */
+.datatable-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.datatable-length {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.datatable-length label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.datatable-length select {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  background-color: white;
+  color: #374151;
+  cursor: pointer;
+  min-width: 60px;
+}
+
+.datatable-length select:focus {
+  outline: none;
+  border-color: #815331;
+  box-shadow: 0 0 0 2px rgba(129, 83, 49, 0.1);
+}
+
+.datatable-info {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.datatable-footer {
+  display: flex;
+  justify-content: center;
+  padding: 16px 20px;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.datatable-pagination .paginate_button {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 0 2px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: white;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.datatable-pagination .paginate_button:hover {
+  background-color: #f9fafb !important;
+  border-color: #9ca3af !important;
+  color: #4b5563 !important;
+}
+
+.datatable-pagination .paginate_button.current {
+  background-color: #6b7280 !important;
+  border-color: #6b7280 !important;
+  color: white;
+}
+
+.datatable-pagination .paginate_button.current:hover {
+  background-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  color: white; 
+}
+
+.datatable-pagination .paginate_button.disabled {
+  color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.datatable-pagination .paginate_button.disabled:hover {
+  background-color: white;
+  border-color: #d1d5db;
+  color: #d1d5db;
 }

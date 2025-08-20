@@ -7,6 +7,9 @@
     <title><?= $title ?></title>
     <link rel="stylesheet" href="/assets/css/style.css">
     <script src="/assets/js/script.js"></script>
+    <link href="https://cdn.datatables.net/v/dt/dt-2.3.3/datatables.min.css" rel="stylesheet" integrity="sha384-C0ogMvg31Mu1GWzYxEEobPIlBlGbp/DY94Le4M9y/HFd9VGLT1zWL7MErNMsM2x6" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/v/dt/dt-2.3.3/datatables.min.js" integrity="sha384-qyN6ZT87DHLvgCDC+GYE3myTUDGpz3swpW19cYxOh4oa/8GNSGPMteQwbyM6Ot0D" crossorigin="anonymous"></script>
 </head>
 
 <body class="grid grid-cols-[250px_1fr]">
@@ -100,4 +103,24 @@
         </div>
     </section>
 
-    <main class="main-content p-6">
+    <div class="col-start-2 bg-[#F8F9FA]">
+        <!-- Top Navbar -->
+        <nav class="flex items-center justify-between px-5 py-3">
+            <div class="text-sm text-[#815331]">
+                <span>Pages</span>
+                <?php foreach (breadcrumbs() as $crumb): ?>
+                    <span class="mx-1">/</span>
+                    <span class="font-medium text-gray-900"><?= htmlspecialchars($crumb) ?></span>
+                <?php endforeach ?>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z" />
+                    </svg>
+                </div>
+                <span class="text-sm font-medium text-[#815331]">Admin</span>
+            </div>
+        </nav>
+
+        <main class="main-content p-6 col-start-2">

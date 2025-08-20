@@ -52,8 +52,8 @@ function old(string $field)
  */
 function isInvalid(string $field)
 {
-    return isset($_SESSION['errors'][$field]) 
-        ? 'style="border-color: #ef4444; outline: none; box-shadow: 0 0 0 1px #fca5a5;"' 
+    return isset($_SESSION['errors'][$field])
+        ? 'style="border-color: #ef4444; outline: none; box-shadow: 0 0 0 1px #fca5a5;"'
         : '';
 }
 
@@ -92,25 +92,25 @@ function flash(string $key, $class = null)
     $message = Application::$app->session->getFlash($key);
 
     if ($message) {
-		$icons = [
-			'success' => '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>',
-			'error'   => '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>',
-			'warning' => '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 19.07A10 10 0 1119.07 4.93 10 10 0 014.93 19.07z" /></svg>',
-			'info'    => '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 1010 10A10 10 0 0012 2z" /></svg>',
-		];
+        $icons = [
+            'success' => '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>',
+            'error'   => '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>',
+            'warning' => '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 19.07A10 10 0 1119.07 4.93 10 10 0 014.93 19.07z" /></svg>',
+            'info'    => '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 1010 10A10 10 0 0012 2z" /></svg>',
+        ];
 
-		if ($class === null) {
-			$map = [
-				'success' => 'alert alert-success',
-				'error'   => 'alert alert-error',
-				'warning' => 'alert alert-warning',
-				'info'    => 'alert alert-info'
-			]; 
-			$class = $map[$key] ?? 'alert';
-		}
+        if ($class === null) {
+            $map = [
+                'success' => 'alert alert-success',
+                'error'   => 'alert alert-error',
+                'warning' => 'alert alert-warning',
+                'info'    => 'alert alert-info'
+            ];
+            $class = $map[$key] ?? 'alert';
+        }
 
-		$icon = $icons[$key] ?? '';
-		return "<div class=\"$class\">$icon <span>$message</span></div>";
+        $icon = $icons[$key] ?? '';
+        return "<div class=\"$class\">$icon <span>$message</span></div>";
     }
     return '';
 }
@@ -243,4 +243,43 @@ function csrf_token(): string
 function redirect(string $url)
 {
     return Application::$app->response->redirect($url);
+}
+
+/**
+ * Build a breadcrumb trail based on the current URL
+ * 
+ * @return array
+ */
+function breadcrumbs(): array
+{
+    $uriPath = trim(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH), '/');
+    $segments = $uriPath === '' ? [] : explode('/', $uriPath);
+
+    // If first segment is "admin", remove it from the trail
+    if (isset($segments[0]) && $segments[0] === 'admin') {
+        array_shift($segments);
+    }
+
+    // Map for pretty labels
+    $labelMap = [
+        'dashboard' => 'Dashboard',
+        'inventory' => 'Inventory',
+        'orders'    => 'Customer Orders',
+        'billings'  => 'Billings',
+        'delivery'  => 'Delivery',
+        'settings'  => 'Settings',
+    ];
+
+    $trail = [];
+    foreach ($segments as $seg) {
+        // Skip numeric IDs
+        if (is_numeric($seg)) {
+            continue;
+        }
+
+        $trail[] = $labelMap[strtolower($seg)]
+            ?? ucwords(str_replace(['-', '_'], ' ', $seg));
+    }
+
+    return $trail;
 }

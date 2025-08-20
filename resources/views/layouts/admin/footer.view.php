@@ -1,5 +1,6 @@
 
-    </main>    
+        </main>
+    </div>    
     <!-- shows SweetAlert -->
     <?php renderSweetAlert() ?>
 
