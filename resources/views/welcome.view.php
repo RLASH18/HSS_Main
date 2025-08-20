@@ -318,7 +318,8 @@
                     <p class="text-xl md:text-2xl font-bold">Builders Supplies Inc.</p>
                     <p class="text-sm">
                         Your one-stop shop for tools, materials, and construction essentials. Prime
-                        Builders is built to serve every Filipino builder - fast, reliable, and trusted by professionals and DIYers alike.
+                        Builders is built to serve every Filipino builder - fast, reliable, and trusted by professionals
+                        and DIYers alike.
                     </p>
                 </div>
 
@@ -334,19 +335,23 @@
                 </div>
                 <div class="space-y-4">
                     <p class="text-xl mb-3 font-bold">Contact Us</p>
-                    <p class="text-sm mb-3">AICS Bldg., Commonwealth Ave., Holy Spirit Drive, Brgy. Don Antonio Dr, Quezon City </p>
+                    <p class="text-sm mb-3">AICS Bldg., Commonwealth Ave., Holy Spirit Drive, Brgy. Don Antonio Dr,
+                        Quezon City </p>
                     <div class="space-y-3">
                         <div class="flex items-center space-x-3">
                             <svg class="w-5 h-5 text-gray-600 flex-shrink-0" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
                                     d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z" />
                             </svg>
                             <p class="text-sm md:text-base">Phone: +63 923 456 7890</p>
                         </div>
                         <div class="flex items-center space-x-3">
                             <svg class="w-5 h-5 text-gray-600 flex-shrink-0" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
                                     d="m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z" />
                             </svg>
@@ -357,100 +362,101 @@
             </div>
         </div>
         <div class="text-center bg-white p-2">
-            <p>&copy; 2025 <span class="abg-footer">ABG Prime Builders Supplies Inc.</span> - Powered by ABG. Building Better, Together.</p>
+            <p>&copy; 2025 <span class="abg-footer">ABG Prime Builders Supplies Inc.</span> - Powered by ABG. Building
+                Better, Together.</p>
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const swiper = new Swiper(".swiper", {
-                // Optional parameters
-                //spaceBetween: 20,
-                slidesPerView: 5,
-                autoplay: {
-                    delay: 5000, // time in ms between swipes
-                    disableOnInteraction: false, // keep autoplay after user interaction
-                },
+    document.addEventListener('DOMContentLoaded', function() {
+        const swiper = new Swiper(".swiper", {
+            // Optional parameters
+            //spaceBetween: 20,
+            slidesPerView: 5,
+            autoplay: {
+                delay: 5000, // time in ms between swipes
+                disableOnInteraction: false, // keep autoplay after user interaction
+            },
 
-                // If we need pagination
-                pagination: {
-                    el: ".swiper-pagination",
-                    dynamicBullets: true,
-                },
+            // If we need pagination
+            pagination: {
+                el: ".swiper-pagination",
+                dynamicBullets: true,
+            },
 
-                // Navigation arrows
-                navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                },
+            // Navigation arrows
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
 
-                // And if we need scrollbar
-                scrollbar: {
-                    el: ".swiper-scrollbar",
-                },
-            });
+            // And if we need scrollbar
+            scrollbar: {
+                el: ".swiper-scrollbar",
+            },
         });
+    });
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const locationChecked = sessionStorage.getItem("locationChecked");
+    document.addEventListener('DOMContentLoaded', () => {
+        const locationChecked = sessionStorage.getItem("locationChecked");
 
-            // If not checked yet, do the geolocation validation
-            if (!locationChecked) {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-                } else {
-                    alert("Geolocation is not supported by this browser");
-                    window.location.href = "/not-allowed";
-                }
-            }
-
-            function successCallback(position) {
-                const userLat = position.coords.latitude;
-                const userLng = position.coords.longitude;
-
-                const storeLat = 14.6981; // Store location
-                const storeLng = 121.0921;
-                const maxDistance = 5; // Accepts users within 5 km radius
-
-                const distance = getDistanceInKm(userLat, userLng, storeLat, storeLng);
-
-                if (distance > maxDistance) {
-                    alert("Sorry! We currently deliver only within a limited area of Quezon City.");
-                    window.location.href = "/not-allowed";
-                } else {
-                    sessionStorage.setItem("locationChecked", "true");
-                    // Set session variable for server-side validation
-                    fetch('/set-location-session', {
-                        method: 'POST',
-                        credentials: 'include'
-                    });
-                }
-            }
-
-            function errorCallback(error) {
-                alert("We need your location to continue. Please allow access.");
+        // If not checked yet, do the geolocation validation
+        if (!locationChecked) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+            } else {
+                alert("Geolocation is not supported by this browser");
                 window.location.href = "/not-allowed";
             }
+        }
 
-            function getDistanceInKm(lat1, lon1, lat2, lon2) {
-                const R = 6371;
-                const dLat = deg2rad(lat2 - lat1);
-                const dLon = deg2rad(lon2 - lon1);
-                const a =
-                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        function successCallback(position) {
+            const userLat = position.coords.latitude;
+            const userLng = position.coords.longitude;
 
-                return R * c;
+            const storeLat = 14.6981; // Store location
+            const storeLng = 121.0921;
+            const maxDistance = 5; // Accepts users within 5 km radius
+
+            const distance = getDistanceInKm(userLat, userLng, storeLat, storeLng);
+
+            if (distance > maxDistance) {
+                alert("Sorry! We currently deliver only within a limited area of Quezon City.");
+                window.location.href = "/not-allowed";
+            } else {
+                sessionStorage.setItem("locationChecked", "true");
+                // Set session variable for server-side validation
+                fetch('/set-location-session', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
             }
+        }
 
-            function deg2rad(deg) {
-                return deg * (Math.PI / 180);
-            }
-        });
+        function errorCallback(error) {
+            alert("We need your location to continue. Please allow access.");
+            window.location.href = "/not-allowed";
+        }
+
+        function getDistanceInKm(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = deg2rad(lat2 - lat1);
+            const dLon = deg2rad(lon2 - lon1);
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            return R * c;
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI / 180);
+        }
+    });
     </script>
 </body>
 

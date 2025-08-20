@@ -434,7 +434,7 @@ footer {
 
 /* Start sidebar */
 .sidebar {
-  background-color: #ECE5DF;
+  background-color: #ece5df;
 }
 
 .sidebar-links-container ul li {
@@ -485,7 +485,62 @@ footer {
 
 /* Start Main content */
 .main-content {
-  background-color: #F8F9FA;
+  background-color: #f8f9fa;
   min-height: 100vh;
   overflow-y: auto;
 }
+
+/* Admin Dashboard */
+
+.icon-admin {
+  background-color: #815331;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.page-title-container p {
+  color: #757575;
+}
+
+.user {
+  color: #815331;
+}
+
+.chart-1-container,
+.chart-2-container {
+  padding: 15px;
+}
+
+.date-time,
+.email {
+  font-size: 12px;
+  color: #757575;
+}
+
+.id,
+.cost,
+.status,
+.quantity,
+.item-category {
+  font-size: 12px;
+}
+
+.product-name,
+.name {
+  font-size: 13px;
+}
+
+.cost {
+  color: green;
+}
+
+.horizontal-line {
+  margin-top: 15px;
+}
+
+/* Admin Dashboard end */
