@@ -1,5 +1,12 @@
 <?php layout('admin/header') ?>
 
+<div class="flex justify-between items-start mb-8">
+    <div class="flex-1">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2 leading-tight">Billings</h1>
+        <p class="text-gray-600 text-base font-normal">Keep your billing records organized</p>
+    </div>
+</div>
+
 <table>
     <thead>
         <tr>

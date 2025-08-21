@@ -18,10 +18,10 @@
             <circle cx="11" cy="11" r="8"></circle>
             <path d="m21 21-4.35-4.35"></path>
         </svg>
-        <input type="text" id="inventory-search" placeholder="Search items or categories..." class="w-full pl-11 pr-3 py-3 border border-gray-300 rounded-lg text-sm bg-white transition-all duration-200 focus:outline-none focus:border-amber-800 focus:ring-3 focus:ring-amber-800/10">
+        <input type="text" id="inventory-search" placeholder="Search items or categories..." class="w-full pl-11 pr-3 py-3 border border-gray-300 rounded-lg text-sm bg-white transition-all duration-200 focus:outline-none focus:border-[#815331] focus:ring-3 focus:ring-[#5f3e27]">
     </div>
     <div class="flex gap-3">
-        <select id="category-filter" class="px-4 py-3 border border-gray-300 rounded-lg bg-white text-sm text-gray-700 cursor-pointer transition-all duration-200 min-w-[180px] focus:outline-none focus:border-amber-800 focus:ring-3 focus:ring-amber-800/10">
+        <select id="category-filter" class="px-4 py-3 border border-gray-300 rounded-lg bg-white text-sm text-gray-700 cursor-pointer transition-all duration-200 min-w-[180px] focus:outline-none focus:border-[#815331] focus:ring-3 focus:ring-[#5f3e27]">
             <option value="">All Categories</option>
             <option value="Hand Tools">Hand Tools</option>
             <option value="Power Tools">Power Tools</option>
@@ -32,7 +32,7 @@
             <option value="Paint and Finishes">Paint and Finishes</option>
             <option value="Chemicals">Chemicals</option>
         </select>
-        <select id="stock-filter" class="px-4 py-3 border border-gray-300 rounded-lg bg-white text-sm text-gray-700 cursor-pointer transition-all duration-200 min-w-[140px] focus:outline-none focus:border-amber-800 focus:ring-3 focus:ring-amber-800/10">
+        <select id="stock-filter" class="px-4 py-3 border border-gray-300 rounded-lg bg-white text-sm text-gray-700 cursor-pointer transition-all duration-200 min-w-[140px] focus:outline-none focus:border-[#815331] focus:ring-3 focus:ring-[#5f3e27]">
             <option value="">All Stock</option>
             <option value="low">Low Stock</option>
             <option value="medium">Warning</option>
@@ -42,7 +42,7 @@
 </div>
 
 <!-- Inventory table -->
-<div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
+<div class="custom-datatable bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
     <table id="inventory-table" class="w-full border-collapse text-sm">
         <thead class="bg-gray-50">
             <tr>
@@ -59,7 +59,7 @@
         <tbody>
             <?php foreach ($inventory as $item): ?>
                 <tr class="hover:bg-gray-50 transition-colors duration-150">
-                    <td class="px-5 py-4 border-b border-gray-100 text-gray-600 font-semibold font-mono"><?= htmlspecialchars($item->id) ?></td>
+                    <td class="px-5 py-4 border-b border-gray-100 text-gray-600 font-semibold font-mono">#<?= str_pad($item->id, 4, '0', STR_PAD_LEFT) ?></td>
                     <td class="px-5 py-4 border-b border-gray-100 text-gray-900 font-medium"><?= htmlspecialchars($item->item_name) ?></td>
                     <td class="px-5 py-4 border-b border-gray-100 text-gray-600"><?= htmlspecialchars($item->category) ?></td>
                     <td class="px-5 py-4 border-b border-gray-100 text-green-600 font-semibold">₱<?= number_format($item->unit_price, 2) ?></td>
@@ -130,17 +130,17 @@
         });
 
         // Custom search functionality
-        $('#inventory-search').on('keyup', function () {
+        $('#inventory-search').on('keyup', function() {
             table.search(this.value).draw();
         });
 
         // Category filter
-        $('#category-filter').on('change', function () {
+        $('#category-filter').on('change', function() {
             table.column(2).search(this.value).draw();
         });
 
         // Stock level filter
-        $('#stock-filter').on('change', function () {
+        $('#stock-filter').on('change', function() {
             const value = this.value;
             if (value === '') {
                 table.column(6).search('').draw();

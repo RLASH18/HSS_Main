@@ -1,6 +1,14 @@
 <?php layout('admin/header') ?>
 
-<a href="/admin/delivery/create">Add delivery</a>
+<div class="flex justify-between items-start mb-8">
+    <div class="flex-1">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2 leading-tight">Deliveries</h1>
+        <p class="text-gray-600 text-base font-normal">Schedule delivery and prepares items for pickup</p>
+    </div>
+    <button class="bg-[#815331] hover:bg-[#5f3e27] text-white px-5 py-3 rounded-lg font-medium text-sm">
+        <a href="/admin/delivery/create" class="text-white no-underline">Add Delivery</a>
+    </button>
+</div>
 
 <table>
     <thead>
