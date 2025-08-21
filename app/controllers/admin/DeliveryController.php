@@ -92,9 +92,19 @@ class DeliveryController extends Controller
     {
         $deliveries = $this->findDeliveryOrFail($id);
 
+        // Get all orders with status 'assembled' for the dropdown
+        $orders = Orders::whereMany(['status' => 'assembled']);
+
+        // Also include the current delivery's order if it's not already in the list
+        $currentOrder = Orders::find($deliveries->order_id);
+        if ($currentOrder && !in_array($currentOrder->id, array_column($orders, 'id'))) {
+            $orders[] = $currentOrder;
+        }
+
         return $this->view('admin/delivery/update', [
             'title' => 'Edit Delivery Info',
-            'deliveries' => $deliveries
+            'deliveries' => $deliveries,
+            'orders' => $orders
         ]);
     }
 
@@ -104,7 +114,7 @@ class DeliveryController extends Controller
     public function update(Request $request, $id)
     {
         $deliveries = $request->validate([
-            'order_id' => 'required',
+            'order_id' => 'nullable',
             'delivery_method' => 'required',
             'status' => 'required',
             'scheduled_date' => 'required',

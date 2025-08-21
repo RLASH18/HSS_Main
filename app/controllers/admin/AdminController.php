@@ -39,7 +39,9 @@ class AdminController extends Controller
 
     public function settings()
     {
-        
+        return $this->view('admin/settings', [
+            'title' => 'Settings'
+        ]);
     }
 
     public function logout() 

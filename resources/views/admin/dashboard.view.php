@@ -146,10 +146,5 @@
         <?php endforeach ?>
     </div>
 </div>
-</div>
-<form action="/admin/logout" method="post">
-    <?= csrf_token() ?>
-    <button type="submit">Logout</button>
-</form>
 
 <?php layout('admin/footer') ?>

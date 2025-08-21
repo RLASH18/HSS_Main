@@ -1,24 +1,131 @@
 <?php layout('admin/header') ?>
 
-<h2>Delete Delivery Info</h2>
+<div class="flex justify-between items-start mb-8">
+    <div class="flex-1">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Delete Delivery</h1>
+        <p class="text-gray-600">Are you sure you want to delete this delivery? This action cannot be undone.</p>
+    </div>
+    <div class="flex space-x-3">
+        <a href="/admin/delivery"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#815331] transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Delivery
+        </a>
+    </div>
+</div>
 
-<p>Are you sure you want to delete this delivery?</p>
+<!-- Item Details Section -->
+<div>
+    <!-- Warning Alert -->
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-red-800">Warning</h3>
+                <div class="mt-2 text-sm text-red-700">
+                    <p>This action will permanently delete the item and cannot be undone. Please review the details below before confirming.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<ul>
-    <li><strong>Delivery ID:</strong> <?= $deliveries->id ?></li>
-    <li><strong>Order ID:</strong> <?= $deliveries->order_id ?></li>
-    <li><strong>Order Name:</strong> <?= $deliveries->order->user->name ?></li>
-    <li><strong>Delivery Method:</strong> <?= ucfirst($deliveries->delivery_method) ?></li>
-    <li><strong>Scheduled Date:</strong> <?= $deliveries->scheduled_date ?></li>
-    <li><strong>Remarks:</strong> <?= $deliveries->remarks ?: 'None' ?></li>
-    <li><strong>Driver Name:</strong> <?= $deliveries->driver_name ?></li>
-    <li><strong>Status:</strong> <?= ucfirst($deliveries->status) ?></li>
-</ul>
+    <!-- 2-Column Grid Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-<form action="/admin/delivery/destroy/<?= $deliveries->id ?>" method="post">
-    <?= csrf_token() ?>
-    <button type="submit">Yes, Delete Delivery</button>
-    <a href="/admin/delivery">Cancel</a>
-</form>
+        <!-- Left Column -->
+        <div class="space-y-6">
+            <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">Customer Information</h3>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Delivery ID</label>
+                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                    #<?= str_pad($deliveries->id, 4, '0', STR_PAD_LEFT) ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Order ID</label>
+                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                    #<?= str_pad($deliveries->order_id, 4, '0', STR_PAD_LEFT) ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Customer Name</label>
+                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                    <?= $deliveries->order->user->name ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-6">
+            <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">Delivery Information</h3>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Delivery Method</label>
+                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                    <?= ucfirst($deliveries->delivery_method) ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Scheduled Date</label>
+                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                    <?= $deliveries->scheduled_date ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Remarks</label>
+                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                    <?= $deliveries->remarks ?: 'None' ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Driver Name</label>
+                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                    <?= $deliveries->driver_name ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                    <?= ucfirst($deliveries->status) ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="mt-8 pt-6 border-t border-gray-200">
+    <div class="flex items-center justify-end space-x-4">
+        <a href="/admin/delivery"
+            class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+            Cancel
+        </a>
+        <form action="/admin/delivery/destroy/<?= $deliveries->id ?>" method="post" class="inline">
+            <?= csrf_token() ?>
+            <button type="submit"
+                class="inline-flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+                onclick="return confirm('Are you absolutely sure you want to delete this item? This action cannot be undone.')">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Delete Delivery
+            </button>
+        </form>
+    </div>
+</div>
+</div>
 
 <?php layout('admin/footer') ?>

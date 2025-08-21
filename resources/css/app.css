@@ -64,7 +64,8 @@ html {
   outline: none;
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: #8c7d73;
 }
 

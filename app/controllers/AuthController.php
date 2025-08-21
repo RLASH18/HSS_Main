@@ -2,10 +2,9 @@
 
 namespace app\controllers;
 
-use app\core\Application;
 use app\core\Controller;
-use app\core\Request;
 use app\core\Session;
+use app\core\Request;
 use app\services\MailService;
 use app\models\User;
 
@@ -17,7 +16,6 @@ class AuthController extends Controller
     public function setLocationSession(Session $session) 
     {
         $session->set('location_approved', true);
-        return json_encode(['status' => 'success']);
     }
 
     /**

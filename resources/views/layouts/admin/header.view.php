@@ -7,16 +7,19 @@
     <title><?= $title ?></title>
     <link rel="stylesheet" href="/assets/css/style.css">
     <script src="/assets/js/script.js"></script>
+    <!-- DataTable and jQuery cdn -->
     <link href="https://cdn.datatables.net/v/dt/dt-2.3.3/datatables.min.css" rel="stylesheet" integrity="sha384-C0ogMvg31Mu1GWzYxEEobPIlBlGbp/DY94Le4M9y/HFd9VGLT1zWL7MErNMsM2x6" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/v/dt/dt-2.3.3/datatables.min.js" integrity="sha384-qyN6ZT87DHLvgCDC+GYE3myTUDGpz3swpW19cYxOh4oa/8GNSGPMteQwbyM6Ot0D" crossorigin="anonymous"></script>
+    <!-- Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 
 <body class="grid grid-cols-[250px_1fr]">
-
     <!-- sidebar and navbar will go here -->
     <section class="sidebar row-span-full min-h-screen p-4">
-        <div class="sidebar-company-logo-container flex items-center justify-center mb-14">
+        <div class="sidebar-company-logo-container flex items-center justify-center mb-14 p-1">
             <img src="/assets/img/abg-logo.png" alt="ABG Prime Logo" class="h-12 w-auto mr-2">
             <div class="company-text">
                 <img src="/assets/img/abg-company-name.svg" alt="ABG Company Name" class="h-5 w-auto mt-1">
@@ -25,6 +28,7 @@
         </div>
 
         <div class="sidebar-links-container">
+            <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 px-2">Main</h2>
             <ul>
                 <li class="group sidebar-item" data-route="/admin/dashboard">
                     <span class="sidebar-icon">
@@ -76,29 +80,37 @@
                     </span>
                     <a href="/admin/delivery">Deliveries</a>
                 </li>
-                <li class="group sidebar-item" data-route="/admin/settings">
-                    <span class="sidebar-icon">
-                        <svg class="w-7 h-7 text-gray-800 dark:text-white group-hover:text-white" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1Z" />
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                        </svg>
-                    </span>
-                    <a href="/admin/settings">Settings</a>
-                </li>
-                <li class="group sidebar-item" data-route="/admin/logout">
-                    <span class="sidebar-icon">
-                        <svg class="w-7 h-7 text-gray-800 dark:text-white group-hover:text-white"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M8.25 9V5.25A2.25 2.25 0 0110.5 3h7.5A2.25 2.25 0 0120.75 5.25v13.5A2.25 2.25 0 0118 21h-7.5a2.25 2.25 0 01-2.25-2.25V15m6 0H3m0 0l3-3m-3 3 3 3" />
-                        </svg>
-                    </span>
-                    <a href="#">Logout</a>
-                </li>
+                <div class="mt-8">
+                    <h2 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 px-2">Account</h2>
+                    <li class="group sidebar-item" data-route="/admin/settings">
+                        <span class="sidebar-icon">
+                            <svg class="w-7 h-7 text-gray-800 dark:text-white group-hover:text-white" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1Z" />
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                            </svg>
+                        </span>
+                        <a href="/admin/settings">Settings</a>
+                    </li>
+                    <li class="group sidebar-item" data-route="/admin/logout">
+                        <form action="/admin/logout" method="post" class="flex items-center w-full">
+                            <?= csrf_token() ?>
+                            <button type="submit" class="flex items-center w-full text-left text-[#815331] group-hover:text-white">
+                                <span class="sidebar-icon">
+                                    <svg class="w-7 h-7 text-gray-800 dark:text-white group-hover:text-white"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M8.25 9V5.25A2.25 2.25 0 0110.5 3h7.5A2.25 2.25 0 0120.75 5.25v13.5A2.25 2.25 0 0118 21h-7.5a2.25 2.25 0 01-2.25-2.25V15m6 0H3m0 0l3-3m-3 3 3 3" />
+                                    </svg>
+                                </span>
+                                <span>Logout</span>
+                            </button>
+                        </form>
+                    </li>
+                </div>
             </ul>
         </div>
     </section>

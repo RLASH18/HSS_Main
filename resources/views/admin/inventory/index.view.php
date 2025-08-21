@@ -88,7 +88,7 @@
                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                 </svg>
                             </a>
-                            <a href="/admin/inventory/delete/<?= $item->id ?>" class="inline-flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200 text-red-600 bg-red-50 border border-red-200 hover:text-red-800 hover:bg-red-100 hover:-translate-y-0.5" title="Delete" onclick="return confirm('Are you sure you want to delete this item?')">
+                            <a href="/admin/inventory/delete/<?= $item->id ?>" class="inline-flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200 text-red-600 bg-red-50 border border-red-200 hover:text-red-800 hover:bg-red-100 hover:-translate-y-0.5" title="Delete">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="3,6 5,6 21,6"></polyline>
                                     <path d="M19,6V20a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6M8,6V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"></path>
@@ -97,7 +97,6 @@
                                 </svg>
                             </a>
                         </div>
-
                     </td>
                 </tr>
             <?php endforeach ?>
