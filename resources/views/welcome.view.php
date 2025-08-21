@@ -418,7 +418,7 @@
 
             const storeLat = 14.6981; // Store location
             const storeLng = 121.0921;
-            const maxDistance = 5; // Accepts users within 5 km radius
+            const maxDistance = 10; // Accepts users within 5 km radius
 
             const distance = getDistanceInKm(userLat, userLng, storeLat, storeLng);
 
