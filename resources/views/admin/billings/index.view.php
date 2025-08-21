@@ -7,45 +7,17 @@
     </div>
 </div>
 
+<!-- Cards -->
 <div class="admin-cards-container grid grid-cols-2 gap-5 my-4">
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
             <p>Total Revenue</p>
-            <p></p>
+            <p class="mt-1">₱ <?= number_format($revenue, 2) ?></p>
+            <p class="text-sm text-gray-500 mt-6">From paid transactions</p>
         </div>
-        <div class="p-2 flex items-center justify-center">
+        <div class="flex items-center justify-center w-12 h-12 rounded-lg mt-1">
             <div class="icon-admin">
-                <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 6h8m-8 6h8m-8 6h8M4 16a2 2 0 1 1 3.321 1.5L4 20h5M4 5l2-1v6m-2 0h4" />
-                </svg>
-            </div>
-        </div>
-    </div>
-    <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
-        <div class="p-2">
-            <p>Pending amount</p>
-            <p></p>
-        </div>
-        <div class="p-2 flex items-center justify-center">
-            <div class="icon-admin">
-                <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-width="2"
-                        d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
-            </div>
-        </div>
-    </div>
-    <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
-        <div class="p-2">
-            <p>Total Transactions</p>
-            <p></p>
-        </div>
-        <div class="p-2 flex items-center justify-center">
-            <div class="icon-admin">
-                <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                <svg class="w-8 h-8 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M6 10h9.231M6 14h9.231M18 5.086A5.95 5.95 0 0 0 14.615 4c-3.738 0-6.769 3.582-6.769 8s3.031 8 6.769 8A5.94 5.94 0 0 0 18 18.916" />
@@ -55,21 +27,58 @@
     </div>
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
-            <p>Success Rate</p>
-            <p></p>
+            <p>Pending amount</p>
+            <p class="mt-1">₱ <?= number_format($pending, 2) ?></p>
+            <p class="text-sm text-gray-500 mt-6">Awaiting payment</p>
         </div>
-        <div class="p-2 flex items-center justify-center">
+        <div class="flex items-center justify-center w-12 h-12 rounded-lg mt-1">
             <div class="icon-admin">
-                <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
-                        d="M4.07141 14v6h5.99999v-6H4.07141Zm4.5-4h6.99999l-3.5-6-3.49999 6Zm7.99999 10c1.933 0 3.5-1.567 3.5-3.5s-1.567-3.5-3.5-3.5-3.5 1.567-3.5 3.5 1.567 3.5 3.5 3.5Z" />
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-8 h-8 text-white">
+                    <path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM13 12H17V14H11V7H13V12Z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+    <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
+        <div class="p-2">
+            <p>Total Transactions</p>
+            <p class="mt-1"><?= $total ?></p>
+            <p class="text-sm text-gray-500 mt-6">All billing records</p>
+        </div>
+        <div class="flex items-center justify-center w-12 h-12 rounded-lg mt-1">
+            <div class="icon-admin">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-8 h-8 text-white">
+                    <path d="M18.0049 6.99979H21.0049C21.5572 6.99979 22.0049 7.4475 22.0049 7.99979V19.9998C22.0049 20.5521 21.5572 20.9998 21.0049 20.9998H3.00488C2.4526 20.9998 2.00488 20.5521 2.00488 19.9998V3.99979C2.00488 3.4475 2.4526 2.99979 3.00488 2.99979H18.0049V6.99979ZM4.00488 8.99979V18.9998H20.0049V8.99979H4.00488ZM4.00488 4.99979V6.99979H16.0049V4.99979H4.00488ZM15.0049 12.9998H18.0049V14.9998H15.0049V12.9998Z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+    <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
+        <div class="p-2">
+            <p>Success Rate</p>
+            <p class="mt-1"><?= number_format($rate, 2) ?>%</p>
+            <p class="text-sm text-gray-500 mt-6">Payment completion</p>
+        </div>
+        <div class="flex items-center justify-center w-12 h-12 rounded-lg mt-1">
+            <div class="icon-admin">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-8 h-8 text-white">
+                    <path d="M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z" />
                 </svg>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Billing table -->
 <div class="custom-datatable bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
     <table id="billing-table" class="w-full border-collapse text-sm">
         <thead class="bg-gray-50">
@@ -143,13 +152,27 @@
 </div>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         const table = $('#billing-table').DataTable({
             pageLength: 10,
             lengthMenu: [5, 10, 25, 50, 100],
             order: [
                 [0, 'desc']
             ],
+            columnDefs: [{
+                orderable: false,
+                searchable: false,
+                targets: -1
+            }],
+            dom: '<"datatable-controls"<"datatable-length"l><"datatable-info"i>>rt<"datatable-footer"<"datatable-pagination"p>>',
+            language: {
+                lengthMenu: "Show _MENU_ entries",
+                info: "Showing _START_ to _END_ of _TOTAL_ billings",
+                paginate: {
+                    previous: "Previous",
+                    next: "Next"
+                }
+            }
         });
     });
 </script>
