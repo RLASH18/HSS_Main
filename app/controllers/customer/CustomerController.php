@@ -21,18 +21,6 @@ class CustomerController extends Controller
 
     public function show($id)
     {
-        $items = $this->findItemOrFail($id);
-
-        $data = [
-            'title' => 'ABG Prime Builders Supplies Inc. | ' . $items->item_name,
-            'items' => $items,
-        ];
-
-        return $this->view('customer/show', $data);
-    }
-
-    private function findItemOrFail($id)
-    {
         $items = Inventory::find($id);
 
         if (!$items) {
@@ -40,6 +28,11 @@ class CustomerController extends Controller
             redirect('/customer/home');
         }
 
-        return $items;
+        $data = [
+            'title' => 'ABG Prime Builders Supplies Inc. | ' . $items->item_name,
+            'items' => $items,
+        ];
+
+        return $this->view('customer/show', $data);
     }
 }

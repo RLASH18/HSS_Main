@@ -52,10 +52,11 @@ abstract class Model
      * Inserts a new record into the database using the provided data.
      * Only fillable fields are used.
      *
-     * @param array $data
-     * @return bool True if insert was successful
+     * @param array $data Data to insert (fillable fields only)
+     * @param bool $returnId Return last insert ID instead of bool
+     * @return bool|int True/ID on success, false on failure
      */
-    public static function insert(array $data): bool
+    public static function insert(array $data, bool $returnId = false): bool|int
     {
         $data = static::filterFillable($data);
         $table = static::tableName();
@@ -69,7 +70,11 @@ abstract class Model
             $stmt->bindValue(":$key", $value);
         }
 
-        return $stmt->execute();
+        if ($stmt->execute()) {
+            return $returnId ? Application::$app->db->pdo->lastInsertId() : true;
+        }
+
+        return false;
     }
 
     /**

@@ -368,95 +368,95 @@
     </footer>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const swiper = new Swiper(".swiper", {
-            // Optional parameters
-            //spaceBetween: 20,
-            slidesPerView: 5,
-            autoplay: {
-                delay: 5000, // time in ms between swipes
-                disableOnInteraction: false, // keep autoplay after user interaction
-            },
+        document.addEventListener('DOMContentLoaded', function() {
+            const swiper = new Swiper(".swiper", {
+                // Optional parameters
+                //spaceBetween: 20,
+                slidesPerView: 5,
+                autoplay: {
+                    delay: 5000, // time in ms between swipes
+                    disableOnInteraction: false, // keep autoplay after user interaction
+                },
 
-            // If we need pagination
-            pagination: {
-                el: ".swiper-pagination",
-                dynamicBullets: true,
-            },
+                // If we need pagination
+                pagination: {
+                    el: ".swiper-pagination",
+                    dynamicBullets: true,
+                },
 
-            // Navigation arrows
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
+                // Navigation arrows
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                },
 
-            // And if we need scrollbar
-            scrollbar: {
-                el: ".swiper-scrollbar",
-            },
+                // And if we need scrollbar
+                scrollbar: {
+                    el: ".swiper-scrollbar",
+                },
+            });
         });
-    });
     </script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const locationChecked = sessionStorage.getItem("locationChecked");
+        document.addEventListener('DOMContentLoaded', () => {
+            const locationChecked = sessionStorage.getItem("locationChecked");
 
-        // If not checked yet, do the geolocation validation
-        if (!locationChecked) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-            } else {
-                alert("Geolocation is not supported by this browser");
+            // If not checked yet, do the geolocation validation
+            if (!locationChecked) {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+                } else {
+                    alert("Geolocation is not supported by this browser");
+                    window.location.href = "/not-allowed";
+                }
+            }
+
+            function successCallback(position) {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+
+                const storeLat = 14.6981; // Store location
+                const storeLng = 121.0921;
+                const maxDistance = 5; // Accepts users within 5 km radius
+
+                const distance = getDistanceInKm(userLat, userLng, storeLat, storeLng);
+
+                if (distance > maxDistance) {
+                    alert("Sorry! We currently deliver only within a limited area of Quezon City.");
+                    window.location.href = "/not-allowed";
+                } else {
+                    sessionStorage.setItem("locationChecked", "true");
+                    // Set session variable for server-side validation
+                    fetch('/set-location-session', {
+                        method: 'POST',
+                        credentials: 'include'
+                    });
+                }
+            }
+
+            function errorCallback(error) {
+                alert("We need your location to continue. Please allow access.");
                 window.location.href = "/not-allowed";
             }
-        }
 
-        function successCallback(position) {
-            const userLat = position.coords.latitude;
-            const userLng = position.coords.longitude;
+            function getDistanceInKm(lat1, lon1, lat2, lon2) {
+                const R = 6371;
+                const dLat = deg2rad(lat2 - lat1);
+                const dLon = deg2rad(lon2 - lon1);
+                const a =
+                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-            const storeLat = 14.6981; // Store location
-            const storeLng = 121.0921;
-            const maxDistance = 5; // Accepts users within 5 km radius
-
-            const distance = getDistanceInKm(userLat, userLng, storeLat, storeLng);
-
-            if (distance > maxDistance) {
-                alert("Sorry! We currently deliver only within a limited area of Quezon City.");
-                window.location.href = "/not-allowed";
-            } else {
-                sessionStorage.setItem("locationChecked", "true");
-                // Set session variable for server-side validation
-                fetch('/set-location-session', {
-                    method: 'POST',
-                    credentials: 'include'
-                });
+                return R * c;
             }
-        }
 
-        function errorCallback(error) {
-            alert("We need your location to continue. Please allow access.");
-            window.location.href = "/not-allowed";
-        }
-
-        function getDistanceInKm(lat1, lon1, lat2, lon2) {
-            const R = 6371;
-            const dLat = deg2rad(lat2 - lat1);
-            const dLon = deg2rad(lon2 - lon1);
-            const a =
-                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-                Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-            return R * c;
-        }
-
-        function deg2rad(deg) {
-            return deg * (Math.PI / 180);
-        }
-    });
+            function deg2rad(deg) {
+                return deg * (Math.PI / 180);
+            }
+        });
     </script>
 </body>
 

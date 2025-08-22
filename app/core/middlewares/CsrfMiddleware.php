@@ -34,8 +34,20 @@ class CsrfMiddleware extends BaseMiddleware
                 return;
             }
 
-            $token = $_POST['_token'] ?? null;
+            $token = null;
             $sessionToken = $_SESSION['_csrf'] ?? null;
+
+            // Check if this is a JSON request
+            $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+            if (strpos($contentType, 'application/json') !== false) {
+                // For JSON requests, check the X-CSRF-TOKEN header
+                $headers = getallheaders();
+                $token = $headers['X-CSRF-TOKEN'] ?? null;
+            } else {
+                // For form requests, check POST data
+                $token = $_POST['_token'] ?? null;
+            }
+
             if (!$token || !$sessionToken || !hash_equals($sessionToken, $token)) {
                 throw new Exception('Expired', 419);
             }
