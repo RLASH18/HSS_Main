@@ -49,7 +49,7 @@
         <div class="flex justify-between items-center">
             <div class="flex gap-2">
                 <div class="orders-icon-box flex justify-center items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#815331">
                         <path
                             d="M4.5 7.65311V16.3469L12 20.689L19.5 16.3469V7.65311L12 3.311L4.5 7.65311ZM12 1L21.5 6.5V17.5L12 23L2.5 17.5V6.5L12 1ZM6.49896 9.97065L11 12.5765V17.625H13V12.5765L17.501 9.97066L16.499 8.2398L12 10.8445L7.50104 8.2398L6.49896 9.97065Z">
                         </path>
@@ -57,7 +57,7 @@
                 </div>
                 <div>
                     <h2 class="text-base font-semibold">Order #<?= str_pad($order->id, 4, '0', STR_PAD_LEFT) ?></h2>
-                    <p class="customer-name"><strong></strong> <?= $order->user->name ?></p>
+                    <p class="customer-name text-[#757575]"><strong></strong> <?= $order->user->name ?></p>
                 </div>
             </div>
             <div>
@@ -85,37 +85,65 @@
             </div>
         </div>
 
+        <div class="flex justify-between">
+            <div class="my-2 flex flex-col">
+                <p class="text-sm text-[#757575]">Total Amount</p>
+                <p class="font-bold text-xl">₱<?= number_format($order->total_amount, 2) ?></p>
+            </div>
+            <div class="my-2 flex flex-col justify-center">
+                <p class="text-xs leading-5 text-[#757575]">Order Date</p>
+                <div class="flex items-center justify-center gap-2">
+                    <svg width="15px" height="15px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        fill="#757575">
+                        <path
+                            d="M9 1V3H15V1H17V3H21C21.5523 3 22 3.44772 22 4V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H7V1H9ZM20 11H4V19H20V11ZM7 5H4V9H20V5H17V7H15V5H9V7H7V5Z">
+                        </path>
+                    </svg>
+                    <p class="text-xs leading-5 text-[#757575]">
+                        <?= date('M d, Y h:i A', strtotime($order->created_at)) ?></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Items ordered -->
         <div class="my-3">
-            <strong>Items Ordered</strong>
+            <p class="text-[#757575]">Items:</p>
             <?php foreach ($order->orderItems as $orderItem): ?>
-            <li><?= $orderItem->items->item_name ?> (<?= $orderItem->quantity ?>)</li>
+            <div class="items-ordered-container">
+                <li class="list-none text-sm"><?= $orderItem->items->item_name ?>
+                    (<?= $orderItem->quantity ?>)</li>
+            </div>
             <?php endforeach ?>
         </div>
 
-
-
-        <p><strong>Amount:</strong> ₱<?= number_format($order->total_amount, 2) ?></p>
-        <p><strong>Status:</strong> <span class="badge"><?= ucfirst($order->status) ?></span></p>
-        <p><strong>Date:</strong> <?= date('M d, Y h:i A', strtotime($order->created_at)) ?></p>
 
         <form method="POST" action="/admin/orders/<?= $order->id ?>/update-status">
             <?= csrf_token() ?>
 
             <?php if ($order->status === 'pending'): ?>
-            <input type="hidden" name="status" value="confirmed">
-            <button type="submit" class="ml-2 bg-yellow-500 text-white px-4 py-1 rounded">Confirmed</button>
+            <div class="float-left">
+                <input type="hidden" name="status" value="confirmed">
+                <button type="submit" class=" bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600">Confirm
+                    Order</button>
+            </div>
             <?php elseif ($order->status === 'confirmed'): ?>
-            <input type="hidden" name="status" value="assembled">
-            <button type="submit" class="ml-2 bg-yellow-500 text-white px-4 py-1 rounded">Assembled</button>
+            <div>
+                <input type="hidden" name="status" value="assembled">
+                <button type="submit" class=" bg-[#F28C28] hover:bg-[#a05f1e] text-white px-4 py-1 rounded-md">Mark
+                    as
+                    Assembled</button>
+            </div>
             <?php elseif ($order->status === 'assembled'): ?>
             <input type="hidden" name="status" value="shipped">
-            <button type="submit" class="ml-2 bg-yellow-500 text-white px-4 py-1 rounded">Shipped</button>
+            <button type="submit" class=" bg-indigo-500 hover:bg-indigo-700 text-white px-4 py-1 rounded-md">Mark as
+                Shipped</button>
             <?php elseif ($order->status === 'shipped'): ?>
             <input type="hidden" name="status" value="delivered">
-            <button type="submit" class="ml-2 bg-yellow-500 text-white px-4 py-1 rounded">Delivered</button>
+            <button type="submit" class=" bg-green-700 hover:bg-green-800 text-white px-4 py-1 rounded-md">Mark as
+                Delivered</button>
             <?php elseif ($order->status === 'delivered'): ?>
             <input type="hidden" name="status" value="paid">
-            <button type="submit" class="ml-2 bg-yellow-500 text-white px-4 py-1 rounded">Paid</button>
+            <button type="submit" class="ml-2 bg-yellow-500 text-white px-4 py-1 rounded-md">Paid</button>
             <?php endif ?>
         </form>
 
@@ -123,7 +151,9 @@
             <?= csrf_token() ?>
 
             <?php if ($order->status === 'pending'): ?>
-            <button type="submit" class="bg-red-500 text-white px-4 py-1 rounded">Cancel Order</button>
+            <div><button type="submit"
+                    class="bg-red-500 hover:bg-red-700 text-white px-4 py-1 rounded ml-2 rounded-md">Cancel</button>
+            </div>
             <?php endif ?>
         </form>
     </div>
