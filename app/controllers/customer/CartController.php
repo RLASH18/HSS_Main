@@ -6,6 +6,7 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 use app\models\Cart;
+use app\models\Inventory;
 
 class CartController extends Controller
 {
@@ -16,8 +17,12 @@ class CartController extends Controller
         $this->userId = auth()->id;
     }
 
+    /**
+     * Display all cart items for the logged-in user.
+     */
     public function index()
     {
+        // Get all cart items that belong to the current user
         $carts = Cart::whereMany(['user_id' => $this->userId]);
 
         $data = [
@@ -28,12 +33,22 @@ class CartController extends Controller
         return $this->view('customer/cart', $data);
     }
 
+    /**
+     * Store a new item in the user's cart.
+     */
     public function store(Request $request)
     {
         $data = $request->validate([
             'item_id' => 'required',
             'quantity' => 'required|min:1'
         ]);
+
+        // Ensure requested quantity is in stock, else show error and redirect
+        $item = Inventory::find($data['item_id']);
+        if (!$item || $data['quantity'] > $item->quantity) {
+            setSweetAlert('error', 'Oops!', "Only {$item->quantity} items available in stock.");
+            redirect('/customer/show/' . $data['item_id']);
+        }
 
         Cart::insert([
             'user_id' => $this->userId,
@@ -44,6 +59,9 @@ class CartController extends Controller
         redirect('/customer/my-cart');
     }
 
+    /**
+     * Update an existing cart item.
+     */
     public function update(Request $request, Response $response)
     {
         $data = $request->validate([
@@ -53,6 +71,7 @@ class CartController extends Controller
 
         $carts = $this->findCartOrFail($data['id']);
 
+        // Ensure the user owns the cart before updating
         if ($carts->user_id !== $this->userId) {
             $response->setStatusCode(403);
             header('Content-Type: application/json');
@@ -63,6 +82,7 @@ class CartController extends Controller
             exit;
         }
 
+        // Ensure requested quantity does not exceed available stock
         if ($data['quantity'] > $carts->item->quantity) {
             header('Content-Type: application/json');
             echo json_encode([
@@ -75,11 +95,15 @@ class CartController extends Controller
         Cart::update($carts->id, ['quantity' => $data['quantity']]);
         $itemTotal = $carts->item->unit_price * $data['quantity'];
 
+        // Return updated item total in JSON
         header('Content-Type: application/json');
         echo json_encode(['success' => true, 'itemTotal' => $itemTotal]);
         exit;
     }
 
+    /**
+     * Delete a cart item by ID.
+     */
     public function delete(Request $request)
     {
         $data = $request->validate([
@@ -90,6 +114,7 @@ class CartController extends Controller
 
         $carts = $this->findCartOrFail($id);
 
+        // Ensures ownership before removing the item from the cart.
         if ($carts->user_id !== $this->userId) {
             setSweetAlert('error', 'Unauthorized!', 'You cannot delete this cart item.');
             redirect('/customer/my-cart');
@@ -100,6 +125,9 @@ class CartController extends Controller
         redirect('/customer/my-cart');
     }
 
+    /**
+     * Find a cart item by ID or fail.
+     */
     private function findCartOrFail($id)
     {
         $carts = Cart::find($id);

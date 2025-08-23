@@ -7,6 +7,9 @@ use app\models\Inventory;
 
 class CustomerController extends Controller
 {
+    /**
+     * Display the customer dashboard with all available inventory items.
+     */
     public function index()
     {
         $items = Inventory::all();
@@ -19,6 +22,9 @@ class CustomerController extends Controller
         return $this->view('customer/index', $data);
     }
 
+    /**
+     * Display details of a specific inventory item by ID.
+     */
     public function show($id)
     {
         $items = Inventory::find($id);
@@ -34,5 +40,10 @@ class CustomerController extends Controller
         ];
 
         return $this->view('customer/show', $data);
+    }
+
+    public function logout()
+    {
+        
     }
 }

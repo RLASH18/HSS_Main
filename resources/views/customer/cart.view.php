@@ -190,8 +190,8 @@
             selected.forEach(cb => total += parseFloat(cb.dataset.price));
 
             document.getElementById('selectedCount').textContent = count;
-            document.getElementById('selectedSubtotal').textContent = '₱' + total.toFixed(2);
-            document.getElementById('selectedTotal').textContent = '₱' + total.toFixed(2);
+            document.getElementById('selectedSubtotal').textContent = '₱' + total.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('selectedTotal').textContent = '₱' + total.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2});
 
             checkoutBtn.disabled = count === 0;
             selectAll.checked = count === checkboxes.length;

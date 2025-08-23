@@ -18,6 +18,9 @@ class CheckoutController extends Controller
         $this->userId = auth()->id;
     }
 
+    /**
+     * Show checkout page with selected or all cart items
+     */
     public function checkout($cartIds = null)
     {
         // Get selected cat items (can be comma-separated IDs)
@@ -42,7 +45,7 @@ class CheckoutController extends Controller
             redirect('/customer/my-cart');
         }
 
-        // Calculate totals
+        // Compute subtotal
         $subtotal = 0;
         foreach ($cartItems as $cart) {
             $total = $cart->quantity * $cart->item->unit_price;
@@ -60,6 +63,9 @@ class CheckoutController extends Controller
         return $this->view('customer/checkout', $data);
     }
 
+    /**
+     * Place order: validate, create order, order items, update inventory
+     */
     public function placeOrder(Request $request)
     {
         $data = $request->validate([
@@ -87,9 +93,9 @@ class CheckoutController extends Controller
                 redirect('/customer/my-cart');
             }
 
+            // Add the cart item to the checkout list and update the running total amount
             $cartItems[] = $cart;
-            $total = $cart->quantity * $cart->item->unit_price;
-            $totalAmount += $total;
+            $totalAmount += $cart->quantity * $cart->item->unit_price;
         }
 
         // Create order
