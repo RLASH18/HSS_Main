@@ -82,12 +82,29 @@ class Request
         }
 
         if ($this->isPost()) {
-            foreach ($_POST as $key => $value) {
-                $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+            // Check if this is a JSON request
+            $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+            if (strpos($contentType, 'application/json') !== false) {
+                $jsonData = file_get_contents('php://input');
+                $body = json_decode($jsonData, true) ?? [];
+            } else {
+                foreach ($_POST as $key => $value) {
+                    $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                }
             }
         }
-
         return $body;
+    }
+
+    /**
+     * Gets JSON data from the request body
+     * 
+     * @return array
+     */
+    public function getJson()
+    {
+        $jsonData = file_get_contents('php://input');
+        return json_decode($jsonData, true) ?? [];
     }
 
     /**

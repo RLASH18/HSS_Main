@@ -77,10 +77,8 @@ class OrdersController extends Controller
 
         // Update order status
         if (Orders::update($id, $status)) {
-            // On first confirmation: update inventory, calculate total, notify customer, and generate billing
+            // On first confirmation: calculate total, notify customer, and generate billing
             if ($isConfirmingOrder) {
-                $this->updateInventoryQuantities($order);
-
                 $total = $order->calculateTotal();
                 Orders::update($order->id, ['total_amount' => $total]);
 
@@ -113,31 +111,6 @@ class OrdersController extends Controller
         }
 
         redirect('/admin/orders');
-    }
-
-    /**
-     * Decrease inventory quantities based on the items in the order.
-     */
-    private function updateInventoryQuantities($order)
-    {
-        // Fetch all items associated with the given order
-        $orderItems = $order->orderItems();
-
-        foreach ($orderItems as $orderItem) {
-            $inventoryItem = Inventory::find($orderItem->item_id);
-
-            if ($inventoryItem) {
-                // Deduct ordered quantity from inventory
-                $newQuantity = $inventoryItem->quantity - $orderItem->quantity;
-
-                // Prevent negative inventory
-                $newQuantity = max(0, $newQuantity);
-
-                Inventory::update($inventoryItem->id, [
-                    'quantity' => $newQuantity
-                ]);
-            }
-        }
     }
 
     /**

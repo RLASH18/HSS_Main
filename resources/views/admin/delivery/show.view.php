@@ -124,68 +124,145 @@
 </div>
 
 <script>
-    // Initialize map
-    const map = L.map('map').setView([14.5995, 120.9842], 13); // Default to Manila coordinates
+    // Initialize map with Quezon City as default (better for Philippine addresses)
+    const map = L.map('map').setView([14.6760, 121.0437], 13); // Quezon City coordinates
     
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Geocode the customer address
+    // Geocode the customer address with multiple strategies
     const address = "<?= $deliveries->order->user->address ?>";
-    console.log('Customer address:', address); // Debug log
+    console.log('Customer address:', address);
     
     if (address && address.trim() !== '') {
-        console.log('Geocoding address:', address); // Debug log
+        console.log('Geocoding address:', address);
         
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
-            .then(response => {
-                console.log('Geocoding response status:', response.status); // Debug log
-                return response.json();
-            })
-            .then(data => {
-                console.log('Geocoding data:', data); // Debug log
-                
-                if (data.length > 0) {
-                    const lat = parseFloat(data[0].lat);
-                    const lon = parseFloat(data[0].lon);
-                    console.log('Coordinates found:', lat, lon); // Debug log
+        // Function to try geocoding with different search strategies
+        async function geocodeAddress() {
+            const searchQueries = [
+                // Original address with Philippines context
+                `${address}, Philippines`,
+                // Address with Metro Manila context
+                `${address}, Metro Manila, Philippines`,
+                // Just the barangay and city if address contains them
+                address.includes('Barangay') && address.includes('Quezon City') 
+                    ? `${address.split('Barangay')[1]}, Philippines`
+                    : null,
+                // Just Quezon City if address contains it
+                address.toLowerCase().includes('quezon city') 
+                    ? 'Quezon City, Metro Manila, Philippines'
+                    : null,
+                // Fallback to just the city mentioned
+                address.toLowerCase().includes('qc') || address.toLowerCase().includes('quezon')
+                    ? 'Quezon City, Philippines'
+                    : null
+            ].filter(query => query !== null);
+
+            for (let query of searchQueries) {
+                try {
+                    console.log('Trying geocoding query:', query);
                     
-                    map.setView([lat, lon], 15);
+                    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=ph&limit=5`);
+                    const data = await response.json();
                     
-                    // Add marker with popup
-                    const marker = L.marker([lat, lon]).addTo(map)
-                        .bindPopup(`<b>Delivery Address</b><br>${address}`)
-                        .openPopup();
+                    console.log(`Results for "${query}":`, data);
                     
-                    console.log('Marker added:', marker); // Debug log
-                } else {
-                    console.warn('No coordinates found for address:', address);
-                    // Add a default marker at Manila center with address info
-                    L.marker([14.5995, 120.9842]).addTo(map)
-                        .bindPopup(`<b>Address Not Found</b><br>${address}<br><em>Showing default location</em>`)
-                        .openPopup();
+                    if (data.length > 0) {
+                        // Find the best match (prefer more specific results)
+                        let bestMatch = data[0];
+                        
+                        // Prefer results that contain "Quezon City" in display name
+                        const qcMatch = data.find(result => 
+                            result.display_name.toLowerCase().includes('quezon city')
+                        );
+                        if (qcMatch) bestMatch = qcMatch;
+                        
+                        const lat = parseFloat(bestMatch.lat);
+                        const lon = parseFloat(bestMatch.lon);
+                        
+                        console.log('Best coordinates found:', lat, lon, 'from:', bestMatch.display_name);
+                        
+                        // Verify coordinates are in Philippines (rough bounds)
+                        if (lat >= 4.5 && lat <= 21.5 && lon >= 116 && lon <= 127) {
+                            map.setView([lat, lon], 15);
+                            
+                            // Add marker with popup
+                            const marker = L.marker([lat, lon]).addTo(map)
+                                .bindPopup(`
+                                    <div style="min-width: 200px;">
+                                        <b>Delivery Address</b><br>
+                                        <strong>Original:</strong> ${address}<br>
+                                        <strong>Found:</strong> ${bestMatch.display_name}<br>
+                                    </div>
+                                `)
+                                .openPopup();
+                            
+                            return true; // Success
+                        }
+                    }
+                } catch (error) {
+                    console.error(`Error geocoding "${query}":`, error);
                 }
-            })
-            .catch(error => {
-                console.error('Geocoding error:', error);
-                // Add a default marker with error info
-                L.marker([14.5995, 120.9842]).addTo(map)
-                    .bindPopup(`<b>Geocoding Error</b><br>${address}<br><em>Could not locate address</em>`)
+            }
+            
+            return false; // No results found
+        }
+
+        // Try geocoding
+        geocodeAddress().then(success => {
+            if (!success) {
+                console.warn('No coordinates found for any search strategy');
+                
+                // Determine best fallback location based on address content
+                let fallbackLat = 14.6760; // Quezon City
+                let fallbackLon = 121.0437;
+                let fallbackName = "Quezon City Center";
+                
+                if (address.toLowerCase().includes('payatas')) {
+                    fallbackLat = 14.7167; // Payatas area
+                    fallbackLon = 121.1167;
+                    fallbackName = "Payatas Area, Quezon City";
+                } else if (address.toLowerCase().includes('quezon') || address.toLowerCase().includes('qc')) {
+                    // Keep Quezon City center
+                } else {
+                    // Default to Manila if no QC reference
+                    fallbackLat = 14.5995;
+                    fallbackLon = 120.9842;
+                    fallbackName = "Manila Center";
+                }
+                
+                map.setView([fallbackLat, fallbackLon], 13);
+                
+                L.marker([fallbackLat, fallbackLon]).addTo(map)
+                    .bindPopup(`
+                        <div style="min-width: 200px;">
+                            <b>Address Not Found</b><br>
+                            <strong>Address:</strong> ${address}<br>
+                            <strong>Showing:</strong> ${fallbackName}<br>
+                            <em>Please verify the exact location with the customer</em>
+                        </div>
+                    `)
                     .openPopup();
-            });
+            }
+        });
     } else {
         console.warn('No address provided');
-        // Add a default marker when no address is available
-        L.marker([14.5995, 120.9842]).addTo(map)
+        // Default to Quezon City when no address is available
+        L.marker([14.6760, 121.0437]).addTo(map)
             .bindPopup(`<b>No Address</b><br><em>Customer address not available</em>`)
             .openPopup();
     }
 
     function openInMaps() {
         if (address && address.trim() !== '') {
-            window.open(`https://www.openstreetmap.org/search?query=${encodeURIComponent(address)}`);
+            // Try Google Maps first (better for Philippine addresses), then OpenStreetMap
+            const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address + ', Philippines')}`;
+            const osmUrl = `https://www.openstreetmap.org/search?query=${encodeURIComponent(address + ', Philippines')}`;
+            
+            // Open Google Maps (more accurate for Philippines)
+            window.open(googleMapsUrl);
         } else {
             alert('No address available to open in maps');
         }
@@ -193,6 +270,8 @@
 
     function refreshMap() {
         map.invalidateSize();
+        // Optionally re-run geocoding
+        location.reload();
     }
 </script>
 

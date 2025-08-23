@@ -6,6 +6,8 @@ use app\controllers\admin\BillingController;
 use app\controllers\admin\DeliveryController;
 use app\controllers\admin\InventoryController;
 use app\controllers\admin\OrdersController;
+use app\controllers\customer\CartController;
+use app\controllers\customer\CheckoutController;
 use app\controllers\customer\CustomerController;
 use app\core\Route;
 
@@ -79,5 +81,18 @@ Route::group(['middleware' => 'auth', 'prefix' => '/customer'], function () {
     Route::controller(CustomerController::class, function () {
         Route::get('/home', 'index');
         Route::get('/show/{id}', 'show');
+        Route::post('/logout', 'logout');
+    });
+
+    Route::controller(CartController::class, function () {
+        Route::get('/my-cart', 'index');
+        Route::post('/add-to-cart', 'store');
+        Route::post('/update-item', 'update');
+        Route::post('/delete-item', 'delete');
+    });
+
+    Route::controller(CheckoutController::class, function () {
+        Route::get('/checkout/{id}', 'checkout');
+        Route::post('/place-order', 'placeOrder');
     });
 });

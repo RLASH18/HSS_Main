@@ -40,7 +40,7 @@
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
             <p>Revenue</p>
-            <p><?= $revenue ?></p>
+            <p>₱ <?= number_format($revenue, 2) ?></p>
         </div>
         <div class="p-2 flex items-center justify-center">
             <div class="icon-admin">

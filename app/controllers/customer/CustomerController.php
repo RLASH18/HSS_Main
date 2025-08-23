@@ -7,6 +7,9 @@ use app\models\Inventory;
 
 class CustomerController extends Controller
 {
+    /**
+     * Display the customer dashboard with all available inventory items.
+     */
     public function index()
     {
         $items = Inventory::all();
@@ -19,9 +22,17 @@ class CustomerController extends Controller
         return $this->view('customer/index', $data);
     }
 
+    /**
+     * Display details of a specific inventory item by ID.
+     */
     public function show($id)
     {
-        $items = $this->findItemOrFail($id);
+        $items = Inventory::find($id);
+
+        if (!$items) {
+            setSweetAlert('error', 'Oops!', 'Item not found.');
+            redirect('/customer/home');
+        }
 
         $data = [
             'title' => 'ABG Prime Builders Supplies Inc. | ' . $items->item_name,
@@ -31,15 +42,8 @@ class CustomerController extends Controller
         return $this->view('customer/show', $data);
     }
 
-    private function findItemOrFail($id)
+    public function logout()
     {
-        $items = Inventory::find($id);
-
-        if (!$items) {
-            setSweetAlert('error', 'Oops!', 'Item not found.');
-            redirect('/customer/home');
-        }
-
-        return $items;
+        
     }
 }
