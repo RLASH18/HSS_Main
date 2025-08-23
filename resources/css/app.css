@@ -574,7 +574,7 @@ footer {
 .custom-datatable .datatable-pagination .paginate_button.current:hover {
   background-color: #4b5563;
   border-color: #4b5563;
-  color: white; 
+  color: white;
 }
 
 .custom-datatable .datatable-pagination .paginate_button.disabled {
@@ -612,7 +612,8 @@ footer {
 .cost,
 .status,
 .quantity,
-.item-category {
+.item-category,
+.customer-name {
   font-size: 12px;
 }
 
@@ -629,3 +630,23 @@ footer {
   margin-top: 15px;
 }
 /* Admin Dashboard end */
+
+/* Orders Dashboard Start */
+
+.orders-icon-box svg {
+  width: 25px;
+  height: 25px;
+}
+
+.items-ordered-container {
+  color: #6a6a6a;
+  display: flex;
+}
+
+.items-ordered-container li {
+  margin-bottom: 5px;
+  border-radius: 7px;
+  background-color: #f1f5f9;
+  padding: 5px;
+  display: inline-block;
+}
