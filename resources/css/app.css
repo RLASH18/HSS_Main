@@ -637,16 +637,3 @@ footer {
   width: 25px;
   height: 25px;
 }
-
-.items-ordered-container {
-  color: #6a6a6a;
-  display: flex;
-}
-
-.items-ordered-container li {
-  margin-bottom: 5px;
-  border-radius: 7px;
-  background-color: #f1f5f9;
-  padding: 5px;
-  display: inline-block;
-}

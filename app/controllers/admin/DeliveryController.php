@@ -32,11 +32,6 @@ class DeliveryController extends Controller
         // Get all orders with status 'assembled'
         $orders = Orders::whereMany(['status' => 'assembled']);
 
-        // Load user data for each order
-        foreach ($orders as $o) {
-            $o->user = $o->user();
-        }
-
         return $this->view('admin/delivery/create', [
             'title' => 'Add Delivery',
             'orders' => $orders

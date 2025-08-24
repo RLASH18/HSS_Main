@@ -148,7 +148,7 @@ class OrdersController extends Controller
         if (empty($existingBilling)) {
             $billings = [
                 'order_id'       => $order->id,
-                'payment_method' => 'cash',
+                'payment_method' => $order->payment_method ?? 'cash',
                 'payment_status' => 'unpaid',
                 'amount_paid'    => $order->total_amount,
                 'issued_at'      => date('Y-m-d H:i:s')

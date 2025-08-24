@@ -44,7 +44,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <p style="color: #000000; font-size:13px; margin-top:20px;">This code will expire in 30 minutes. If you didn't request this, you can ignore the email.</p>
+                            <p style="color: #000000; font-size:13px; margin-top:20px;">This code will expire in 5 minutes. If you didn't request this, you can ignore the email.</p>
                         </td>
                     </tr>
 

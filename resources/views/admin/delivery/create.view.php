@@ -8,7 +8,7 @@
     </div>
     <div class="flex space-x-3">
         <a href="/admin/delivery"
-           class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#815331] transition-colors">
+            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#815331] transition-colors">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -41,9 +41,11 @@
         <div class="form-group">
             <label for="delivery_method" class="block text-sm font-medium text-gray-700 mb-2">Delivery Method <span class="text-red-500">*</span></label>
             <select name="delivery_method" id="delivery_method" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= error('delivery_method') ? 'border-red-300 bg-red-50' : '' ?>" <?= isInvalid('delivery_method') ?>>
+                <option value="" disabled selected>Select delivery method</option>
                 <option value="pickup" <?= old('delivery_method') == 'pickup' ? 'selected' : '' ?>>Pickup</option>
                 <option value="delivery" <?= old('delivery_method') == 'delivery' ? 'selected' : '' ?>>Delivery</option>
             </select>
+            <p class="mt-2 text-sm text-gray-600" id="delivery_hint">Customer's preferred method will be auto-selected</p>
             <p class="mt-2 text-sm text-red-600"><?= error('delivery_method') ?></p>
         </div>
 
@@ -84,5 +86,42 @@
         </div>
     </div>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const orderSelect = document.getElementById('order_select');
+        const deliveryMethodSelect = document.getElementById('delivery_method');
+        const deliveryHint = document.getElementById('delivery_hint');
+
+        // Create order data mapping for easy access
+        const orderData = {
+            <?php foreach ($orders as $order): ?>
+                <?= $order->id ?>: {
+                    delivery_method: '<?= $order->delivery_method ?? 'pickup' ?>',
+                    customer_name: '<?= htmlspecialchars($order->user->name) ?>'
+                },
+            <?php endforeach ?>
+        };
+
+        // Updates delivery method and hint text when an order is selected
+        orderSelect.addEventListener('change', function() {
+            const orderId = this.value;
+
+            // If valid order set delivery + show green hint, else reset + gray hint
+            if (orderId && orderData[orderId]) {
+                const order = orderData[orderId];
+                deliveryMethodSelect.value = order.delivery_method;
+                deliveryHint.textContent = `Customer selected: ${order.delivery_method} (${order.customer_name})`;
+                deliveryHint.classList.remove('text-gray-600');
+                deliveryHint.classList.add('text-green-600');
+            } else {
+                deliveryMethodSelect.value = '';
+                deliveryHint.textContent = "Customer's preferred method will be auto-selected";
+                deliveryHint.classList.remove('text-green-600');
+                deliveryHint.classList.add('text-gray-600');
+            }
+        });
+    });
+</script>
 
 <?php layout('admin/footer') ?>

@@ -6,3 +6,7 @@
 
 # Environment files
 .env
+
+# Public assets
+/public/assets/css/
+/public/assets/js/
