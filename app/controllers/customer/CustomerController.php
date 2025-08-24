@@ -42,6 +42,13 @@ class CustomerController extends Controller
         return $this->view('customer/show', $data);
     }
 
+    public function profile() {
+        $data = [
+            'title' => 'ABG Prime Builders Supplies Inc. | My Profile'
+        ];
+        return $this->view('customer/profile', $data);
+    }
+
     public function logout()
     {
         

@@ -11,18 +11,18 @@
 </head>
 
 <body>
-    <header class="container mx-auto px-4 lg:px-8 py-4">
+    <header class="container px-4 py-4 mx-auto lg:px-8">
         <div class="flex items-center justify-between">
             <div class="logo-container">
-                <img src="/assets/img/abg-logo.png" alt="ABG Prime Logo" class="h-12 w-auto">
+                <img src="/assets/img/abg-logo.png" alt="ABG Prime Logo" class="w-auto h-12">
                 <div class="company-text">
-                    <img src="/assets/img/abg-company-name.svg" alt="ABG Company Name" class="h-5 w-auto mt-1">
-                    <img src="/assets/img/abg-company-subtitle.svg" alt="ABG Company Subtitle" class="h-4 w-auto mt-1">
+                    <img src="/assets/img/abg-company-name.svg" alt="ABG Company Name" class="w-auto h-5 mt-1">
+                    <img src="/assets/img/abg-company-subtitle.svg" alt="ABG Company Subtitle" class="w-auto h-4 mt-1">
                 </div>
             </div>
 
             <nav class="hidden md:flex">
-                <ul class="navbar-links flex space-x-8">
+                <ul class="flex space-x-8 navbar-links">
                     <li><a href="#hero">Home</a></li>
                     <li><a href="#about">About</a></li>
                     <li><a href="#products">Products</a></li>
@@ -33,29 +33,29 @@
     </header>
 
     <section class="hero-banner-section" id="hero">
-        <div class="hero-banner-container px-4 lg:px-8">
-            <div class="hero-details-container max-w-xl">
-                <h1 class="text-4xl md:text-4xl font-bold leading-tight mb-6">Build smarter with ABG Prime Builders</h1>
-                <p class="text-lg md:text-xl mb-8">Shop high-quality tools and materials at unbeatable prices</p>
-                <div class="shop-now-button inline-block">
+        <div class="px-4 hero-banner-container lg:px-8">
+            <div class="max-w-xl hero-details-container">
+                <h1 class="mb-6 text-4xl font-bold leading-tight md:text-4xl">Build smarter with ABG Prime Builders</h1>
+                <p class="mb-8 text-lg md:text-xl">Shop high-quality tools and materials at unbeatable prices</p>
+                <div class="inline-block shop-now-button">
                     <a href="/login" class="px-8 py-3 text-lg">Start shopping</a>
                 </div>
-                <div class="get-started-button inline-block">
+                <div class="inline-block get-started-button">
                     <a href="/register" class="px-8 py-3 text-lg">Join free</a>
                 </div>
             </div>
-            <div class="hero-image-container flex justify-center items-center">
+            <div class="flex items-center justify-center hero-image-container">
                 <img src="assets/img/tools.png" alt="Tools" />
             </div>
         </div>
     </section>
 
-    <section class="about-section py-16" id="about">
-        <div class="about-container container mx-auto px-4 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="description-container space-y-6">
+    <section class="py-16 about-section" id="about">
+        <div class="container px-4 mx-auto about-container lg:px-8">
+            <div class="grid items-center grid-cols-1 gap-12 lg:grid-cols-2">
+                <div class="space-y-6 description-container">
                     <div class="title-container">
-                        <p class="text-3xl md:text-4xl font-bold mb-4">About Us</p>
+                        <p class="mb-4 text-3xl font-bold md:text-4xl">About Us</p>
                     </div>
                     <div class="motto-container">
                         <p class="text-lg md:text-xl">
@@ -63,8 +63,8 @@
                             time.
                         </p>
                     </div>
-                    <div class="about-details-container space-y-4">
-                        <p class="text-base md:text-lg leading-relaxed">
+                    <div class="space-y-4 about-details-container">
+                        <p class="text-base leading-relaxed md:text-lg">
                             Built to simplify and speed up daily operations at ABG Prime
                             Builders - from real-time stock tracking to fast, accurate order
                             processing, all in one reliable online platform:
@@ -89,24 +89,24 @@
                         </ul>
                     </div>
                 </div>
-                <div class="about-image-container flex justify-center lg:justify-end">
+                <div class="flex justify-center about-image-container lg:justify-end">
                     <img src="assets/img/about.jpg" alt="ABG Shop" />
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="cards-section py-12 px-4 lg:px-8" id="products">
+    <section class="px-4 py-12 cards-section lg:px-8" id="products">
         <div class="container mx-auto">
-            <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center justify-between mb-8">
                 <div class="deals-container">
                     <p>Hot Deals 🔥</p>
                 </div>
-                <a href="/login" class="text-blue-700 hover:text-blue-300 cursor-pointer font-bold">See more</a>
+                <a href="/login" class="font-bold text-blue-700 cursor-pointer hover:text-blue-300">See more</a>
             </div>
-            <div class="swiper container mx-auto">
+            <div class="container mx-auto swiper">
                 <!-- Additional required wrapper -->
-                <div class="swiper-wrapper gap-5">
+                <div class="gap-5 swiper-wrapper">
                     <!-- Slides -->
                     <div class="card swiper-slide ">
                         <img src="assets/img/products/magnetic_lever.png" alt="" />
@@ -181,15 +181,15 @@
                 <!-- <div class="swiper-scrollbar"></div> -->
             </div>
 
-            <div class="container mx-auto flex justify-between">
+            <div class="container flex justify-between mx-auto">
                 <div class="deals-container">
                     <p>Top Products 🏆</p>
                 </div>
-                <a href="/login" class="text-blue-700 hover:text-blue-300 cursor-pointer font-bold">See more</a>
+                <a href="/login" class="font-bold text-blue-700 cursor-pointer hover:text-blue-300">See more</a>
             </div>
-            <div class="swiper container mx-auto">
+            <div class="container mx-auto swiper">
                 <!-- Additional required wrapper -->
-                <div class="swiper-wrapper gap-5">
+                <div class="gap-5 swiper-wrapper">
                     <!-- Slides -->
                     <div class="card swiper-slide">
                         <img src="assets/img/products/pvc.png" alt="" />
@@ -266,18 +266,18 @@
         </div>
     </section>
 
-    <section class="team-section py-16" id="team">
-        <div class="container mx-auto px-4 lg:px-8">
-            <div class="team-description mb-16 text-center max-w-4xl mx-auto">
-                <div class="team-description-title mb-6">
+    <section class="py-16 team-section" id="team">
+        <div class="container px-4 mx-auto lg:px-8">
+            <div class="max-w-4xl mx-auto mb-16 text-center team-description">
+                <div class="mb-6 team-description-title">
                     <p class="text-3xl md:text-4xl font-bold text-[#815331]">Team</p>
                 </div>
-                <p class="text-base md:text-lg leading-relaxed">
+                <p class="text-base leading-relaxed md:text-lg">
                     Behind ABG Prime Builders is a dedicated team of individuals who share one goal: to serve the
                     Filipino builder with excellence, innovation, and heart.
                 </p>
             </div>
-            <div class="team-cards-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
+            <div class="grid grid-cols-1 gap-8 team-cards-container sm:grid-cols-2 lg:grid-cols-4 justify-items-center">
                 <div class="team-card">
                     <img src="assets/img/team/dingdong.png" alt="">
                     <div class="team-name">
@@ -311,11 +311,11 @@
     </section>
 
     <footer class="w-full">
-        <div class="container mx-auto px-4 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="container px-4 py-12 mx-auto lg:px-8">
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 <div class="space-y-4">
-                    <p class="text-3xl md:text-4xl font-bold">ABG Prime</p>
-                    <p class="text-xl md:text-2xl font-bold">Builders Supplies Inc.</p>
+                    <p class="text-3xl font-bold md:text-4xl">ABG Prime</p>
+                    <p class="text-xl font-bold md:text-2xl">Builders Supplies Inc.</p>
                     <p class="text-sm">
                         Your one-stop shop for tools, materials, and construction essentials. Prime
                         Builders is built to serve every Filipino builder - fast, reliable, and trusted by professionals
@@ -323,8 +323,8 @@
                     </p>
                 </div>
 
-                <div class="space-y-4 ml-10">
-                    <p class="text-xl mb-3 font-bold">Useful Links</p>
+                <div class="ml-10 space-y-4">
+                    <p class="mb-3 text-xl font-bold">Useful Links</p>
                     <ul class="space-y-2">
                         <li>Home</li>
                         <li>About Us</li>
@@ -334,12 +334,12 @@
                     </ul>
                 </div>
                 <div class="space-y-4">
-                    <p class="text-xl mb-3 font-bold">Contact Us</p>
-                    <p class="text-sm mb-3">AICS Bldg., Commonwealth Ave., Holy Spirit Drive, Brgy. Don Antonio Dr,
+                    <p class="mb-3 text-xl font-bold">Contact Us</p>
+                    <p class="mb-3 text-sm">AICS Bldg., Commonwealth Ave., Holy Spirit Drive, Brgy. Don Antonio Dr,
                         Quezon City </p>
                     <div class="space-y-3">
                         <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-gray-600 flex-shrink-0" aria-hidden="true"
+                            <svg class="flex-shrink-0 w-5 h-5 text-gray-600" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                 viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -349,7 +349,7 @@
                             <p class="text-sm md:text-base">Phone: +63 923 456 7890</p>
                         </div>
                         <div class="flex items-center space-x-3">
-                            <svg class="w-5 h-5 text-gray-600 flex-shrink-0" aria-hidden="true"
+                            <svg class="flex-shrink-0 w-5 h-5 text-gray-600" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                 viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
@@ -361,7 +361,7 @@
                 </div>
             </div>
         </div>
-        <div class="text-center bg-white p-2">
+        <div class="p-2 text-center bg-white">
             <p>&copy; 2025 <span class="abg-footer">ABG Prime Builders Supplies Inc.</span> - Powered by ABG. Building
                 Better, Together.</p>
         </div>
@@ -418,7 +418,7 @@
 
                 const storeLat = 14.6981; // Store location
                 const storeLng = 121.0921;
-                const maxDistance = 5; // Accepts users within 5 km radius
+                const maxDistance = 15; // Accepts users within 5 km radius
 
                 const distance = getDistanceInKm(userLat, userLng, storeLat, storeLng);
 
