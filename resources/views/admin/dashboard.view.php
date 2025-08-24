@@ -70,13 +70,22 @@
 </div>
 
 <div class="admin-chart-container grid grid-cols-2 gap-4">
-    <div
-        class="chart-1-container bg-white border border-gray-200 rounded-lg shadow-sm flex justify-center align-center">
-        <img src="/assets/img/chart1.png" alt="">
+    <!-- Sales Overview Chart -->
+    <div class="chart-1-container bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+        <div class="mb-4">
+            <h3 class="text-lg font-semibold text-gray-900 mb-1">Sales Overview</h3>
+        </div>
+        <div class="relative h-80">
+            <canvas id="salesChart"></canvas>
+        </div>
     </div>
-    <div
-        class="chart-2-container bg-white border border-gray-200 rounded-lg shadow-sm flex justify-center align-center">
-        <img src="/assets/img/chart2.png" alt="">
+    <div class="chart-2-container bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+        <div class="mb-4">
+            <h3 class="text-lg font-semibold text-gray-900 mb-1">Stock Overview</h3>
+        </div>
+        <div class="relative h-80">
+            <canvas id="stockChart"></canvas>
+        </div>
     </div>
 </div>
 
@@ -117,7 +126,7 @@
         <?php foreach ($newCustomers as $newCustomer): ?>
             <div class="flex align-center justify-between my-3">
                 <div>
-                    <p class="name"><?= $newCustomer->name ?></p>
+                    <p class="name"><?= $newCustomer->username ?></p>
                     <p class="email"><?= $newCustomer->email ?></p>
                 </div>
                 <div class="flex flex-col justify-end">
@@ -146,5 +155,170 @@
         <?php endforeach ?>
     </div>
 </div>
+
+<script>
+    // Sales Chart Data from PHP
+    const salesData = <?= json_encode($salesData) ?>;
+    const stockData = <?= json_encode($stockData) ?>;
+
+    // Sales Overview Chart (Area Chart)
+    const salesCtx = document.getElementById('salesChart').getContext('2d');
+    const salesChart = new Chart(salesCtx, {
+        type: 'line',
+        data: {
+            labels: salesData.labels,
+            datasets: [
+                {
+                    label: 'Revenue',
+                    data: salesData.revenue,
+                    borderColor: '#815331',
+                    backgroundColor: 'rgba(129, 83, 49, 0.2)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 4,
+                    pointBackgroundColor: '#815331',
+                    pointBorderColor: '#815331'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    callbacks: {
+                        label: function(context) {
+                            return 'Revenue: ₱' + context.parsed.y.toLocaleString();
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    ticks: {
+                        color: '#9CA3AF',
+                        font: {
+                            size: 10
+                        }
+                    },
+                    grid: {
+                        display: false
+                    },
+                    border: {
+                        display: false
+                    }
+                },
+                y: {
+                    display: true,
+                    position: 'left',
+                    ticks: {
+                        color: '#9CA3AF',
+                        font: {
+                            size: 10
+                        },
+                        callback: function(value) {
+                            return '₱' + (value / 1000) + 'k';
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(156, 163, 175, 0.2)',
+                        lineWidth: 1
+                    },
+                    border: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+
+    // Stock Overview Chart (Bar Chart)
+    const stockCtx = document.getElementById('stockChart').getContext('2d');
+    const stockChart = new Chart(stockCtx, {
+        type: 'bar',
+        data: {
+            labels: stockData.labels,
+            datasets: [{
+                label: 'Stock Quantity',
+                data: stockData.data,
+                backgroundColor: function(context) {
+                    const colors = ['rgba(129, 83, 49, 0.3)', '#815331', 'rgba(129, 83, 49, 0.5)', '#A67C52', 'rgba(129, 83, 49, 0.7)', '#8B5A3C'];
+                    return colors[context.dataIndex] || 'rgba(129, 83, 49, 0.4)';
+                },
+                borderColor: 'transparent',
+                borderWidth: 0,
+                borderRadius: 4,
+                borderSkipped: false,
+                categoryPercentage: 0.8,
+                barPercentage: 0.6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'x',
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ': ' + context.parsed.y + ' items';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    ticks: {
+                        color: '#9CA3AF',
+                        font: {
+                            size: 10
+                        },
+                        maxRotation: 0,
+                        minRotation: 0
+                    },
+                    grid: {
+                        display: false
+                    },
+                    border: {
+                        display: false
+                    }
+                },
+                y: {
+                    display: true,
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#9CA3AF',
+                        font: {
+                            size: 10
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(156, 163, 175, 0.2)',
+                        lineWidth: 1
+                    },
+                    border: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+</script>
 
 <?php layout('admin/footer') ?>

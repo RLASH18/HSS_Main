@@ -298,15 +298,18 @@ abstract class Model
     }
 
     /**
-     * Finds multiple records with conditions.
+     * Find records by multiple conditions.
      *
-     * @param array $conditions ['column' => 'value']
-     * @return array
+     * @param array $conditions Key-value pairs for WHERE clause
+     * @param bool $single If true, return a single model instance or null
+     * 
+     * @return static[]|static|null  Returns:
+     *   - static|null if $single = true
+     *   - static[]   if $single = false
      */
-    public static function whereMany(array $conditions): array
+    public static function whereMany(array $conditions, bool $single = false)
     {
         $table = static::tableName();
-        $columns = array_keys($conditions);
         $whereParts = [];
 
         foreach ($conditions as $key => $value) {
@@ -318,8 +321,11 @@ abstract class Model
         }
 
         $whereClause = implode(' AND ', $whereParts);
-
         $sql = "SELECT * FROM $table WHERE $whereClause";
+        if ($single) {
+            $sql .= " LIMIT 1"; // <-- Only get one row
+        }
+
         $stmt = self::prepare($sql);
 
         foreach ($conditions as $key => $value) {
@@ -329,6 +335,11 @@ abstract class Model
         }
 
         $stmt->execute();
+
+        if ($single) {
+            return $stmt->fetchObject(static::class) ?: null;
+        }
+
         return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 
@@ -372,6 +383,59 @@ abstract class Model
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         return $result['total'] !== null ? (float)$result['total'] : 0.0;
+    }
+
+    /**
+     * Group records by a column and sum another column.
+     *
+     * @param string $groupByColumn Column to group by
+     * @param string $sumColumn Column to sum
+     * @param array $conditions Optional WHERE conditions
+     * @param string $orderBy Optional ORDER BY column (defaults to sum column DESC)
+     * @return array Array of objects with group and total properties
+     */
+    public static function groupBySum(string $groupByColumn, string $sumColumn, array $conditions = [], string $orderBy = null): array
+    {
+        $table = static::tableName();
+        $orderBy = $orderBy ?: "total DESC";
+
+        $sql = "SELECT $groupByColumn as `group`, SUM($sumColumn) as total FROM $table";
+
+        if (!empty($conditions)) {
+            $whereParts = [];
+            foreach ($conditions as $key => $value) {
+                // Handle comparison operators in key
+                if (strpos($key, ' ') !== false) {
+                    // Key contains operator like 'quantity >'
+                    $whereParts[] = "$key :param_" . str_replace(' ', '_', $key);
+                } elseif ($value === null) {
+                    $whereParts[] = "$key IS NULL";
+                } else {
+                    $whereParts[] = "$key = :$key";
+                }
+            }
+            $whereClause = implode(' AND ', $whereParts);
+            $sql .= " WHERE $whereClause";
+        }
+
+        $sql .= " GROUP BY $groupByColumn ORDER BY $orderBy";
+
+        $stmt = self::prepare($sql);
+
+        foreach ($conditions as $key => $value) {
+            if ($value !== null) {
+                if (strpos($key, ' ') !== false) {
+                    // Handle operator keys
+                    $paramName = ':param_' . str_replace(' ', '_', $key);
+                    $stmt->bindValue($paramName, $value);
+                } else {
+                    $stmt->bindValue(":$key", $value);
+                }
+            }
+        }
+
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_OBJ);
     }
 
     /**

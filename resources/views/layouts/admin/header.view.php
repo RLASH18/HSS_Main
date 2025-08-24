@@ -14,6 +14,8 @@
     <script src="https://cdn.datatables.net/v/dt/dt-2.3.3/datatables.min.js"
         integrity="sha384-qyN6ZT87DHLvgCDC+GYE3myTUDGpz3swpW19cYxOh4oa/8GNSGPMteQwbyM6Ot0D" crossorigin="anonymous">
     </script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Leaflet CSS and JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -133,8 +135,8 @@
             <div class="text-sm text-[#815331]">
                 <span>Pages</span>
                 <?php foreach (breadcrumbs() as $crumb): ?>
-                <span class="mx-1">/</span>
-                <span class="font-medium text-gray-900"><?= htmlspecialchars($crumb) ?></span>
+                    <span class="mx-1">/</span>
+                    <span class="font-medium text-gray-900"><?= htmlspecialchars($crumb) ?></span>
                 <?php endforeach ?>
             </div>
             <div class="flex items-center gap-3">

@@ -50,11 +50,29 @@ class CartController extends Controller
             redirect('/customer/show/' . $data['item_id']);
         }
 
-        Cart::insert([
+        // Check if this item already exists in the user's cart
+        $existingCart = Cart::whereMany([
             'user_id' => $this->userId,
-            'item_id' => $data['item_id'],
-            'quantity' => $data['quantity'],
-        ]);
+            'item_id' => $data['item_id']
+        ], true);
+
+        if ($existingCart) {
+            // If exists, update quantity
+            $newQty = $existingCart->quantity + $data['quantity'];
+
+            // Ensure it doesn't exceed stock
+            if ($newQty > $item->quantity) {
+                $newQty = $item->quantity;
+            }
+
+            Cart::update($existingCart->id, ['quantity' => $newQty]);
+        } else {
+            Cart::insert([
+                'user_id' => $this->userId,
+                'item_id' => $data['item_id'],
+                'quantity' => $data['quantity'],
+            ]);
+        }
         setSweetAlert('success', 'Added!', 'Item added to cart successfully.');
         redirect('/customer/my-cart');
     }

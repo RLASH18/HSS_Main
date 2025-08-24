@@ -18,7 +18,10 @@ class m_0003_create_orders_table
                         'paid', 
                         'cancelled'
                     ) DEFAULT 'pending',
+                    payment_method ENUM('cash', 'gcash', 'bank_transfer') DEFAULT 'cash',
                     total_amount DECIMAL(10,2),
+                    delivery_method ENUM('pickup', 'delivery') DEFAULT 'pickup',
+                    delivery_address TEXT NULL,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     FOREIGN KEY (user_id) REFERENCES users(id)

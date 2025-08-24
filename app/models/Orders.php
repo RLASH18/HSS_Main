@@ -21,7 +21,10 @@ class Orders extends Model
         return [
             'user_id',
             'status',
-            'total_amount'
+            'payment_method',
+            'total_amount',
+            'delivery_method',
+            'delivery_address'
         ];
     }
 

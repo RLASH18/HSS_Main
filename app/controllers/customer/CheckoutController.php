@@ -23,15 +23,12 @@ class CheckoutController extends Controller
      */
     public function checkout($cartIds = null)
     {
-        // Get selected cat items (can be comma-separated IDs)
+        // Get selected cart items (can be comma-separated IDs)
         $selectedCartIds = $cartIds ? explode(',', $cartIds) : [];
+        $cartItems = [];
 
-        // If no specific items selected, get all user's cart items
-        if (empty($selectedCartIds)) {
-            $cartItems = Cart::whereMany(['user_id' => $this->userId]);
-        } else {
-            // Get only selected cart items that belong to the user
-            $cartItems = [];
+        // If specific items selected, get only those
+        if (!empty($selectedCartIds)) {
             foreach ($selectedCartIds as $cartId) {
                 $cart = Cart::find($cartId);
                 if ($cart && $cart->user_id === $this->userId) {
@@ -39,10 +36,16 @@ class CheckoutController extends Controller
                 }
             }
         }
-
+        
+        // If no valid selected items found, get all user's cart items
         if (empty($cartItems)) {
-            setSweetAlert('error', 'No Items!', 'No items selected for checkout.');
-            redirect('/customer/my-cart');
+            $cartItems = Cart::whereMany(['user_id' => $this->userId]);
+        }
+
+        // Only show error if user truly has no cart items at all
+        if (empty($cartItems)) {
+            setSweetAlert('error', 'Empty Cart!', 'Your cart is empty. Please add some items first.');
+            redirect('/customer/home');
         }
 
         // Compute subtotal
@@ -75,9 +78,10 @@ class CheckoutController extends Controller
             'payment_method' => 'required'
         ]);
 
+        // Extract cart IDs, store valid items, and track total amount
         $cartIds = explode(',', $data['cart_ids']);
-        $cartItems = [];
-        $totalAmount = 0;
+        $cartItems = [];     
+        $totalAmount = 0;                               
 
         // Validate cart items and calculate total
         foreach ($cartIds as $cartId) {
@@ -102,6 +106,9 @@ class CheckoutController extends Controller
         $orderData = [
             'user_id' => auth()->id,
             'total_amount' => $totalAmount,
+            'payment_method' => $data['payment_method'],
+            'delivery_method' => $data['delivery_method'],
+            'delivery_address' => $data['delivery_address'],
             'status' => 'pending',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
