@@ -4,6 +4,7 @@ namespace app\controllers\customer;
 
 use app\core\Controller;
 use app\models\Inventory;
+use app\models\User;
 
 class CustomerController extends Controller
 {
@@ -43,8 +44,10 @@ class CustomerController extends Controller
     }
 
     public function profile() {
+        $users = User::where(['id'=> auth()->id]);
         $data = [
-            'title' => 'ABG Prime Builders Supplies Inc. | My Profile'
+            'title' => 'ABG Prime Builders Supplies Inc. | My Profile',
+            'users' => $users,
         ];
         return $this->view('customer/profile', $data);
     }

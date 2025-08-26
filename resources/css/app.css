@@ -637,3 +637,19 @@ footer {
   width: 25px;
   height: 25px;
 }
+
+/* Customer Show page start */
+
+.show-add-to-cart {
+  /* padding: 10px 15px; */
+  border: 1px solid brown;
+  border-radius: 8px;
+}
+
+.show-buy-btn {
+  /* padding: 10px 40px; */
+  border: 1px solid brown;
+  border-radius: 8px;
+}
+
+/* Customer Show page end */
