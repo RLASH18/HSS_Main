@@ -73,8 +73,9 @@ class CartController extends Controller
                 'quantity' => $data['quantity'],
             ]);
         }
+        
         setSweetAlert('success', 'Added!', 'Item added to cart successfully.');
-        redirect('/customer/my-cart');
+        redirect('/customer/item/' . $data['item_id']);
     }
 
     /**

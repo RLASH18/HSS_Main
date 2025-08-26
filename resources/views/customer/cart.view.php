@@ -109,7 +109,7 @@
                                 </div>
 
                                 <!-- Remove button -->
-                                <form action="/customer/delete-item" method="post" class="inline">
+                                <form action="/customer/delete-cart" method="post" class="inline">
                                     <?= csrf_token() ?>
                                     <input type="hidden" name="id" value="<?= $cart->id ?>">
                                     <button type="submit" class="remove-item text-red-600 hover:text-red-800 transition-colors" data-cart-id="<?= $cart->id ?>">
@@ -241,7 +241,7 @@
                 }
 
                 // Send update request to server
-                fetch('/customer/update-item', {
+                fetch('/customer/update-cart', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

@@ -4,6 +4,7 @@ namespace app\controllers\customer;
 
 use app\core\Controller;
 use app\models\Inventory;
+use app\models\Orders;
 
 class CustomerController extends Controller
 {
@@ -40,6 +41,18 @@ class CustomerController extends Controller
         ];
 
         return $this->view('customer/show', $data);
+    }
+
+    public function orders()
+    {
+        $orders = Orders::whereMany(['user_id' => auth()->id]);
+
+        $data = [
+            'title' => 'ABG Prime Builders Supplies Inc. | My Orders',
+            'orders' => $orders
+        ];
+
+        return $this->view('customer/orders', $data);
     }
 
     public function logout()

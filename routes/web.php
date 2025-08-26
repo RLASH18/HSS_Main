@@ -80,15 +80,16 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
 Route::group(['middleware' => 'auth', 'prefix' => '/customer'], function () {
     Route::controller(CustomerController::class, function () {
         Route::get('/home', 'index');
-        Route::get('/show/{id}', 'show');
+        Route::get('/item/{id}', 'show');
+        Route::get('/my-orders', 'orders');
         Route::post('/logout', 'logout');
     });
 
     Route::controller(CartController::class, function () {
         Route::get('/my-cart', 'index');
         Route::post('/add-to-cart', 'store');
-        Route::post('/update-item', 'update');
-        Route::post('/delete-item', 'delete');
+        Route::post('/update-cart', 'update');
+        Route::post('/delete-cart', 'delete');
     });
 
     Route::controller(CheckoutController::class, function () {
