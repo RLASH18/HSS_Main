@@ -15,28 +15,37 @@
             <circle cx="11" cy="11" r="8"></circle>
             <path d="m21 21-4.35-4.35"></path>
         </svg>
-        <input type="text" id="inventory-search" placeholder="Search items or categories..."
+        <input type="text" id="order-search" placeholder="Search by order ID, customer name, or items..."
             class="w-full pl-11 pr-3 py-3 border border-gray-300 rounded-lg text-sm bg-white transition-all duration-200 focus:outline-none focus:border-[#815331] focus:ring-3 focus:ring-[#5f3e27]">
     </div>
     <div class="flex gap-3">
-        <select id="category-filter"
-            class="px-4 py-3 border border-gray-300 rounded-lg bg-white text-sm text-gray-700 cursor-pointer transition-all duration-200 min-w-[180px] focus:outline-none focus:border-[#815331] focus:ring-3 focus:ring-[#5f3e27]">
-            <option value="">All Categories</option>
-            <option value="Hand Tools">Hand Tools</option>
-            <option value="Power Tools">Power Tools</option>
-            <option value="Construction Materials">Construction Materials</option>
-            <option value="Locks and Security">Locks and Security</option>
-            <option value="Plumbing">Plumbing</option>
-            <option value="Electrical">Electrical</option>
-            <option value="Paint and Finishes">Paint and Finishes</option>
-            <option value="Chemicals">Chemicals</option>
+        <select id="status-filter"
+            class="px-4 py-3 border border-gray-300 rounded-lg bg-white text-sm text-gray-700 cursor-pointer transition-all duration-200 min-w-[160px] focus:outline-none focus:border-[#815331] focus:ring-3 focus:ring-[#5f3e27]">
+            <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="assembled">Assembled</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="paid">Paid</option>
+            <option value="cancelled">Cancelled</option>
         </select>
-        <select id="stock-filter"
+        <select id="date-filter"
             class="px-4 py-3 border border-gray-300 rounded-lg bg-white text-sm text-gray-700 cursor-pointer transition-all duration-200 min-w-[140px] focus:outline-none focus:border-[#815331] focus:ring-3 focus:ring-[#5f3e27]">
-            <option value="">All Stock</option>
-            <option value="low">Low Stock</option>
-            <option value="medium">Warning</option>
-            <option value="high">In Stock</option>
+            <option value="">All Dates</option>
+            <option value="today">Today</option>
+            <option value="yesterday">Yesterday</option>
+            <option value="this-week">This Week</option>
+            <option value="this-month">This Month</option>
+            <option value="last-month">Last Month</option>
+        </select>
+        <select id="amount-filter"
+            class="px-4 py-3 border border-gray-300 rounded-lg bg-white text-sm text-gray-700 cursor-pointer transition-all duration-200 min-w-[140px] focus:outline-none focus:border-[#815331] focus:ring-3 focus:ring-[#5f3e27]">
+            <option value="">All Amounts</option>
+            <option value="0-1000">₱0 - ₱1,000</option>
+            <option value="1000-5000">₱1,000 - ₱5,000</option>
+            <option value="5000-10000">₱5,000 - ₱10,000</option>
+            <option value="10000+">₱10,000+</option>
         </select>
     </div>
 </div>
@@ -281,6 +290,92 @@
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('order-search');
+        const statusFilter = document.getElementById('status-filter');
+        const dateFilter = document.getElementById('date-filter');
+        const amountFilter = document.getElementById('amount-filter');
+        const orderCards = document.querySelectorAll('[data-order]');
+
+        function filterOrders() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedStatus = statusFilter.value.toLowerCase();
+            const selectedDate = dateFilter.value;
+            const selectedAmount = amountFilter.value;
+
+            let visibleCount = 0;
+
+            orderCards.forEach(card => {
+                let showCard = true;
+
+                // Search filter
+                if (searchTerm) {
+                    const orderText = card.textContent.toLowerCase();
+                    showCard = showCard && orderText.includes(searchTerm);
+                }
+
+                // Status filter - improved logic
+                if (selectedStatus) {
+                    const statusBadge = card.querySelector('.status-badge');
+                    if (statusBadge) {
+                        const cardStatus = statusBadge.textContent.toLowerCase().trim();
+                        showCard = showCard && cardStatus === selectedStatus;
+                    } else {
+                        showCard = false;
+                    }
+                }
+
+                // Date filter
+                if (selectedDate) {
+                    const dateElement = card.querySelector('p');
+                    // Need more complex date parsing logic, skip for now
+                }
+
+                // Amount filter
+                if (selectedAmount) {
+                    const amountElement = card.querySelector('.font-bold.text-xl');
+                    if (amountElement) {
+                        const amountText = amountElement.textContent.replace(/[₱,\s]/g, '');
+                        const amount = parseFloat(amountText);
+                        let showByAmount = false;
+
+                        if (!isNaN(amount)) {
+                            switch (selectedAmount) {
+                                case '0-1000':
+                                    showByAmount = amount >= 0 && amount <= 1000;
+                                    break;
+                                case '1000-5000':
+                                    showByAmount = amount > 1000 && amount <= 5000;
+                                    break;
+                                case '5000-10000':
+                                    showByAmount = amount > 5000 && amount <= 10000;
+                                    break;
+                                case '10000+':
+                                    showByAmount = amount > 10000;
+                                    break;
+                            }
+                        }
+                        showCard = showCard && showByAmount;
+                    }
+                }
+
+                // Show or hide the card
+                if (showCard) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Add event listeners
+        if (searchInput) searchInput.addEventListener('input', filterOrders);
+        if (statusFilter) statusFilter.addEventListener('change', filterOrders);
+        if (dateFilter) dateFilter.addEventListener('change', filterOrders);
+        if (amountFilter) amountFilter.addEventListener('change', filterOrders);
+    });
+
     function toggleProgress(orderId) {
         const timeline = document.getElementById(`progress-timeline-${orderId}`);
         const button = document.getElementById(`progress-btn-${orderId}`);
