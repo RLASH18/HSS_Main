@@ -7,16 +7,16 @@
             <h1 class="text-3xl font-bold text-gray-900 mb-2">Checkout</h1>
             <p class="text-gray-600">Review your order and complete your purchase</p>
         </div>
-        <a href="/customer/my-cart" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition-colors">
+        <a href="<?= isset($buyNow) ? '/customer/home' : '/customer/my-cart' ?>" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition-colors">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
-            Back to Cart
+            <?= isset($buyNow) ? 'Continue Shopping' : 'Back to Cart' ?>
         </a>
     </div>
 </div>
 
-<form action="/customer/place-order" method="post" id="checkoutForm">
+<form action="<?= isset($buyNow) ? '/customer/process-buy-now' : '/customer/place-order' ?>" method="post" id="checkoutForm">
     <?= csrf_token() ?>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -28,27 +28,34 @@
 
                 <?php
                 $cartIdsList = [];
-                foreach ($cartItems as $cart):
-                    $cartIdsList[] = $cart->id;
-                    $itemTotal = $cart->quantity * $cart->item->unit_price;
+                $items = isset($orderItems) ? $orderItems : $cartItems;
+                foreach ($items as $item):
+                    if (isset($buyNow)) {
+                        // For buy now, we don't have cart IDs
+                        $itemTotal = $item->total;
+                    } else {
+                        // For cart items
+                        $cartIdsList[] = $item->id;
+                        $itemTotal = $item->quantity * $item->item->unit_price;
+                    }
                 ?>
 
                     <div class="flex items-center space-x-4 py-4 border-b border-gray-200 last:border-b-0">
                         <!-- Item Image -->
                         <div class="flex-shrink-0">
-                            <img src="/storage/items-img/<?= $cart->item->item_image ?>"
-                                alt="<?= $cart->item->item_name ?>"
+                            <img src="/storage/items-img/<?= $item->item->item_image ?>"
+                                alt="<?= $item->item->item_name ?>"
                                 class="w-16 h-16 object-cover rounded-lg border border-gray-200">
                         </div>
 
                         <!-- Item Details -->
                         <div class="flex-1 min-w-0">
-                            <h4 class="text-sm font-medium text-gray-900"><?= $cart->item->item_name ?></h4>
-                            <p class="text-sm text-gray-600"><?= $cart->item->description ?? 'No description' ?></p>
+                            <h4 class="text-sm font-medium text-gray-900"><?= $item->item->item_name ?></h4>
+                            <p class="text-sm text-gray-600"><?= $item->item->description ?? 'No description' ?></p>
                             <div class="flex items-center space-x-2 mt-1">
-                                <span class="text-sm text-gray-500">Qty: <?= $cart->quantity ?></span>
+                                <span class="text-sm text-gray-500">Qty: <?= $item->quantity ?></span>
                                 <span class="text-sm text-gray-500">×</span>
-                                <span class="text-sm font-medium text-[#815331]">₱<?= number_format($cart->item->unit_price, 2) ?></span>
+                                <span class="text-sm font-medium text-[#815331]">₱<?= number_format($item->item->unit_price, 2) ?></span>
                             </div>
                         </div>
 
@@ -59,8 +66,13 @@
                     </div>
                 <?php endforeach ?>
 
-                <!-- Hidden input for cart IDs -->
-                <input type="hidden" name="cart_ids" value="<?= implode(',', $cartIdsList) ?>">
+                <!-- Hidden inputs for form data -->
+                <?php if (isset($buyNow)): ?>
+                    <input type="hidden" name="item_id" value="<?= $orderItems[0]->item_id ?>">
+                    <input type="hidden" name="quantity" value="<?= $orderItems[0]->quantity ?>">
+                <?php else : ?>
+                    <input type="hidden" name="cart_ids" value="<?= implode(',', $cartIdsList) ?>">
+                <?php endif ?>
             </div>
 
             <!-- Delivery Information -->
@@ -194,7 +206,7 @@
                 <!-- Summary Details -->
                 <div class="space-y-3 mb-6">
                     <div class="flex justify-between text-sm">
-                        <span class="text-gray-600">Items (<?= count($cartItems) ?>):</span>
+                        <span class="text-gray-600">Items (<?= isset($buyNow) ? count($orderItems) : count($cartItems) ?>):</span>
                         <span class="font-medium">₱<?= number_format($subtotal, 2) ?></span>
                     </div>
                     <div class="flex justify-between text-sm">

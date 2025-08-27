@@ -78,10 +78,10 @@
                         ADD TO CART
                     </button>
 
-                    <a href="/customer/place-order"
+                    <button type="button" onclick="buyNow()" id="buyNowBtn"
                         class="flex-1 bg-[#815331] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[#6d4529] transition-colors text-center">
-                        BUY
-                    </a>
+                        BUY NOW
+                    </button>
                 </div>
             </form>
         </div>
@@ -116,6 +116,40 @@
     }
 
     updateBtnState();
+</script>
+
+<script>
+    function buyNow() {
+        // Create a new form for buy now submission
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/customer/buy-now';
+
+        // Add CSRF token
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '_token';
+        csrfInput.value = '<?= $_SESSION["_csrf"] ?? "" ?>';
+        form.appendChild(csrfInput);
+
+        // Add item ID
+        const itemIdInput = document.createElement('input');
+        itemIdInput.type = 'hidden';
+        itemIdInput.name = 'item_id';
+        itemIdInput.value = '<?= $items->id ?>';
+        form.appendChild(itemIdInput);
+
+        // Add Quantity
+        const quantityInput = document.createElement('input');
+        quantityInput.type = 'hidden';
+        quantityInput.name = 'quantity';
+        quantityInput.value = qty;
+        form.appendChild(quantityInput);
+
+        // Submit form
+        document.body.appendChild(form);
+        form.submit();
+    }
 </script>
 
 <?php layout('customer/footer') ?>

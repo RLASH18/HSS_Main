@@ -96,5 +96,7 @@ Route::group(['middleware' => 'auth', 'prefix' => '/customer'], function () {
     Route::controller(CheckoutController::class, function () {
         Route::get('/checkout/{id}', 'checkout');
         Route::post('/place-order', 'placeOrder');
+        Route::post('/buy-now', 'buyNow');
+        Route::post('/process-buy-now', 'processBuyNow');
     });
 });

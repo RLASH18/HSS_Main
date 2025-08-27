@@ -19,7 +19,7 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Show checkout page with selected or all cart items
+     * Display checkout page with items from the cart
      */
     public function checkout($cartIds = null)
     {
@@ -36,7 +36,7 @@ class CheckoutController extends Controller
                 }
             }
         }
-        
+
         // If no valid selected items found, get all user's cart items
         if (empty($cartItems)) {
             $cartItems = Cart::whereMany(['user_id' => $this->userId]);
@@ -67,7 +67,7 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Place order: validate, create order, order items, update inventory
+     * Process placing an order with selected cart items
      */
     public function placeOrder(Request $request)
     {
@@ -78,10 +78,9 @@ class CheckoutController extends Controller
             'payment_method' => 'required'
         ]);
 
-        // Extract cart IDs, store valid items, and track total amount
+        // Extract cart IDs, and store valid items
         $cartIds = explode(',', $data['cart_ids']);
-        $cartItems = [];     
-        $totalAmount = 0;                               
+        $cartItems = [];
 
         // Validate cart items and calculate total
         foreach ($cartIds as $cartId) {
@@ -97,14 +96,115 @@ class CheckoutController extends Controller
                 redirect('/customer/my-cart');
             }
 
-            // Add the cart item to the checkout list and update the running total amount
+            // Add the cart item to the checkout list
             $cartItems[] = $cart;
-            $totalAmount += $cart->quantity * $cart->item->unit_price;
         }
 
-        // Create order
-        $orderData = [
-            'user_id' => auth()->id,
+        $orderId = $this->storeOrderWithItems($data, $cartItems, true);
+
+        setSweetAlert('success', 'Order Placed!', 'Your order has been placed successfully. Order ID: ' . $orderId);
+        redirect('/customer/my-orders');
+    }
+
+    /**
+     * Display checkout page for a single buy now item
+     */
+    public function buyNow(Request $request)
+    {
+        $data = $request->validate([
+            'item_id' => 'required',
+            'quantity' => 'required|integer|min:1'
+        ]);
+
+        // Get the item
+        $item = Inventory::find($data['item_id']);
+        if (!$item) {
+            setSweetAlert('error', 'Item Not Found!', 'The selected item is no longer available.');
+            redirect('/customer/home');
+        }
+
+        // Check stock availability
+        if ($data['quantity'] > $item->quantity) {
+            setSweetAlert('error', 'Insufficient Stock!', "Sorry, only {$item->quantity} units available.");
+            redirect("/customer/item/{$item->id}");
+        }
+
+        // Create temporary order item data for checkout
+        $orderItem = (object)[
+            'item_id' => $item->id,
+            'quantity' => $data['quantity'],
+            'item' => $item,
+            'total' => $data['quantity'] * $item->unit_price
+        ];
+
+        $subtotal = $orderItem->total;
+
+        $checkoutData = [
+            'title' => 'ABG Prime Builders Supplies Inc. | Buy Now',
+            'orderItems' => [$orderItem],
+            'subtotal' => $subtotal,
+            'total' => $subtotal,
+            'user' => auth(),
+            'buyNow' => true // Flag to indicate this is buy now flow
+        ];
+
+        return $this->view('customer/checkout', $checkoutData);
+    }
+
+    /**
+     * Process placing an order directly from buy now
+     */
+    public function processBuyNow(Request $request)
+    {
+        $data = $request->validate([
+            'item_id' => 'required',
+            'quantity' => 'required|integer|min:1',
+            'delivery_address' => 'required',
+            'delivery_method' => 'required',
+            'payment_method' => 'required'
+        ]);
+
+        // Get and validate item
+        $item = Inventory::find($data['item_id']);
+        if (!$item) {
+            setSweetAlert('error', 'Item Not Found!', 'The selected item is no longer available.');
+            redirect('/customer/home');
+        }
+
+        // Check stock availability
+        if ($data['quantity'] > $item->quantity) {
+            setSweetAlert('error', 'Insufficient Stock!', "Sorry, only {$item->quantity} units available.");
+            redirect("/customer/item/{$item->id}");
+        }
+
+        // Create temporary order item object for processing
+        $orderItem = (object)[
+            'id' => null,
+            'item_id' => $item->id,
+            'quantity' => $data['quantity'],
+            'item' => $item
+        ];
+
+        $orderId = $this->storeOrderWithItems($data, [$orderItem], false);
+
+        setSweetAlert('success', 'Order Placed!', 'Your order has been placed successfully. Order ID: ' . $orderId);
+        redirect('/customer/my-orders');
+    }
+
+    /**
+     * Create order record with its items
+     */
+    private function storeOrderWithItems(array $data, array $items, bool $fromCart): int
+    {
+        // Calculate total order amount
+        $totalAmount = 0;
+        foreach ($items as $item) {
+            $totalAmount += $item->quantity * $item->item->unit_price;
+        }
+
+        // Insert new order and get its ID
+        $orderId = Orders::insert([
+            'user_id' => $this->userId,
             'total_amount' => $totalAmount,
             'payment_method' => $data['payment_method'],
             'delivery_method' => $data['delivery_method'],
@@ -112,30 +212,30 @@ class CheckoutController extends Controller
             'status' => 'pending',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
-        ];
+        ], true);
 
-        $orderId = Orders::insert($orderData, true);
-
-        // Create order items and update inventory
-        foreach ($cartItems as $cart) {
-            // Create order item
+        // Insert each item into order_items and update stock
+        foreach ($items as $item) {
             OrderItems::insert([
                 'order_id' => $orderId,
-                'item_id' => $cart->item_id,
-                'quantity' => $cart->quantity,
-                'unit_price' => $cart->item->unit_price,
+                'item_id' => $item->item_id,
+                'quantity' => $item->quantity,
+                'unit_price' => $item->item->unit_price,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
 
-            // Update inventory quantity
-            $newQuantity = $cart->item->quantity - $cart->quantity;
-            Inventory::update($cart->item_id, ['quantity' => $newQuantity]);
+            // Update item quantity in inventory
+            $newQuantity = $item->item->quantity - $item->quantity;
+            Inventory::update($item->item_id, ['quantity' => $newQuantity]);
 
-            // Remove from cart
-            Cart::delete($cart->id);
+            // Remove item from cart if order came from cart
+            if ($fromCart && isset($item->id)) {
+                Cart::delete($item->id);
+            }
         }
-        setSweetAlert('success', 'Order Placed!', 'Your order has been placed successfully. Order ID: ' . $orderId);
-        redirect('/customer/my-orders');
+
+        // Return the newly created order ID
+        return $orderId;
     }
 }
