@@ -136,6 +136,6 @@ class CheckoutController extends Controller
             Cart::delete($cart->id);
         }
         setSweetAlert('success', 'Order Placed!', 'Your order has been placed successfully. Order ID: ' . $orderId);
-        redirect('/customer/orders/' . $orderId);
+        redirect('/customer/my-orders');
     }
 }

@@ -159,13 +159,73 @@
                         </div>
                     </div>
                     <div class="card swiper-slide">
-                        <img src="assets/img/products/coco_lumber.png" alt="" />
+                        <img src="assets/img/products/grinder.png" alt="" />
                         <div class="price-container">
-                            <p>PHP 1,450.00</p>
+                            <p>PHP 2,150.00</p>
                         </div>
-                        <p>Wokin Rotary Hammer</p>
+                        <p>Wokin Cordless Drill</p>
                         <div class="sold-container">
-                            <p>98 sold</p>
+                            <p>158 sold</p>
+                        </div>
+                    </div>
+                    <div class="card swiper-slide">
+                        <img src="assets/img/products/drill.png" alt="" />
+                        <div class="price-container">
+                            <p>PHP 3,450.00</p>
+                        </div>
+                        <p>Wokin Angle Grinder</p>
+                        <div class="sold-container">
+                            <p>198 sold</p>
+                        </div>
+                    </div>
+                    <div class="card swiper-slide">
+                        <img src="assets/img/products/wrench.png" alt="" />
+                        <div class="price-container">
+                            <p>PHP 650.00</p>
+                        </div>
+                        <p>Adjustable Wrench Set</p>
+                        <div class="sold-container">
+                            <p>136 sold</p>
+                        </div>
+                    </div>
+                    <div class="card swiper-slide">
+                        <img src="assets/img/products/precision_screwdriver.png" alt="" />
+                        <div class="price-container">
+                            <p>PHP 420.00</p>
+                        </div>
+                        <p>Precision Screwdriver Set</p>
+                        <div class="sold-container">
+                            <p>325 sold</p>
+                        </div>
+                    </div>
+                    <div class="card swiper-slide">
+                        <img src="assets/img/products/digital_caliper.png" alt="" />
+                        <div class="price-container">
+                            <p>PHP 1,280.00</p>
+                        </div>
+                        <p>Digital Vernier Caliper</p>
+                        <div class="sold-container">
+                            <p>325 sold</p>
+                        </div>
+                    </div>
+                    <div class="card swiper-slide">
+                        <img src="assets/img/products/pipe.png" alt="" />
+                        <div class="price-container">
+                            <p>PHP 90.00</p>
+                        </div>
+                        <p>Electrical Conduit Pipe</p>
+                        <div class="sold-container">
+                            <p>215 sold</p>
+                        </div>
+                    </div>
+                    <div class="card swiper-slide">
+                        <img src="assets/img/products/nails.png" alt="" />
+                        <div class="price-container">
+                            <p>PHP 120.00</p>
+                        </div>
+                        <p>Roofing Nails</p>
+                        <div class="sold-container">
+                            <p>55 sold</p>
                         </div>
                     </div>
                 </div>
@@ -212,7 +272,7 @@
                         </div>
                     </div>
                     <div class="card swiper-slide">
-                        <img src="assets/img/products/rotary_hammer.png" alt="" />
+                        <img src="assets/img/products/sack.png" alt="" />
                         <div class="price-container">
                             <p>PHP 29.00 - 42.00</p>
                         </div>
@@ -249,6 +309,66 @@
                         <p>Wokin Rotary Hammer</p>
                         <div class="sold-container">
                             <p>98 sold</p>
+                        </div>
+                    </div>
+                    <div class="card swiper-slide">
+                        <img src="assets/img/products/drill.png" alt="" />
+                        <div class="price-container">
+                            <p>PHP 4,200.00</p>
+                        </div>
+                        <p>Wokin Circular Saw</p>
+                        <div class="sold-container">
+                            <p>228 sold</p>
+                        </div>
+                    </div>
+                    <div class="card swiper-slide">
+                        <img src="assets/img/products/bolt_cutter.png" alt="" />
+                        <div class="price-container">
+                            <p>PHP 1,750.00</p>
+                        </div>
+                        <p>Heavy Duty Bolt Cutter</p>
+                        <div class="sold-container">
+                            <p>115 sold</p>
+                        </div>
+                    </div>
+                    <div class="card swiper-slide">
+                        <img src="assets/img/products/hollow_blocks.png" alt="" />
+                        <div class="price-container">
+                            <p>PHP 18.00</p>
+                        </div>
+                        <p>Hollow Blocks</p>
+                        <div class="sold-container">
+                            <p>300 sold</p>
+                        </div>
+                    </div>
+                    <div class="card swiper-slide">
+                        <img src="assets/img/products/steel_bar.png" alt="" />
+                        <div class="price-container">
+                            <p>PHP 350.00</p>
+                        </div>
+                        <p>Reinforcing Steel Bar</p>
+                        <div class="sold-container">
+                            <p>200 sold</p>
+                        </div>
+                    </div>
+                    <div class="card swiper-slide">
+                        <img src="assets/img/products/tile.png" alt="" />
+                        <div class="price-container">
+                            <p>PHP 750.00</p>
+                        </div>
+                        <p>Ceramic Floor Tiles</p>
+                        <div class="sold-container">
+                            <p>328 sold</p>
+                        </div>
+                    </div>
+                    <div class="card swiper-slide">
+                        <img src="assets/img/products/paint.png" alt="" />
+                        <div class="price-container">
+                            <p>PHP 1,150.00</p>
+                        </div>
+                        <p>Waterproofing Paint</p>
+                        <div class="sold-container">
+                            <p>58 sold</p>
                         </div>
                     </div>
                 </div>
@@ -373,6 +493,8 @@
                 // Optional parameters
                 //spaceBetween: 20,
                 slidesPerView: 5,
+                loop: true, // Enable infinite loop
+                loopAdditionalSlides: 3, // Add extra slides for smooth looping
                 autoplay: {
                     delay: 5000, // time in ms between swipes
                     disableOnInteraction: false, // keep autoplay after user interaction

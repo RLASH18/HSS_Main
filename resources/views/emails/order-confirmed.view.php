@@ -37,7 +37,7 @@
                     <tr>
                         <td style="padding:24px; background-color:#ECE5DF;">
                             <p style="color: #000000; font-size:13px; margin:0;">Hi <strong><?= htmlspecialchars($user->name) ?></strong>,</p>
-                            <p style="color: #000000; font-size:13px; margin:10px 0 20px 0;">Your order #<?= htmlspecialchars($order->id) ?> has been successfully confirmed. Thank you for shopping with us!</p>
+                            <p style="color: #000000; font-size:13px; margin:10px 0 20px 0;">Your order #<?= htmlspecialchars(str_pad($order->id, 4, '0', STR_PAD_LEFT)) ?> has been successfully confirmed. Thank you for shopping with us!</p>
                             <p style="color: #000000; font-size:14px; font-weight:bold; margin:0 0 10px 0;">Order Summary:</p>
                         </td>
                     </tr>
