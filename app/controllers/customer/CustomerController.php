@@ -44,7 +44,10 @@ class CustomerController extends Controller
         return $this->view('customer/show', $data);
     }
 
-    public function profile() 
+    /**
+     * Display the logged-in customer's profile information.
+     */
+    public function profile()
     {
         $users = User::where(['id' => auth()->id]);
 
@@ -52,10 +55,13 @@ class CustomerController extends Controller
             'title' => 'ABG Prime Builders Supplies Inc. | My Profile',
             'users' => $users,
         ];
-        
+
         return $this->view('customer/profile', $data);
     }
 
+    /**
+     * Display the order history of the logged-in customer.
+     */
     public function orders()
     {
         $orders = Orders::whereMany(['user_id' => auth()->id]);
@@ -68,8 +74,12 @@ class CustomerController extends Controller
         return $this->view('customer/orders', $data);
     }
 
+    /**
+     * Log out the current customer and redirect to the homepage.
+     */
     public function logout()
     {
-        
+        logout();
+        return redirect('/');
     }
 }

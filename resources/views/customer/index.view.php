@@ -1,7 +1,7 @@
 <?php layout('customer/header') ?>
 
 <div class="container">
-    <div class="w-full bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div class="w-full bg-white border border-gray-100 rounded-lg shadow-sm">
         <div class="container w-[90%] mx-auto p-6 text-3xl font-bold">
             <h1 class="-mb-4">Categories</h1>
         </div>
@@ -74,7 +74,7 @@
     </div>
 </div>
 
-<div class="w-full bg-white border border-gray-200 rounded-lg shadow-sm mt-6">
+<div class="w-full bg-white border border-gray-100 rounded-lg shadow-sm mt-8">
     <div class="container mx-auto p-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php foreach ($items as $item): ?>

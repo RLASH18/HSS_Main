@@ -7,28 +7,48 @@
             <h1 class="text-3xl font-bold text-black-900 mb-2">My Profile</h1>
             <p class="text-black-600">Manage your details or continue shopping</p>
         </div>
-        <div class="flex space-x-2"> <!-- container para magkadikit buttons -->
-
+        <div class="flex space-x-2">
             <a href="/customer/home" class="inline-flex items-center px-4 py-2 bg-[#815331] text-white font-medium rounded-lg hover:bg-[#6d4529] transition-colors">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
                 Continue Shopping
             </a>
-            <a href="/customer/edit-profile" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition-colors">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                    </path>
-                </svg>
-                Edit Profile
-            </a>
+            <div class="relative">
+                <button id="accountBtn" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    Account
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div id="accountDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden">
+                    <a href="/customer/edit-profile" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                        Edit Profile
+                    </a>
+                    <form action="/customer/logout" method="post">
+                        <?= csrf_token() ?>
+                        <button type="submit" class="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <svg class="w-4 h-4 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 18H6V20H18V4H6V6H4V3C4 2.44772 4.44772 2 5 2H19C19.5523 2 20 2.44772 20 3V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V18ZM6 11H13V13H6V16L1 12L6 8V11Z" />
+                            </svg>
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Profile Info Section -->
-<div class="bg-white rounded-lg shadow-sm p-8 mb-8">
+<div class="bg-white border border-gray-100 rounded-lg shadow-sm p-8 mb-6">
     <div class="flex items-center space-x-6">
         <!-- Avatar -->
         <div class="flex-shrink-0">
@@ -67,7 +87,7 @@
 <!-- Information Grid -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
     <!-- Contact Information -->
-    <div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-8">
         <div class="flex items-center mb-6">
             <svg class="w-5 h-5 text-blue-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -127,7 +147,7 @@
     </div>
 
     <!-- Personal Information -->
-    <div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-8">
         <div class="flex items-center mb-6">
             <svg class="w-5 h-5 text-purple-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -165,7 +185,7 @@
     </div>
 
     <!-- Account Information -->
-    <div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-8">
         <div class="flex items-center mb-6">
             <svg class="w-5 h-5 text-gray-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -203,5 +223,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btn = document.getElementById('accountBtn');
+        const dropdown = document.getElementById('accountDropdown');
+
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function() {
+            dropdown.classList.add('hidden');
+        });
+    });
+</script>
 
 <?php layout('customer/footer') ?>

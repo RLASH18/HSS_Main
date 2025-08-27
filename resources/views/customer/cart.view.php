@@ -18,7 +18,7 @@
 
 <?php if (empty($carts)): ?>
     <!-- Empty cart -->
-    <div class="bg-white rounded-lg shadow-sm p-12 text-center">
+    <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-12 text-center">
         <div class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
             <svg class="w-12 h-12 text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312" />
@@ -36,7 +36,7 @@
         <!-- Items lists -->
         <div class="lg:col-span-2 space-y-4">
             <!-- Select all header -->
-            <div class="bg-white rounded-lg shadow-sm p-4 border-b">
+            <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-4 border-b">
                 <div class="flex items-center justify-between">
                     <label class="flex items-center space-x-3 cursor-pointer">
                         <input type="checkbox" id="selectAll" class="w-5 h-5 text-[#815331] border-gray-300 rounded focus:ring-[#815331]">
@@ -53,7 +53,7 @@
                 $itemTotal = $cart->quantity * $cart->item->unit_price;
                 $totalAmount += $itemTotal;
             ?>
-                <div class="cart-item bg-white rounded-lg shadow-sm p-6">
+                <div class="cart-item bg-white border border-gray-100 rounded-lg shadow-sm p-6">
                     <div class="flex items-start space-x-4">
                         <!-- checkbox -->
                         <div class="flex-shrink-0 pt-2">
@@ -139,7 +139,7 @@
 
         <!-- Checkout summary -->
         <div class="lg:col-span-1">
-            <div class="bg-white rounded-lg shadow-sm p-6 sticky top-8">
+            <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-6 sticky top-8">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Order Summary</h3>
 
                 <!-- Summary details -->
