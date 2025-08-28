@@ -77,7 +77,7 @@
                 </div>
                 <div class="flex items-center">
                     <span class="text-gray-400">ID:</span>
-                    <span class="ml-1 font-medium">#<?= htmlspecialchars($users->id) ?></span>
+                    <span class="ml-1 font-medium">#<?= str_pad(htmlspecialchars($users->id), 4, '0', STR_PAD_LEFT) ?></span>
                 </div>
             </div>
         </div>
@@ -108,8 +108,7 @@
                     </svg>
                     <span class="text-sm font-medium text-gray-700">Email:</span>
                 </div>
-                <p class="text-gray-900 ml-6"><?= htmlspecialchars($users->email) ?>
-                </p>
+                <p class="text-gray-900 ml-6"><?= htmlspecialchars($users->email) ?></p>
             </div>
 
             <div>
@@ -122,8 +121,7 @@
                     </svg>
                     <span class="text-sm font-medium text-gray-700">Phone:</span>
                 </div>
-                <p class="text-gray-900 ml-6"><?= htmlspecialchars($users->contact_number) ?>
-                </p>
+                <p class="text-gray-900 ml-6"><?= htmlspecialchars($users->contact_number) ?></p>
             </div>
 
             <div>
@@ -140,7 +138,6 @@
                 </div>
                 <div class="text-gray-900 ml-6">
                     <p><?= htmlspecialchars($users->address) ?></p>
-
                 </div>
             </div>
         </div>
@@ -187,7 +184,7 @@
     <!-- Account Information -->
     <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-8">
         <div class="flex items-center mb-6">
-            <svg class="w-5 h-5 text-gray-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
@@ -204,8 +201,7 @@
                     </svg>
                     <span class="text-sm font-medium text-gray-700">Created:</span>
                 </div>
-                <p class="text-gray-900 ml-6"><?= date("F j, Y", strtotime($users->created_at)) ?>
-                </p>
+                <p class="text-gray-900 ml-6"><?= date("F j, Y", strtotime($users->created_at)) ?></p>
             </div>
 
             <div>
@@ -217,8 +213,7 @@
                     </svg>
                     <span class="text-sm font-medium text-gray-700">Last Updated:</span>
                 </div>
-                <p class="text-gray-900 ml-6"><?= date("F j, Y", strtotime($users->updated_at)) ?>
-                </p>
+                <p class="text-gray-900 ml-6"><?= date("F j, Y", strtotime($users->updated_at)) ?></p>
             </div>
         </div>
     </div>
