@@ -4,6 +4,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 @import "flowbite";
 
+@layer components {
+  .pagination li {
+    @apply inline-block mx-1;
+  }
+
+  .pagination li a {
+    @apply inline-block px-3 py-1 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition;
+  }
+
+  .pagination li.active a {
+    @apply bg-[#815331] text-white;
+  }
+}
+
 * {
   font-family: "Outfit", sans-serif;
 }
@@ -37,8 +51,8 @@ html {
   margin-bottom: 30px;
 }
 
-.header-container div + p,
-.register-title div + p {
+.header-container div+p,
+.register-title div+p {
   color: #8c7d73;
   font-size: 14px;
 }
@@ -158,6 +172,7 @@ input[type="checkbox"] {
   margin-right: 5px;
   border-radius: 3px;
 }
+
 /* End of Log-in and Register Page */
 
 /* flash alert message */
@@ -196,6 +211,7 @@ input[type="checkbox"] {
   color: #1e40af;
   border-color: #bfdbfe;
 }
+
 /* End of flash alert message */
 
 /* Start of Header Section */
@@ -241,6 +257,7 @@ input[type="checkbox"] {
 .navbar-links a:hover:before {
   width: 100%;
 }
+
 /* End of Header Section */
 
 /* Start of Hero Banner Section */
@@ -305,6 +322,7 @@ input[type="checkbox"] {
   background-color: #815331;
   color: #fff;
 }
+
 /* End of Hero Banner Section */
 
 /* Start of About Section */
@@ -333,6 +351,7 @@ input[type="checkbox"] {
   max-width: 32rem;
   height: auto;
 }
+
 /* End of About Section */
 
 /* Cards section */
@@ -382,6 +401,7 @@ input[type="checkbox"] {
   color: green;
   font-weight: bold;
 }
+
 /* End of Cards section */
 
 /* Team Section */
@@ -407,8 +427,10 @@ input[type="checkbox"] {
   object-fit: cover;
   border-radius: 50%;
   transform: translateX(22px);
-  margin-top: -60px; /* moves image up */
-  border: 4px solid #fff; /* nice border around image */
+  margin-top: -60px;
+  /* moves image up */
+  border: 4px solid #fff;
+  /* nice border around image */
   margin-bottom: 20px;
 }
 
@@ -416,6 +438,7 @@ input[type="checkbox"] {
   margin-bottom: 20px;
   font-weight: bold;
 }
+
 /* End of Team Section */
 
 /* Footer */
@@ -431,6 +454,7 @@ footer {
   color: #815331;
   font-weight: bold;
 }
+
 /* End of Footer section */
 
 /* Start sidebar */
@@ -482,6 +506,7 @@ footer {
   margin-right: 8px;
   transition: color 0.3s ease;
 }
+
 /* End sidebar */
 
 /* Start Main content */
@@ -489,6 +514,7 @@ footer {
   min-height: 100vh;
   overflow-y: auto;
 }
+
 /* End of Main content */
 
 /* DataTable Custom style */
@@ -629,6 +655,7 @@ footer {
 .horizontal-line {
   margin-top: 15px;
 }
+
 /* Admin Dashboard end */
 
 /* Orders Dashboard Start */
@@ -637,6 +664,69 @@ footer {
   width: 25px;
   height: 25px;
 }
+
+/* Customer navbar */
+.search-container {
+  position: relative;
+  flex-grow: 1;
+  max-width: 500px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px 12px 45px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: #815331;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.header-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+  text-decoration: none;
+  color: inherit;
+  min-width: 60px;
+}
+
+.header-icon:hover {
+  background-color: #f3f4f6;
+}
+
+.my-badge {
+  position: absolute;
+  top: -8px;
+  right: -7px;
+  background-color: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+}
+/* End of Customer navbar */
 
 /* Customer Show page start */
 

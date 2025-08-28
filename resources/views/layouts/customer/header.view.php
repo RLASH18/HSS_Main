@@ -7,67 +7,10 @@
     <title><?= $title ?></title>
     <link rel="stylesheet" href="/assets/css/style.css">
     <script src="/assets/js/script.js"></script>
+    <!-- List.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
     <style>
-        .search-container {
-            position: relative;
-            flex-grow: 1;
-            max-width: 500px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 16px 12px 45px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: #815331;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #9ca3af;
-        }
-
-        .header-icon {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 8px 16px;
-            border-radius: 6px;
-            transition: background-color 0.2s;
-            text-decoration: none;
-            color: inherit;
-            min-width: 60px;
-        }
-
-        .header-icon:hover {
-            background-color: #f3f4f6;
-        }
-
-        .my-badge {
-            position: absolute;
-            top: -8px;
-            right: -7px;
-            background-color: #ef4444;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: bold;
-        }
+       
     </style>
 </head>
 

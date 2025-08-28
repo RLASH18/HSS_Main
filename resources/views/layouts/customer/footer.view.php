@@ -1,6 +1,8 @@
         </div>
     </div>
 
+    <?= renderSweetAlert() ?>
+
     <footer class="w-full">
         <div class="container mx-auto px-4 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -47,8 +49,6 @@
                 Better, Together.</p>
         </div>
     </footer>
-
-    <?= renderSweetAlert() ?>
 </body>
 
 </html>

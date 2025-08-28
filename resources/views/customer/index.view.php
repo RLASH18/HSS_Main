@@ -75,11 +75,11 @@
 </div>
 
 <div class="w-full bg-white border border-gray-100 rounded-lg shadow-sm mt-8">
-    <div class="container mx-auto p-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div id="item-list" class="container mx-auto p-6">
+        <div class="grid list grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <?php foreach ($items as $item): ?>
                 <a href="/customer/item/<?= $item->id ?>" class="block-group">
-                    <div class="border rounded-x1 overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="border border-gray-300 rounded-md overflow-hidden shadow-sm hover:shadow-md transition">
                         <!-- product image -->
                         <img src="/storage/items-img/<?= $item->item_image ?>" alt="<?= $item->item_name ?>"
                             class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
@@ -91,7 +91,7 @@
                             </h5>
 
                             <!-- Name -->
-                            <p class="text-gray-800 font-medium truncate">
+                            <p class="item-name text-gray-800 font-medium truncate">
                                 <?= $item->item_name ?>
                             </p>
 
@@ -104,7 +104,21 @@
                 </a>
             <?php endforeach ?>
         </div>
+
+        <!-- Pagination -->
+        <div class="pagination mt-6 flex justify-center"></div>
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var options = {
+            valueNames: ['item-name'],
+            page: 8, // Items per page
+            pagination: true
+        }
+
+        var itemList = new List('item-list', options);
+    });
+</script>
 <?php layout('customer/footer') ?>
