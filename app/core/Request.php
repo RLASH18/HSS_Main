@@ -125,6 +125,11 @@ class Request
             $value = $data[$field] ?? '';
             $rulesArray = explode('|', $ruleString);
 
+            // If field is nullable AND empty, skip all validation for it
+            if (in_array('nullable', $rulesArray) && empty($value)) {
+                continue;
+            }
+
             foreach ($rulesArray as $rule) {
                 $ruleName = $rule;
                 $param = null;
@@ -159,11 +164,6 @@ class Request
                     $errors[$field][] = "This field must match $param.";
                 }
 
-                // Rule: nullable – if empty, skip further validation for this rule
-                if ($ruleName === 'nullable' && empty($value)) {
-                    continue;
-                }
-
                 // Rule: image – ensure a image is uploaded with no errors
                 if ($ruleName === 'image') {
                     if (!isset($_FILES[$field]) || $_FILES[$field]['error'] !== UPLOAD_ERR_OK) {
@@ -173,10 +173,22 @@ class Request
 
                 // Rule: unique – value must not already exist in the specified table and column
                 if ($ruleName === 'unique') {
-                    [$table, $column] = explode(',', $param);
+                    $parts = explode(',', $param);
 
-                    $stmt = Application::$app->db->pdo->prepare("SELECT * FROM $table WHERE $column = :value");
+                    $table = $parts[0];
+                    $column = $parts[1];
+                    $ignoreId = $parts[2] ?? null; // optional 3rd param for ID to ignore
+
+                    $sql = "SELECT * FROM $table WHERE $column = :value";
+                    if ($ignoreId) {
+                        $sql .= " AND id != :id";
+                    }
+
+                    $stmt = Application::$app->db->pdo->prepare($sql);
                     $stmt->bindValue(':value', $value);
+                    if ($ignoreId) {
+                        $stmt->bindValue(':id', $ignoreId);
+                    }
                     $stmt->execute();
 
                     if ($stmt->fetch()) {
