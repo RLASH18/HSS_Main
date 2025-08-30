@@ -35,17 +35,11 @@
                 </label>
                 <input type="text" name="supplier_name" id="supplier_name"
                     value="<?= old('supplier_name') ?>"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= error('supplier_name') ? 'border-red-300 bg-red-50' : '' ?>"
-                    placeholder="Enter supplier name"
-                    <?= isInvalid('supplier_name') ?>>
-                <?php if (error('supplier_name')): ?>
-                    <p class="mt-2 text-sm text-red-600 flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                        <?= error('supplier_name') ?>
-                    </p>
-                <?php endif; ?>
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('supplier_name') ? 'border-red-300 bg-red-50' : '' ?>"
+                    placeholder="Enter supplier name">
+                <div class="text-red-500 text-xs text-left mt-2">
+                    <p><?= error('supplier_name') ?></p>
+                </div>
             </div>
 
             <!-- Item Name -->
@@ -55,17 +49,11 @@
                 </label>
                 <input type="text" name="item_name" id="item_name"
                     value="<?= old('item_name') ?>"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= error('item_name') ? 'border-red-300 bg-red-50' : '' ?>"
-                    placeholder="Enter item name"
-                    <?= isInvalid('item_name') ?>>
-                <?php if (error('item_name')): ?>
-                    <p class="mt-2 text-sm text-red-600 flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                        <?= error('item_name') ?>
-                    </p>
-                <?php endif; ?>
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('item_name') ? 'border-red-300 bg-red-50' : '' ?>"
+                    placeholder="Enter item name">
+                <div class="text-red-500 text-xs text-left mt-2">
+                    <p><?= error('item_name') ?></p>
+                </div>
             </div>
 
             <!-- Description -->
@@ -74,17 +62,11 @@
                     Description
                 </label>
                 <textarea name="description" id="description" rows="4"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors resize-none <?= error('description') ? 'border-red-300 bg-red-50' : '' ?>"
-                    placeholder="Enter item description"
-                    <?= isInvalid('description') ?>><?= old('description') ?></textarea>
-                <?php if (error('description')): ?>
-                    <p class="mt-2 text-sm text-red-600 flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                        <?= error('description') ?>
-                    </p>
-                <?php endif; ?>
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors resize-none <?= isInvalid('description') ? 'border-red-300 bg-red-50' : '' ?>"
+                    placeholder="Enter item description"><?= old('description') ?></textarea>
+                <div class="text-red-500 text-xs text-left mt-2">
+                    <p><?= error('description') ?></p>
+                </div>
             </div>
 
             <!-- Category -->
@@ -93,8 +75,7 @@
                     Category <span class="text-red-500">*</span>
                 </label>
                 <select name="category" id="category"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors bg-white <?= error('category') ? 'border-red-300 bg-red-50' : '' ?>"
-                    <?= isInvalid('category') ?>>
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors bg-white <?= isInvalid('category') ? 'border-red-300 bg-red-50' : '' ?>">
                     <option value="" disabled selected>-- Select a category --</option>
                     <option value="Hand Tools" <?= old('category') === 'Hand Tools' ? 'selected' : '' ?>>Hand Tools</option>
                     <option value="Power Tools" <?= old('category') === 'Power Tools' ? 'selected' : '' ?>>Power Tools</option>
@@ -105,14 +86,9 @@
                     <option value="Paint and Finishes" <?= old('category') === 'Paint and Finishes' ? 'selected' : '' ?>>Paint and Finishes</option>
                     <option value="Chemicals" <?= old('category') === 'Chemicals' ? 'selected' : '' ?>>Chemicals</option>
                 </select>
-                <?php if (error('category')): ?>
-                    <p class="mt-2 text-sm text-red-600 flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                        <?= error('category') ?>
-                    </p>
-                <?php endif; ?>
+                <div class="text-red-500 text-xs text-left mt-2">
+                    <p><?= error('category') ?></p>
+                </div>
             </div>
         </div>
 
@@ -131,18 +107,12 @@
                     </div>
                     <input type="number" name="unit_price" id="unit_price" step="0.01" min="0"
                         value="<?= old('unit_price') ?>"
-                        class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= error('unit_price') ? 'border-red-300 bg-red-50' : '' ?>"
-                        placeholder="0.00"
-                        <?= isInvalid('unit_price') ?>>
+                        class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('unit_price') ? 'border-red-300 bg-red-50' : '' ?>"
+                        placeholder="0.00">
                 </div>
-                <?php if (error('unit_price')): ?>
-                    <p class="mt-2 text-sm text-red-600 flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                        <?= error('unit_price') ?>
-                    </p>
-                <?php endif; ?>
+                <div class="text-red-500 text-xs text-left mt-2">
+                    <p><?= error('unit_price') ?></p>
+                </div>
             </div>
 
             <!-- Quantity -->
@@ -152,17 +122,11 @@
                 </label>
                 <input type="number" name="quantity" id="quantity" min="0"
                     value="<?= old('quantity') ?>"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= error('quantity') ? 'border-red-300 bg-red-50' : '' ?>"
-                    placeholder="Enter quantity"
-                    <?= isInvalid('quantity') ?>>
-                <?php if (error('quantity')): ?>
-                    <p class="mt-2 text-sm text-red-600 flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                        <?= error('quantity') ?>
-                    </p>
-                <?php endif; ?>
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('quantity') ? 'border-red-300 bg-red-50' : '' ?>"
+                    placeholder="Enter quantity">
+                <div class="text-red-500 text-xs text-left mt-2">
+                    <p><?= error('quantity') ?></p>
+                </div>
             </div>
 
             <!-- Restock Threshold -->
@@ -172,18 +136,12 @@
                 </label>
                 <input type="number" name="restock_threshold" id="restock_threshold" min="0"
                     value="<?= old('restock_threshold') ?>"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= error('restock_threshold') ? 'border-red-300 bg-red-50' : '' ?>"
-                    placeholder="Enter restock threshold"
-                    <?= isInvalid('restock_threshold') ?>>
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('restock_threshold') ? 'border-red-300 bg-red-50' : '' ?>"
+                    placeholder="Enter restock threshold">
                 <p class="mt-1 text-xs text-gray-500">Alert when stock falls below this number</p>
-                <?php if (error('restock_threshold')): ?>
-                    <p class="mt-2 text-sm text-red-600 flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                        <?= error('restock_threshold') ?>
-                    </p>
-                <?php endif; ?>
+                <div class="text-red-500 text-xs text-left mt-2">
+                    <p><?= error('restock_threshold') ?></p>
+                </div>
             </div>
 
             <!-- Item Image -->
@@ -201,26 +159,20 @@
                             <div class="flex text-sm text-gray-600">
                                 <label for="image" class="relative cursor-pointer bg-white rounded-md font-medium text-[#815331] hover:text-[#6b4428] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-[#815331]">
                                     <span>Upload a file</span>
-                                    <input id="image" name="item_image" type="file" accept="image/*" class="sr-only" <?= isInvalid('item_image') ?>>
+                                    <input id="image" name="item_image" type="file" accept="image/*" class="sr-only">
                                 </label>
                                 <p class="pl-1">or drag and drop</p>
                             </div>
                             <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                         </div>
-                        
+
                         <!-- Image Preview (hidden by default) -->
                         <div id="image-preview" class="hidden"></div>
                     </div>
                 </div>
-                
-                <?php if (error('item_image')): ?>
-                    <p class="mt-2 text-sm text-red-600 flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                        <?= error('item_image') ?>
-                    </p>
-                <?php endif; ?>
+                <div class="text-red-500 text-xs text-left mt-2">
+                    <p><?= error('item_image') ?></p>
+                </div>
             </div>
         </div>
     </div>
