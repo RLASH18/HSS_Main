@@ -80,6 +80,7 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
 Route::group(['middleware' => 'auth', 'prefix' => '/customer'], function () {
     Route::controller(CustomerController::class, function () {
         Route::get('/home', 'index');
+        Route::get('/home/category/{category}', 'categoryFilter');
         Route::get('/item/{id}', 'show');
         Route::get('/my-orders', 'orders');
         Route::get('/profile', 'profile');

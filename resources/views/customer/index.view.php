@@ -1,75 +1,40 @@
 <?php layout('customer/header') ?>
 
-<div class="container">
-    <div class="w-full bg-white border border-gray-100 rounded-lg shadow-sm">
-        <div class="container w-[90%] mx-auto p-6 text-3xl font-bold">
-            <h1 class="-mb-4">Categories</h1>
-        </div>
-        <div class="w-[80%] mx-auto p-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-auto container">
-                <div class="flex items-center justify-center flex-col gap-2 m-2">
-                    <a href="#">
-                        <img src="/assets/img/customer_page_categories/power_tools.png" alt="">
+<div class="w-full bg-white border border-gray-100 rounded-lg shadow-sm" id="categories-section">
+    <div class="container w-[90%] mx-auto p-6">
+        <div class="flex justify-between items-center mb-2">
+            <h1 class="text-3xl font-bold">Categories</h1>
+            <?php if (!empty($selectedCategory)): ?>
+                <div class="flex items-center">
+                    <a href="/customer/home"
+                        class="inline-flex items-center text-base text-[#815331] hover:underline font-medium">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        View All Items
                     </a>
-                    <p>Power Tools</p>
                 </div>
-                <div class="flex items-center justify-center m-2">
-                    <div class="flex items-center justify-center flex-col gap-2">
-                        <a href="#">
-                            <img src="/assets/img/customer_page_categories/hand_tools.png" alt="">
-                        </a>
-                        <p>Hand Tools</p>
-                    </div>
+            <?php endif ?>
+        </div>
+    </div>
+    <div class="w-[80%] mx-auto p-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-auto container">
+            <?php foreach ($categories as $category): ?>
+                <?php
+                $categorySlug = strtolower(str_replace([' ', '&'], '_', $category));
+                $imageName = $categorySlug . '.png';
+                $isSelected = ($selectedCategory === $category);
+                ?>
+                <div class="flex items-center justify-center flex-col gap-2 m-2 <?= $isSelected ? 'border-2 border-[#815331] rounded-lg p-2' : '' ?>">
+                    <a href="/customer/home/category/<?= urlencode($category) ?>">
+                        <img src="/assets/img/customer_page_categories/<?= $imageName ?>" alt="<?= $category ?>" class="transition-transform duration-300 hover:scale-105">
+                    </a>
+                    <p class="<?= $isSelected ? 'text-[#815331] font-semibold' : 'text-gray-700 font-medium' ?>">
+                        <?= $category ?>
+                    </p>
                 </div>
-                <div class="flex items-center justify-center m-2">
-                    <div class="flex items-center justify-center flex-col gap-2">
-                        <a href="#">
-                            <img src="/assets/img/customer_page_categories/construction_materials.png" alt="">
-                        </a>
-                        <p>Construction Materials</p>
-                    </div>
-                </div>
-                <div class="flex items-center justify-center m-2">
-                    <div class="flex items-center justify-center flex-col gap-2">
-                        <a href="#">
-                            <img src="/assets/img/customer_page_categories/lock_and_security.png" alt="">
-                        </a>
-                        <p>Lock and Security</p>
-                    </div>
-                </div>
-                <div class="flex items-center justify-center m-2">
-                    <div class="flex items-center justify-center flex-col gap-2">
-                        <a href="#">
-                            <img src="/assets/img/customer_page_categories/plumbing.png" alt="">
-                        </a>
-                        <p>Plumbing</p>
-                    </div>
-                </div>
-                <div class="flex items-center justify-center">
-                    <div class="flex items-center justify-center flex-col gap-2">
-                        <a href="#">
-                            <img src="/assets/img/customer_page_categories/electrical.png" alt="">
-                        </a>
-                        <p>Electrical</p>
-                    </div>
-                </div>
-                <div class="flex items-center justify-center">
-                    <div class="flex items-center justify-center flex-col gap-2">
-                        <a href="#">
-                            <img src="/assets/img/customer_page_categories/paint_and_finishes.png" alt="">
-                        </a>
-                        <p>Paint and Finishes</p>
-                    </div>
-                </div>
-                <div class="flex items-center justify-center">
-                    <div class="flex items-center justify-center flex-col gap-2">
-                        <a href="#">
-                            <img src="/assets/img/customer_page_categories/chemicals.png" alt="">
-                        </a>
-                        <p>Chemicals</p>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach ?>
         </div>
     </div>
 </div>
@@ -86,7 +51,7 @@
 
                         <div class="p-4">
                             <!-- Price -->
-                            <h5 class="text-green-600 font-bold text-lg">
+                            <h5 class="item-price text-green-600 font-bold text-lg">
                                 PHP <?= number_format($item->unit_price, 2) ?>
                             </h5>
 
@@ -113,12 +78,12 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var options = {
-            valueNames: ['item-name'],
+            valueNames: ['item-name', 'item-price'],
             page: 8, // Items per page
-            pagination: true
+            pagination: true,
         }
 
-        var itemList = new List('item-list', options);
+        window.itemList = new List('item-list', options);
     });
 </script>
 <?php layout('customer/footer') ?>

@@ -49,6 +49,50 @@
                 Better, Together.</p>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const categoriesSection = document.getElementById('categories-section');
+
+            // Only initialize search on customer index page
+            if (window.itemList && searchInput) {
+                // Connect search input to List.js
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.trim();
+
+                    if (searchTerm === '') {
+                        // Clear search and show all items
+                        window.itemList.search();
+                        // Show categories section
+                        if (categoriesSection) {
+                            categoriesSection.style.display = 'block';
+                        }
+                    } else {
+                        // Search in item names
+                        window.itemList.search(searchTerm);
+                        // Hide categories section when searching
+                        if (categoriesSection) {
+                            categoriesSection.style.display = 'none';
+                        }
+                    }
+                });
+
+                // Clear search when input is cleared
+                searchInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        this.value = '';
+                        window.itemList.search();
+                        // Show categories section when clearing searching
+                        if (categoriesSection) {
+                            categoriesSection.style.display = 'block';
+                        }
+                        this.blur();
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

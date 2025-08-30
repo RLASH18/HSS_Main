@@ -18,9 +18,49 @@ class CustomerController extends Controller
     {
         $items = Inventory::all();
 
+        $categories = [
+            'Power Tools',
+            'Hand Tools',
+            'Construction Materials',
+            'Lock and Security',
+            'Plumbing',
+            'Electrical',
+            'Paint and Finishes',
+            'Chemicals'
+        ];
+
         $data = [
             'title' => 'ABG Prime Builders Supplies Inc. | Customer Dashboard',
             'items' => $items,
+            'categories' => $categories,
+            'selectedCategory' => null,
+        ];
+
+        return $this->view('customer/index', $data);
+    }
+
+    public function categoryFilter($category)
+    {
+        $decodedCategory = urldecode($category);
+
+        $items = Inventory::whereMany(['category' => $decodedCategory]);
+
+        $categories = [
+            'Power Tools',
+            'Hand Tools',
+            'Construction Materials',
+            'Lock and Security',
+            'Plumbing',
+            'Electrical',
+            'Paint and Finishes',
+            'Chemicals'
+        ];
+
+        $data = [
+            'title' => "ABG Prime Builders Supplies Inc. | Category: $decodedCategory",
+            'items' => $items,
+            'categories' => $categories,
+            'selectedCategory' => $decodedCategory
         ];
 
         return $this->view('customer/index', $data);
