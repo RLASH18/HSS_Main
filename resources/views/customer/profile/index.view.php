@@ -52,14 +52,14 @@
     <div class="flex items-center space-x-6">
         <!-- Avatar -->
         <div class="flex-shrink-0">
-            <div class="w-20 h-20 rounded-full bg-gray-300 overflow-hidden">
-                <img src="/public/assets/img/default-avatar.jpg" alt="Profile Picture"
-                    class="w-full h-full object-cover"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div class="w-full h-full bg-gray-300 flex items-center justify-center text-gray-600 text-2xl font-semibold"
-                    style="display: none;">
+            <div class="w-20 h-20 rounded-full bg-gray-300 overflow-hidden flex items-center justify-center text-gray-600 text-2xl font-semibold">
+                <?php if (!empty($users->profile_picture)): ?>
+                    <img src="/storage/profile-img/<?= htmlspecialchars($users->profile_picture) ?>"
+                        alt="Profile Picture"
+                        class="w-full h-full object-cover">
+                <?php else: ?>
                     <?= strtoupper(substr($users->name ?? 'U', 0, 1)) ?>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
 

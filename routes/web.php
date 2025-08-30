@@ -83,6 +83,8 @@ Route::group(['middleware' => 'auth', 'prefix' => '/customer'], function () {
         Route::get('/item/{id}', 'show');
         Route::get('/my-orders', 'orders');
         Route::get('/profile', 'profile');
+        Route::get('/edit-profile', 'editProfile');
+        Route::post('/update-profile', 'updateProfile');
         Route::post('/logout', 'logout');
     });
 

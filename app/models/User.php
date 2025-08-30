@@ -32,6 +32,11 @@ class User extends Model
             'username',
             'email',
             'password',
+            'profile_picture',
+            'address',
+            'contact_number',
+            'birthdate',
+            'gender',
             'email_verified_at',
             'verification_code',
             'verification_code_expires_at'
