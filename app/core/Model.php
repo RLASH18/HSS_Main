@@ -228,6 +228,58 @@ abstract class Model
     }
 
     /**
+     * Fetch recent records ordered by a column, with limit and eager loading.
+     *
+     * @param array $relationships Array of relationship method names to load
+     * @param string $orderBy Column to order by (e.g., created_at)
+     * @param string $direction Sort direction (ASC or DESC)
+     * @param int $limit Number of records to fetch
+     * @return array
+     */
+    public static function recentWith(array $relationships = [], string $orderBy = 'created_at', string $direction = 'DESC', int $limit = 5): array
+    {
+        $table = static::tableName();
+
+        $sql = "SELECT * FROM $table ORDER BY $orderBy $direction LIMIT :limit";
+        $stmt = static::prepare($sql);
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        $records = $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
+
+        // Load relationships for each record
+        foreach ($records as $record) {
+            foreach ($relationships as $relationship) {
+                if (method_exists($record, $relationship)) {
+                    $record->$relationship = $record->$relationship();
+                    
+                    // Handle nested relationships (e.g., 'orderItems.items')
+                    if (strpos($relationship, '.') !== false) {
+                        $parts = explode('.', $relationship);
+                        $mainRelation = $parts[0];
+                        $nestedRelation = $parts[1];
+                        
+                        if (method_exists($record, $mainRelation)) {
+                            $record->$mainRelation = $record->$mainRelation();
+                            
+                            // Load nested relationship for each item in the collection
+                            if (is_array($record->$mainRelation)) {
+                                foreach ($record->$mainRelation as $item) {
+                                    if (method_exists($item, $nestedRelation)) {
+                                        $item->$nestedRelation = $item->$nestedRelation();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $records;
+    }
+
+    /**
      * Fetches recent records filtered by given conditions.
      *
      * @param array $conditions Key-value pairs for WHERE clause (e.g. ['role' => 'customer'])
