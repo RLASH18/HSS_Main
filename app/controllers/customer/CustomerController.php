@@ -16,7 +16,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $items = Inventory::all();
+        $items = Inventory::recent('created_at', 'DESC', 1000);
 
         $categories = [
             'Power Tools',
@@ -176,7 +176,7 @@ class CustomerController extends Controller
      */
     public function orders()
     {
-        $orders = Orders::whereMany(['user_id' => auth()->id]);
+        $orders = Orders::recentWhere(['user_id' => auth()->id], 'created_at', 'DESC', 100);
 
         $data = [
             'title' => 'ABG Prime Builders Supplies Inc. | My Orders',

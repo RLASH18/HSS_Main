@@ -16,8 +16,8 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        // Eager-load user and nested item info
-        $order = Orders::with(['user', 'orderItems.items']);
+        // Get orders in descending order with eager loaded relationships
+        $order = Orders::recentWith(['user', 'orderItems.items'], 'created_at', 'DESC', 1000);
 
         $data = [
             'title' => 'Customer Orders',
