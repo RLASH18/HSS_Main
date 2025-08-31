@@ -28,7 +28,7 @@
                 ?>
                 <div class="flex items-center justify-center flex-col gap-2 m-2 <?= $isSelected ? 'border-2 border-[#815331] rounded-lg p-2' : '' ?>">
                     <a href="/customer/home/category/<?= urlencode($category) ?>">
-                        <img src="/assets/img/customer_page_categories/<?= $imageName ?>" alt="<?= $category ?>" class="transition-transform duration-300 hover:scale-105">
+                        <img src="/assets/img/customer_page_categories/<?= $imageName ?>" alt="<?= $category ?>" class="transition-transform duration-300 hover:scale-95">
                     </a>
                     <p class="<?= $isSelected ? 'text-[#815331] font-semibold' : 'text-gray-700 font-medium' ?>">
                         <?= $category ?>
