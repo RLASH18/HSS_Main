@@ -491,8 +491,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             const swiper = new Swiper(".swiper", {
                 // Optional parameters
-                //spaceBetween: 20,
-                slidesPerView: 5,
+                spaceBetween: 20,
+                slidesPerView: 7,
                 loop: true, // Enable infinite loop
                 loopAdditionalSlides: 3, // Add extra slides for smooth looping
                 autoplay: {
