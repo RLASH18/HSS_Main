@@ -26,6 +26,7 @@ class CheckoutController extends Controller
         // Get selected cart items (can be comma-separated IDs)
         $selectedCartIds = $cartIds ? explode(',', $cartIds) : [];
         $cartItems = [];
+        $invalidIds = [];
 
         // If specific items selected, get only those
         if (!empty($selectedCartIds)) {
@@ -33,13 +34,18 @@ class CheckoutController extends Controller
                 $cart = Cart::find($cartId);
                 if ($cart && $cart->user_id === $this->userId) {
                     $cartItems[] = $cart;
+                } else {
+                    $invalidIds[] = $cartId;
                 }
             }
+        } else {
+            // Only load all cart items if no specific IDs were provided
+            $cartItems = Cart::whereMany(['user_id' => $this->userId]);
         }
 
-        // If no valid selected items found, get all user's cart items
-        if (empty($cartItems)) {
-            $cartItems = Cart::whereMany(['user_id' => $this->userId]);
+        // Warn if some items were invalid, but still proceed with valid ones
+        if (!empty($invalidIds)) {
+            setSweetAlert('warning', 'Some items were skipped', 'Items with IDs: ' . implode(', ', $invalidIds) . ' are not valid.');
         }
 
         // Only show error if user truly has no cart items at all
