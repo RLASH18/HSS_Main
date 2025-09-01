@@ -134,11 +134,8 @@
 
     // Geocode the customer address with multiple strategies
     const address = "<?= $deliveries->order->user->address ?>";
-    console.log('Customer address:', address);
     
-    if (address && address.trim() !== '') {
-        console.log('Geocoding address:', address);
-        
+    if (address && address.trim() !== '') {        
         // Function to try geocoding with different search strategies
         async function geocodeAddress() {
             const searchQueries = [
@@ -161,14 +158,10 @@
             ].filter(query => query !== null);
 
             for (let query of searchQueries) {
-                try {
-                    console.log('Trying geocoding query:', query);
-                    
+                try {                    
                     const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=ph&limit=5`);
                     const data = await response.json();
-                    
-                    console.log(`Results for "${query}":`, data);
-                    
+                                        
                     if (data.length > 0) {
                         // Find the best match (prefer more specific results)
                         let bestMatch = data[0];
@@ -181,9 +174,7 @@
                         
                         const lat = parseFloat(bestMatch.lat);
                         const lon = parseFloat(bestMatch.lon);
-                        
-                        console.log('Best coordinates found:', lat, lon, 'from:', bestMatch.display_name);
-                        
+                                                
                         // Verify coordinates are in Philippines (rough bounds)
                         if (lat >= 4.5 && lat <= 21.5 && lon >= 116 && lon <= 127) {
                             map.setView([lat, lon], 15);
@@ -212,9 +203,7 @@
 
         // Try geocoding
         geocodeAddress().then(success => {
-            if (!success) {
-                console.warn('No coordinates found for any search strategy');
-                
+            if (!success) {                
                 // Determine best fallback location based on address content
                 let fallbackLat = 14.6760; // Quezon City
                 let fallbackLon = 121.0437;
@@ -248,7 +237,6 @@
             }
         });
     } else {
-        console.warn('No address provided');
         // Default to Quezon City when no address is available
         L.marker([14.6760, 121.0437]).addTo(map)
             .bindPopup(`<b>No Address</b><br><em>Customer address not available</em>`)

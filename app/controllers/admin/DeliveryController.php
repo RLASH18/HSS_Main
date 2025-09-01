@@ -18,10 +18,12 @@ class DeliveryController extends Controller
         // Eager load the related order, its user, and the items in that order
         $deliveries = Delivery::with(['order.user', 'order.orderItems.items']);
 
-        return $this->view('admin/delivery/index', [
+        $data = [
             'title' => 'Delivery',
             'deliveries' => $deliveries
-        ]);
+        ];
+
+        return $this->view('admin/delivery/index', $data);
     }
 
     /**
@@ -32,10 +34,12 @@ class DeliveryController extends Controller
         // Get all orders with status 'assembled'
         $orders = Orders::whereMany(['status' => 'assembled']);
 
-        return $this->view('admin/delivery/create', [
+        $data = [
             'title' => 'Add Delivery',
             'orders' => $orders
-        ]);
+        ];
+
+        return $this->view('admin/delivery/create', $data);
     }
 
     /**
@@ -74,10 +78,12 @@ class DeliveryController extends Controller
     {
         $deliveries = $this->findDeliveryOrFail($id);
 
-        return $this->view('admin/delivery/show', [
+        $data = [
             'title' => 'Delivery Info',
             'deliveries' => $deliveries
-        ]);
+        ];
+
+        return $this->view('admin/delivery/show', $data);
     }
 
     /**
@@ -90,17 +96,13 @@ class DeliveryController extends Controller
         // Get all orders with status 'assembled' for the dropdown
         $orders = Orders::whereMany(['status' => 'assembled']);
 
-        // Also include the current delivery's order if it's not already in the list
-        $currentOrder = Orders::find($deliveries->order_id);
-        if ($currentOrder && !in_array($currentOrder->id, array_column($orders, 'id'))) {
-            $orders[] = $currentOrder;
-        }
-
-        return $this->view('admin/delivery/update', [
+        $data = [
             'title' => 'Edit Delivery Info',
             'deliveries' => $deliveries,
             'orders' => $orders
-        ]);
+        ];
+
+        return $this->view('admin/delivery/update', $data);
     }
 
     /**
@@ -139,10 +141,12 @@ class DeliveryController extends Controller
     {
         $deliveries = $this->findDeliveryOrFail($id);
 
-        return $this->view('admin/delivery/delete', [
+        $data = [
             'title' => 'Delete Delivery Info',
             'deliveries' => $deliveries
-        ]);
+        ];
+
+        return $this->view('admin/delivery/delete', $data);
     }
 
     /**

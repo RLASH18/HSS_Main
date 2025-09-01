@@ -22,7 +22,6 @@
     <?= csrf_token() ?>
 
     <div class="space-y-6">
-
         <!-- Order ID -->
         <div class="form-group">
             <label for="order_select" class="block text-sm font-medium text-gray-700 mb-2">Order ID <span class="text-red-500">*</span></label>
@@ -30,7 +29,7 @@
                 <option value="" disabled selected>Select Order ID</option>
                 <?php foreach ($orders as $order): ?>
                     <option value="<?= $order->id ?>" <?= old('order_id') == $order->id ? 'selected' : '' ?>>
-                        Order #<?= $order->id ?> - <?= htmlspecialchars($order->user->name) ?>
+                        Order #<?= str_pad($order->id, 4, '0', STR_PAD_LEFT) ?> - <?= htmlspecialchars($order->user->name) ?>
                     </option>
                 <?php endforeach ?>
             </select>

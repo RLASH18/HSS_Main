@@ -22,23 +22,13 @@
     <?= csrf_token() ?>
 
     <div class="space-y-6">
-
         <!-- Order ID -->
         <div class="form-group">
-            <label for="order_select" class="block text-sm font-medium text-gray-700 mb-2">Order ID <span class="text-red-500">*</span></label>
-            <select name="order_id" id="order_select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('order_id') ? 'border-red-300 bg-red-50' : '' ?>">
-                <option value="" disabled>Select Order ID</option>
-                <?php $selectedOrderId = old('order_id') ?: $deliveries->order_id ?>
-                <?php foreach ($orders as $order): ?>
-                    <option value="<?= $order->id ?>"
-                        <?= $selectedOrderId === $order->id ? 'selected' : '' ?>>
-                        Order #<?= $order->id ?> - <?= htmlspecialchars($order->user->name) ?>
-                    </option>
-                <?php endforeach ?>
-            </select>
-            <div class="text-red-500 text-xs text-left mt-2">
-                <p><?= error('order_id') ?></p>
+            <label for="order_display" class="block text-sm font-medium text-gray-700 mb-2">Order ID</label>
+            <div class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 cursor-not-allowed">
+                Order #<?= str_pad($deliveries->order_id, 4, '0', STR_PAD_LEFT) ?> - <?= htmlspecialchars($deliveries->order->user->name ?? 'Unknown Customer') ?>
             </div>
+            <input type="hidden" name="order_id" value="<?= $deliveries->order_id ?>">
         </div>
 
         <!-- Delivery Method -->
