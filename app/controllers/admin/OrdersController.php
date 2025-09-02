@@ -146,10 +146,17 @@ class OrdersController extends Controller
         $existingBilling = Billings::whereMany(['order_id' => $order->id]);
 
         if (empty($existingBilling)) {
+            // Determine payment status based on payment method and order source
+            $paymentStatus = 'unpaid';
+
+            if (in_array($order->payment_method, ['gcash', 'bank_transfer'])) {
+                $paymentStatus = 'paid';
+            }
+
             $billings = [
                 'order_id'       => $order->id,
                 'payment_method' => $order->payment_method ?? 'cash',
-                'payment_status' => 'unpaid',
+                'payment_status' => $paymentStatus,
                 'amount_paid'    => $order->total_amount,
                 'issued_at'      => date('Y-m-d H:i:s')
             ];
