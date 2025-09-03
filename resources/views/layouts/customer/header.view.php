@@ -98,4 +98,4 @@
     </header>
 
     <div class="py-4 my-5">
-        <div class="max-w-6xl mx-auto px-4">
+        <div class="max-w-[1350px] mx-auto px-4">
