@@ -10,7 +10,7 @@
   }
 
   .pagination li a {
-    @apply inline-block px-3 py-1 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition;
+    @apply inline-block px-3 py-1 font-medium text-gray-700 transition bg-gray-100 rounded-lg hover:bg-gray-200;
   }
 
   .pagination li.active a {
@@ -51,8 +51,8 @@ html {
   margin-bottom: 30px;
 }
 
-.header-container div+p,
-.register-title div+p {
+.header-container div + p,
+.register-title div + p {
   color: #8c7d73;
   font-size: 14px;
 }
@@ -743,3 +743,27 @@ footer {
 }
 
 /* Customer Show page end */
+
+input[type="checkbox"] {
+  color: #815331;
+}
+
+#price-range::-webkit-slider-thumb {
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #815331;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+#price-range::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #815331;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

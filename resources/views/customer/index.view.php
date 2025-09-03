@@ -5,85 +5,340 @@
         <div class="flex justify-between items-center mb-2">
             <h1 class="text-3xl font-bold">Categories</h1>
             <?php if (!empty($selectedCategory)): ?>
-                <div class="flex items-center">
-                    <a href="/customer/home"
-                        class="inline-flex items-center text-base text-[#815331] hover:underline font-medium">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                        View All Items
-                    </a>
-                </div>
+            <div class="flex items-center">
+                <a href="/customer/home"
+                    class="inline-flex items-center text-base text-[#815331] hover:underline font-medium">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    View All Items
+                </a>
+            </div>
             <?php endif ?>
         </div>
     </div>
     <div class="w-[80%] mx-auto p-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-auto container">
             <?php foreach ($categories as $category): ?>
-                <?php
+            <?php
                 $categorySlug = strtolower(str_replace([' ', '&'], '_', $category));
                 $imageName = $categorySlug . '.png';
                 $isSelected = ($selectedCategory === $category);
                 ?>
-                <div class="flex items-center justify-center flex-col gap-2 m-2 <?= $isSelected ? 'border-2 border-[#815331] rounded-lg p-2' : '' ?>">
-                    <a href="/customer/home/category/<?= urlencode($category) ?>">
-                        <img src="/assets/img/customer_page_categories/<?= $imageName ?>" alt="<?= $category ?>" class="transition-transform duration-300 hover:scale-95">
-                    </a>
-                    <p class="<?= $isSelected ? 'text-[#815331] font-semibold' : 'text-gray-700 font-medium' ?>">
-                        <?= $category ?>
-                    </p>
-                </div>
+            <div
+                class="flex items-center justify-center flex-col gap-2 m-2 <?= $isSelected ? 'border-2 border-[#815331] rounded-lg p-2' : '' ?>">
+                <a href="/customer/home/category/<?= urlencode($category) ?>">
+                    <img src="/assets/img/customer_page_categories/<?= $imageName ?>" alt="<?= $category ?>"
+                        class="transition-transform duration-300 hover:scale-95">
+                </a>
+                <p class="<?= $isSelected ? 'text-[#815331] font-semibold' : 'text-gray-700 font-medium' ?>">
+                    <?= $category ?>
+                </p>
+            </div>
             <?php endforeach ?>
         </div>
     </div>
 </div>
 
 <div class="w-full bg-white border border-gray-100 rounded-lg shadow-sm mt-8">
-    <div id="item-list" class="container mx-auto p-6">
-        <div class="grid list grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <?php foreach ($items as $item): ?>
-                <a href="/customer/item/<?= $item->id ?>" class="block-group">
-                    <div class="border border-gray-300 rounded-md overflow-hidden shadow-sm hover:shadow-md transition">
-                        <!-- product image -->
-                        <img src="/storage/items-img/<?= $item->item_image ?>" alt="<?= $item->item_name ?>"
-                            class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-
-                        <div class="p-4">
-                            <!-- Price -->
-                            <h5 class="item-price text-green-600 font-bold text-lg">
-                                PHP <?= number_format($item->unit_price, 2) ?>
-                            </h5>
-
-                            <!-- Name -->
-                            <p class="item-name text-gray-800 font-medium truncate">
-                                <?= $item->item_name ?>
-                            </p>
-
-                            <!-- Quantity -->
-                            <p class="text-sm text-gray-500 text-right">
-                                Qty: <?= $item->quantity  ?>
-                            </p>
+    <div class="container mx-auto p-6">
+        <div class="flex gap-6">
+            <!-- Filter Sidebar -->
+            <div class="w-64 bg-gray-50 rounded-lg flex-shrink-0">
+                <div class="p-4 ">
+                    <!-- Availability Filter -->
+                    <div class="mb-4">
+                        <h3 class="font-semibold text-gray-800 mb-6">Filter Products</h3>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="availability-filter mr-2" value="in-stock" checked
+                                    style="accent-color: #000;">
+                                <span class="text-sm text-gray-700">In stock</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="availability-filter mr-2" value="out-of-stock"
+                                    style="accent-color: red;">
+                                <span class="text-sm text-gray-700">Out of stock</span>
+                            </label>
                         </div>
                     </div>
-                </a>
-            <?php endforeach ?>
-        </div>
 
-        <!-- Pagination -->
-        <div class="pagination mt-6 flex justify-center"></div>
+                    <!-- Price Filter -->
+                    <div class="mb-6">
+                        <h3 class="font-semibold text-gray-800 mb-3 flex items-center justify-between">
+                            Price
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </h3>
+                        <div class="space-y-3">
+                            <p class="text-sm text-gray-600">The highest price is PHP <span
+                                    id="max-price">1,449.00</span></p>
+                            <div class="relative">
+                                <input type="range" id="price-range"
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" min="0"
+                                    max="1449" value="1449" step="1">
+                            </div>
+                            <div class="mt-2 flex text-center justify-between">
+                                <span class="text-sm font-medium text-gray-700">
+                                    Min: ₱
+                                    <input type="number" id="current-min-price"
+                                        class="w-20 text-sm border border-gray-300 rounded px-2 py-1 ml-1" value="0"
+                                        min="0" max="1449">
+                                </span>
+                                <div class="flex flex-col items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mt-4" viewBox="0 0 24 24"
+                                        fill="currentColor">
+                                        <path
+                                            d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <span class="text-sm font-medium text-gray-700">
+                                    Max: ₱
+                                    <input type="number" id="current-max-price"
+                                        class="w-20 text-sm border border-gray-300 rounded px-2 py-1" value="1449"
+                                        min="0" max="1449">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <!-- Brand Filter -->
+                    <div class="mb-6">
+                        <h3 class="font-semibold text-gray-800 mb-3 flex items-center justify-between">
+                            Brand
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </h3>
+                        <div class="space-y-2" id="brand-filters">
+                            <!-- Brands will be populated dynamically -->
+                        </div>
+                        <button class="text-sm text-blue-600 hover:underline mt-2" id="show-more-brands">Show
+                            more</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="flex-1" id="item-list">
+                <div class="grid list grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <?php foreach ($items as $item): ?>
+                    <a href="/customer/item/<?= $item->id ?>" class="block-group">
+                        <div
+                            class="border border-gray-300 rounded-md overflow-hidden shadow-sm hover:shadow-md transition">
+                            <!-- product image -->
+                            <img src="/storage/items-img/<?= $item->item_image ?>" alt="<?= $item->item_name ?>"
+                                class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+
+                            <div class="p-4">
+                                <!-- Price -->
+                                <h5 class="item-price text-green-600 font-bold text-lg"
+                                    data-price="<?= $item->unit_price ?>">
+                                    PHP <?= number_format($item->unit_price, 2) ?>
+                                </h5>
+
+                                <!-- Name -->
+                                <p class="item-name text-gray-800 font-medium truncate">
+                                    <?= $item->item_name ?>
+                                </p>
+
+                                <!-- Category (hidden for filtering) -->
+                                <span class="item-category hidden"
+                                    data-category="<?= $item->category ?>"><?= $item->category ?></span>
+
+                                <!-- Brand (hidden for filtering) -->
+                                <span class="item-brand hidden"
+                                    data-brand="<?= $item->supplier_name ?>"><?= $item->supplier_name ?></span>
+
+                                <!-- Availability (hidden for filtering) -->
+                                <span class="item-availability hidden"
+                                    data-availability="<?= $item->quantity > 0 ? 'in-stock' : 'out-of-stock' ?>"><?= $item->quantity > 0 ? 'in-stock' : 'out-of-stock' ?></span>
+
+                                <!-- Quantity -->
+                                <p class="text-sm text-gray-500 text-right">
+                                    Qty: <?= $item->quantity  ?>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                    <?php endforeach ?>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination mt-6 flex justify-center"></div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var options = {
-            valueNames: ['item-name', 'item-price'],
-            page: 8, // Items per page
-            pagination: true,
-        }
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize List.js with proper configuration
+    var options = {
+        valueNames: [
+            'item-name',
+            'item-price',
+            {
+                name: 'price',
+                attr: 'data-price'
+            },
+            {
+                name: 'brand',
+                attr: 'data-brand'
+            },
+            {
+                name: 'availability',
+                attr: 'data-availability'
+            }
+        ],
+        page: 8,
+        pagination: true,
+    }
 
-        window.itemList = new List('item-list', options);
+    window.itemList = new List('item-list', options);
+
+    // Get unique categories and brands from items - wait for List.js to initialize
+    setTimeout(() => {
+        const items = document.querySelectorAll('.list .block-group');
+        const brands = new Set();
+        let maxPrice = 0;
+
+        items.forEach(item => {
+            const brand = item.querySelector('.item-brand')?.dataset.brand;
+            const price = parseFloat(item.querySelector('.item-price')?.dataset.price || 0);
+
+            if (brand) brands.add(brand);
+            if (price > maxPrice) maxPrice = price;
+        });
+
+        // Update max price display
+        document.getElementById('max-price').textContent = maxPrice.toLocaleString('en-PH', {
+            minimumFractionDigits: 2
+        });
+        document.getElementById('price-range').max = maxPrice;
+        document.getElementById('current-max-price').value = maxPrice;
+        document.getElementById('current-max-price').max = maxPrice;
+
+
+        // Populate brand filters
+        const brandContainer = document.getElementById('brand-filters');
+        let brandCount = 0;
+        brands.forEach(brand => {
+            const isVisible = brandCount < 5;
+            brandContainer.innerHTML += `
+                    <label class="flex items-center ${!isVisible ? 'hidden brand-extra' : ''}">
+                        <input type="checkbox" class="brand-filter mr-2" value="${brand}" checked>
+                        <span class="text-sm text-gray-700">${brand}</span>
+                    </label>
+                `;
+            brandCount++;
+        });
+
+        // Attach event listeners after populating filters
+        attachFilterListeners();
+    }, 100);
+
+
+    document.getElementById('show-more-brands').addEventListener('click', function() {
+        const hiddenBrands = document.querySelectorAll('.brand-extra');
+        hiddenBrands.forEach(brand => brand.classList.toggle('hidden'));
+        this.textContent = this.textContent === 'Show less' ? 'Show more' : 'Show less';
     });
+
+    // Filter function - completely rewritten for better compatibility
+    function applyFilters() {
+        const availabilityFilters = Array.from(document.querySelectorAll('.availability-filter:checked')).map(
+            cb => cb.value);
+        const brandFilters = Array.from(document.querySelectorAll('.brand-filter:checked')).map(cb => cb.value);
+        const minPriceValue = parseFloat(document.getElementById('current-min-price').value) || 0;
+        const maxPriceValue = parseFloat(document.getElementById('current-max-price').value) || 999999;
+
+        // Get all product items directly
+        const allItems = document.querySelectorAll('.list .block-group');
+
+        allItems.forEach(item => {
+            const itemPrice = parseFloat(item.querySelector('.item-price')?.dataset.price || 0);
+            const itemBrand = item.querySelector('.item-brand')?.dataset.brand || '';
+            const itemAvailability = item.querySelector('.item-availability')?.dataset.availability ||
+                '';
+
+            const priceMatch = itemPrice >= minPriceValue && itemPrice <= maxPriceValue;
+            const categoryMatch = true; // Category filtering removed
+            const brandMatch = brandFilters.length === 0 || brandFilters.includes(itemBrand);
+            const availabilityMatch = availabilityFilters.length === 0 || availabilityFilters.includes(
+                itemAvailability);
+
+            const shouldShow = priceMatch && categoryMatch && brandMatch && availabilityMatch;
+
+            // Show/hide items directly
+            if (shouldShow) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    // Price range inputs
+    const currentMinPrice = document.getElementById('current-min-price');
+    const currentMaxPrice = document.getElementById('current-max-price');
+
+    currentMinPrice.addEventListener('input', function() {
+        applyFilters();
+    });
+
+    currentMaxPrice.addEventListener('input', function() {
+        applyFilters();
+    });
+
+    // Event listeners for filters (after dynamic population)
+    function attachFilterListeners() {
+        document.querySelectorAll('.availability-filter, .brand-filter').forEach(checkbox => {
+            checkbox.addEventListener('change', applyFilters);
+        });
+    }
+
+    // Price range slider
+    const priceRange = document.getElementById('price-range');
+
+    priceRange.addEventListener('input', function() {
+        // Update the price input field
+        document.getElementById('current-max-price').value = this.value;
+        applyFilters();
+    });
+
+    // Style the range slider
+    // const style = document.createElement('style');
+    // style.textContent = `
+    //         #price-range::-webkit-slider-thumb {
+    //             appearance: none;
+    //             height: 20px;
+    //             width: 20px;
+    //             border-radius: 50%;
+    //             background: #f59e0b;
+    //             cursor: pointer;
+    //             border: 2px solid #ffffff;
+    //             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    //         }
+    //         #price-range::-moz-range-thumb {
+    //             height: 20px;
+    //             width: 20px;
+    //             border-radius: 50%;
+    //             background: #f59e0b;
+    //             cursor: pointer;
+    //             border: 2px solid #ffffff;
+    //             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    //         }
+    //     `;
+    // document.head.appendChild(style);
+});
 </script>
 <?php layout('customer/footer') ?>
