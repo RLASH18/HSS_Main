@@ -110,12 +110,15 @@ class CheckoutController extends Controller
             $cartItems[] = $cart;
         }
 
-        // Save order and send payment to PayMongo
-        $orderId = $this->storeOrderWithItems($data, $cartItems, true);
-        $this->handlePayMongoPayment($orderId, $data['payment_method']);
+        // For cash payments, create order immediately
+        if ($data['payment_method'] === 'cash') {
+            $orderId = $this->storeOrderWithItems($data, $cartItems, true);
+            setSweetAlert('success', 'Order Placed!', 'Your order has been placed successfully. Order ID: ' . $orderId);
+            redirect('/customer/my-orders');
+        }
 
-        setSweetAlert('success', 'Order Placed!', 'Your order has been placed successfully. Order ID: ' . $orderId);
-        redirect('/customer/my-orders');
+        // For online payments, store data in session and redirect to PayMongo
+        $this->handlePayMongoPayment($data, $cartItems, true);
     }
 
     /**
@@ -197,12 +200,15 @@ class CheckoutController extends Controller
             'item' => $item
         ];
 
-        // Save order and send payment to PayMongo
-        $orderId = $this->storeOrderWithItems($data, [$orderItem], false);
-        $this->handlePayMongoPayment($orderId, $data['payment_method']);
+        // For cash payments, create order immediately
+        if ($data['payment_method'] === 'cash') {
+            $orderId = $this->storeOrderWithItems($data, [$orderItem], false);
+            setSweetAlert('success', 'Order Placed!', 'Your order has been placed successfully. Order ID: ' . $orderId);
+            redirect('/customer/my-orders');
+        }
 
-        setSweetAlert('success', 'Order Placed!', 'Your order has been placed successfully. Order ID: ' . $orderId);
-        redirect('/customer/my-orders');
+        // For online payments, store data in session and redirect to PayMongo
+        $this->handlePayMongoPayment($data, [$orderItem], false);
     }
 
     /**
@@ -256,32 +262,64 @@ class CheckoutController extends Controller
     /**
      * Redirects customer to PayMongo checkout if online payment
      */
-    private function handlePayMongoPayment(int $orderId, string $paymentMethod)
+    /**
+     * Redirects customer to PayMongo checkout if online payment
+     */
+    private function handlePayMongoPayment(array $data, array $items, bool $fromCart)
     {
         // Skip if payment method not supported
-        if (!in_array($paymentMethod, ['gcash', 'bank_transfer'])) {
+        if (!in_array($data['payment_method'], ['gcash', 'bank_transfer'])) {
             return;
         }
 
-        // Store order ID in session for test mode fallback
-        $_SESSION['pending_order_id'] = $orderId;
-
-        $paymongo = new PayMongoService();
-        $order = Orders::find($orderId);
-        $totalAmount = $order->total_amount * 100; // PayMongo expects cents
-
-        $typeMapping = [
-            'gcash' => 'gcash',
-            'bank_transfer' => 'online_banking'
+        // Store order data in session for later use
+        $_SESSION['pending_order_data'] = [
+            'data' => $data,
+            'items' => $items,
+            'from_cart' => $fromCart
         ];
 
-        $type = $typeMapping[$paymentMethod];
+        $paymongo = new PayMongoService();
+        $totalAmount = 0;
+        foreach ($items as $item) {
+            $totalAmount += $item->quantity * $item->item->unit_price;
+        }
+        $totalAmount *= 100; // PayMongo expects cents
 
-        $source = $paymongo->createSource($type, $totalAmount, "Order #{$orderId}");
+        // get order items for line items
+        $lineItems = [];
 
-        if (!empty($source['data']['attributes']['redirect']['checkout_url'])) {
-            header('Location: ' . $source['data']['attributes']['redirect']['checkout_url']);
-            exit;
+        foreach ($items as $item) {
+            $inventory = Inventory::find($item->item_id);
+            $lineItems[] = [
+                'name' => $inventory->item_name,
+                'amount' => (int) ($item->item->unit_price * 100), // Convert to cent
+                'currency' => 'PHP',
+                'quantity' => (int) $item->quantity,
+                'description' => $inventory->description ?? 'Order item'
+            ];
+        }
+
+        // Map payment methods for checkout session
+        $paymentMethodMapping = [
+            'gcash' => 'gcash',
+            'bank_transfer' => 'card'
+        ];
+
+        $paymentType = [$paymentMethodMapping[$data['payment_method']]];
+
+        // Create checkout session with order metadata
+        $session = $paymongo->createCheckoutSession(
+            $lineItems,
+            "Order",
+            $paymentType,
+            'http://localhost:8000/customer/payment-success',
+            'http://localhost:8000/customer/payment-failed',
+            ['order_id' => null]
+        );
+
+        if (!empty($session['data']['attributes']['checkout_url'])) {
+            redirect($session['data']['attributes']['checkout_url']);
         }
 
         setSweetAlert('error', 'Payment Failed', 'Unable to initiate payment.');
@@ -293,13 +331,20 @@ class CheckoutController extends Controller
      */
     public function paymentSuccess()
     {
-        $sourceId = $this->extractSourceIdFromRequest();
+        $sessionId = $this->extractSourceIdFromRequest();
 
-        if ($sourceId) {
+        if ($sessionId) {
             // Handle production PayMongo payment verification
-            $this->handleProductionPaymentVerification($sourceId);
+            $this->handleProductionPaymentVerification($sessionId);
         } else {
-            $this->handleTestModePaymentConfirmation();
+            // Check if we have pending order data in session (for test mode or missing session ID)
+            if (isset($_SESSION['pending_order_data'])) {
+                $this->handleTestModePaymentConfirmation();
+            } else {
+                // No session data found - payment may have already been processed
+                setSweetAlert('success', 'Payment Already Processed', 'Your payment has been successfully processed.');
+                redirect('/customer/my-orders');
+            }
         }
     }
 
@@ -308,7 +353,12 @@ class CheckoutController extends Controller
      */
     public function paymentFailed()
     {
-        setSweetAlert('error', 'Payment Failed', 'Your payment could not be completed.');
+        // Clean up session data for failed payment
+        if (isset($_SESSION['pending_order_data'])) {
+            unset($_SESSION['pending_order_data']);
+        }
+
+        setSweetAlert('error', 'Payment Failed', 'Your payment could not be completed. No order was created and no inventory was affected.');
         redirect('/customer/my-orders');
     }
 
@@ -317,25 +367,38 @@ class CheckoutController extends Controller
      */
     private function extractSourceIdFromRequest(): ?string
     {
-        return $_GET['source_id'] ?? $_GET['id'] ?? $_GET['source'] ?? null;
+        return $_GET['session_id'] ?? $_GET['checkout_session_id'] ?? $_GET['cs_id'] ?? $_GET['source_id'] ?? null;
     }
 
     /**
      * Confirm PayMongo payment in production mode
      */
-    private function handleProductionPaymentVerification(string $sourceId): void
+    private function handleProductionPaymentVerification(string $sessionId): void
     {
         $paymongo = new PayMongoService();
 
-        // Validate payment with PayMongo API
-        if (!$paymongo->isPaymentSuccessful($sourceId)) {
-            setSweetAlert('error', 'Payment Failed', 'Payment verification failed');
-            redirect('/customer/my-orders');
+        // Check if it's a checkout session ID or legacy source ID
+        if (strpos($sessionId, 'cs_') === 0) {
+            // New checkout session
+            if (!$paymongo->isCheckoutSessionPaid($sessionId)) {
+                setSweetAlert('error', 'Payment Failed', 'Payment verification failed');
+                redirect('/customer/my-orders');
+            }
+
+            // For production mode, we need to create the order after payment verification
+            if (!isset($_SESSION['pending_order_data'])) {
+                setSweetAlert('error', 'Payment Error', 'Order data not found in session');
+                redirect('/customer/my-orders');
+            }
+
+            $pendingOrderData = $_SESSION['pending_order_data'];
+            unset($_SESSION['pending_order_data']);
+
+            $orderId = $this->storeOrderWithItems($pendingOrderData['data'], $pendingOrderData['items'], $pendingOrderData['from_cart']);
         }
 
-        // Get order ID from PayMongo source
-        $orderId = $this->getOrderIdFromPayMongoSource($paymongo, $sourceId);
         if (!$orderId) {
+            setSweetAlert('error', 'Payment Error', 'Unable to create order after payment');
             redirect('/customer/my-orders');
         }
 
@@ -348,43 +411,22 @@ class CheckoutController extends Controller
      */
     private function handleTestModePaymentConfirmation(): void
     {
-        if (!isset($_SESSION['pending_order_id'])) {
+        if (!isset($_SESSION['pending_order_data'])) {
             $availableParams = implode(', ', array_keys($_GET));
             setSweetAlert('error', 'Payment Error', "Invalid payment confirmation. Available params: {$availableParams}");
             redirect('/customer/my-orders');
         }
 
-        $orderId = $_SESSION['pending_order_id'];
-        unset($_SESSION['pending_order_id']);
+        $pendingOrderData= $_SESSION['pending_order_data'];
+        unset($_SESSION['pending_order_data']);
+
+        $orderId = $this->storeOrderWithItems($pendingOrderData['data'], $pendingOrderData['items'], $pendingOrderData['from_cart']);
 
         $this->confirmOrderPayment($orderId, true);
     }
 
     /**
-     * Fetch order ID from PayMongo source data
-     */
-    private function getOrderIdFromPayMongoSource(PayMongoService $paymongo, string $sourceId): ?int
-    {
-        $source = $paymongo->getSource($sourceId);
-        if (!$source) {
-            setSweetAlert('error', 'Payment Error', 'Unable to verify payment details');
-            return null;
-        }
-
-        // Order ID is embedded in source description
-        $description = $source['data']['attributes']['description'] ?? '';
-        $orderId = $paymongo->extractOrderIdFromDescription($description);
-
-        if (!$orderId) {
-            setSweetAlert('error', 'Payment Error', 'Unable to identify order from payment');
-            return null;
-        }
-
-        return $orderId;
-    }
-
-    /**
-     * Confirm order payment (both prod + test)
+     * Confirm order payment
      */
     private function confirmOrderPayment(int $orderId, bool $isTestMode = false): void
     {
@@ -467,7 +509,7 @@ class CheckoutController extends Controller
         $paymongo = new PayMongoService();
 
         // Parse and validate webhook payload using service
-        $webhookData = $paymongo->parseWebhookPayload($payload);
+        $webhookData = $paymongo->parseCheckoutWebhookPayload($payload);
 
         if (!$webhookData || !$webhookData['order_id']) {
             $response->setStatusCode(200);

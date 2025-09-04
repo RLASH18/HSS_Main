@@ -103,6 +103,7 @@ Route::group(['middleware' => 'auth', 'prefix' => '/customer'], function () {
         Route::post('/process-buy-now', 'processBuyNow');
         Route::get('/payment-success', 'paymentSuccess');
         Route::get('/payment-failed', 'paymentFailed');
+        Route::get('/cleanup-payment', 'cleanupPendingPayment');
     });
 });
 
