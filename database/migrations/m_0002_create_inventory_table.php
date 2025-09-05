@@ -22,6 +22,8 @@ class m_0002_create_inventory_table
                         'Chemicals'
                     ) NOT NULL,
                     item_image VARCHAR(255),
+                    item_image_2 VARCHAR(255),
+                    item_image_3 VARCHAR(255),
                     unit_price DECIMAL(10, 2) NOT NULL,
                     quantity INT NOT NULL,
                     restock_threshold INT DEFAULT 10,

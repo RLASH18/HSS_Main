@@ -45,15 +45,22 @@ class InventoryController extends Controller
             'item_name' => 'required',
             'description' => 'nullable',
             'category' => 'required',
-            'item_image' => 'nullable|image',
+            'item_image_1' => 'nullable|image',
+            'item_image_2' => 'nullable|image',
+            'item_image_3' => 'nullable|image',
             'unit_price' => 'required',
             'quantity' => 'required',
             'restock_threshold' => 'required'
         ]);
 
         // Handle image upload
-        $image = FileHandler::fromRequest('item_image');
-        $inventory['item_image'] = $image ? $image->store('public/storage/items-img') : null;
+        $image1 = FileHandler::fromRequest('item_image_1');
+        $image2 = FileHandler::fromRequest('item_image_2');
+        $image3 = FileHandler::fromRequest('item_image_3');
+
+        $inventory['item_image_1'] = $image1 ? $image1->store('public/storage/items-img') : null;
+        $inventory['item_image_2'] = $image2 ? $image2->store('public/storage/items-img') : null;
+        $inventory['item_image_3'] = $image3 ? $image3->store('public/storage/items-img') : null;
 
         // Save to database
         if (Inventory::insert($inventory)) {
@@ -106,7 +113,9 @@ class InventoryController extends Controller
             'item_name' => 'required',
             'description' => 'nullable',
             'category' => 'required',
-            'item_image' => 'nullable',
+            'item_image_1' => 'nullable|image',
+            'item_image_2' => 'nullable|image',
+            'item_image_3' => 'nullable|image',
             'unit_price' => 'required',
             'quantity' => 'required',
             'restock_threshold' => 'required'
@@ -115,26 +124,49 @@ class InventoryController extends Controller
         // Get existing inventory record
         $existing = $this->findInventoryOrFail($id);
 
-        // Handle image upload if a new image is provided
-        $image = FileHandler::fromRequest('item_image');
+        // Handle multiple image uploads
+        $image1 = FileHandler::fromRequest('item_image_1');
+        $image2 = FileHandler::fromRequest('item_image_2');
+        $image3 = FileHandler::fromRequest('item_image_3');
 
-        if ($image) {
-            // delete the old image if exist
+        // Handle image 1
+        if ($image1) {
+            // Delete old image if exists
             if (!empty($existing->item_image)) {
                 FileHandler::delete('public/storage/items-img/', $existing->item_image);
             }
-            // Store the new image
-            $inventory['item_image'] = $image->store('public/storage/items-img');
+            $inventory['item_image'] = $image1->store('public/storage/items-img');
         } else {
-            // keep the old image
             $inventory['item_image'] = $existing->item_image;
+        }
+
+        // Handle image 2
+        if ($image2) {
+            // Delete old image if exists
+            if (!empty($existing->item_image_2)) {
+                FileHandler::delete('public/storage/items-img/', $existing->item_image_2);
+            }
+            $inventory['item_image_2'] = $image2->store('public/storage/items-img');
+        } else {
+            $inventory['item_image_2'] = $existing->item_image_2;
+        }
+
+        // Handle image 3
+        if ($image3) {
+            // Delete old image if exists
+            if (!empty($existing->item_image_3)) {
+                FileHandler::delete('public/storage/items-img/', $existing->item_image_3);
+            }
+            $inventory['item_image_3'] = $image3->store('public/storage/items-img');
+        } else {
+            $inventory['item_image_3'] = $existing->item_image_3;
         }
 
         // Update in database
         if (Inventory::update($id, $inventory)) {
             setSweetAlert('success', 'Updated!', 'Item info has been updated.');
         } else {
-            setSweetAlert('error', 'Oops!', 'Couldn’t update the item.');
+            setSweetAlert('error', 'Oops!', 'Couldn\'t update the item.');
         }
 
         redirect('/admin/inventory');
@@ -162,9 +194,15 @@ class InventoryController extends Controller
     {
         $item = $this->findInventoryOrFail($id);
 
-        // If item exists and has an image, delete the image file
+        // Delete all image files if they exist
         if (!empty($item->item_image)) {
             FileHandler::delete('public/storage/items-img/', $item->item_image);
+        }
+        if (!empty($item->item_image_2)) {
+            FileHandler::delete('public/storage/items-img/', $item->item_image_2);
+        }
+        if (!empty($item->item_image_3)) {
+            FileHandler::delete('public/storage/items-img/', $item->item_image_3);
         }
 
         // Delete the inventory record from the database

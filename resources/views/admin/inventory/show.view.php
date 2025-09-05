@@ -152,27 +152,50 @@
                 </div>
             </div>
 
-            <!-- Item Image -->
-            <?php if ($inventory->item_image): ?>
+            <!-- Item Images Gallery -->
+            <?php
+            $images = [];
+            if (!empty($inventory->item_image)) $images[] = $inventory->item_image;
+            if (!empty($inventory->item_image_2)) $images[] = $inventory->item_image_2;
+            if (!empty($inventory->item_image_3)) $images[] = $inventory->item_image_3;
+            ?>
+
+            <?php if (!empty($images)): ?>
                 <div class="form-group">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Item Image</label>
-                    <div class="w-full border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-                        <img src="/storage/items-img/<?= htmlspecialchars($inventory->item_image) ?>"
-                            alt="<?= htmlspecialchars($inventory->item_name) ?>"
-                            class="w-full h-64 object-cover">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Item Images (<?= count($images) ?> image<?= count($images) > 1 ? 's' : '' ?>)
+                    </label>
+
+                    <!-- Main Image Display -->
+                    <div class="w-full border border-gray-200 rounded-lg overflow-hidden shadow-sm mb-4 p-2">
+                        <img id="mainImage" src="/storage/items-img/<?= htmlspecialchars($images[0]) ?>" alt="<?= htmlspecialchars($inventory->item_name) ?>"
+                            class="w-full max-h-96 object-contain">
                     </div>
+
+                    <!-- Thumbnail Gallery (only show if more than 1 image) -->
+                    <?php if (count($images) > 1): ?>
+                        <div class="flex space-x-2 overflow-x-auto">
+                            <?php foreach ($images as $index => $image): ?>
+                                <button type="button" onclick="selectImage(<?= $index ?>)"
+                                    class="thumbnail-btn flex-shrink-0 border-2 rounded-lg overflow-hidden transition-all <?= $index === 0 ? 'border-[#815331]' : 'border-gray-200 hover:border-gray-300' ?>">
+                                    <img src="/storage/items-img/<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($inventory->item_name) ?> - Image <?= $index + 1 ?>"
+                                        class="w-16 h-16 object-cover">
+                                </button>
+                            <?php endforeach ?>
+                        </div>
+                    <?php endif ?>
                 </div>
             <?php else: ?>
                 <div class="form-group">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Item Image</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Item Images</label>
                     <div class="w-full px-4 py-16 bg-gray-50 border border-gray-200 rounded-lg text-center text-gray-500">
                         <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                             <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                        <p>No image available</p>
+                        <p>No images available</p>
                     </div>
                 </div>
-            <?php endif; ?>
+            <?php endif ?>
         </div>
     </div>
 
@@ -181,7 +204,7 @@
         <div class="flex items-center justify-between">
             <div class="flex space-x-4">
                 <a href="/admin/inventory"
-                    class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                    class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#815331] transition-colors">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
@@ -191,5 +214,27 @@
         </div>
     </div>
 </div>
+
+<script>
+    const images = <?= json_encode(array_map(function ($img) {
+                        return '/storage/items-img/' . $img;
+                    }, $images)) ?>;
+
+    function selectImage(index) {
+        const mainImg = document.getElementById('mainImage');
+        mainImg.src = images[index];
+
+        // Update thumbnail borders
+        document.querySelectorAll('.thumbnail-btn').forEach((btn, i) => {
+            if (i === index) {
+                btn.classList.remove('border-gray-200', 'hover:border-gray-300');
+                btn.classList.add('border-[#815331]');
+            } else {
+                btn.classList.remove('border-[#815331]');
+                btn.classList.add('border-gray-200', 'hover:border-gray-300');
+            }
+        });
+    }
+</script>
 
 <?php layout('admin/footer') ?>

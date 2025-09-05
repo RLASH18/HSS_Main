@@ -144,33 +144,109 @@
                 </div>
             </div>
 
-            <!-- New Image Upload -->
-            <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Change Image (Optional)</label>
-                <div class="mt-1 flex justify-center items-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-lg <?= isInvalid('item_image') ? 'border-red-300 bg-red-50' : '' ?>">
-                    <div class="space-y-1 text-center">
-                        <!-- Upload Icon and Text (shown by default) -->
-                        <div id="upload-placeholder">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <div class="flex text-sm text-gray-600 justify-center">
-                                <label for="image" class="relative cursor-pointer bg-white rounded-md font-medium text-[#815331] hover:text-[#6b4428] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-[#815331]">
-                                    <span>Upload a file</span>
-                                    <input id="image" name="item_image" type="file" accept="image/*" class="sr-only">
-                                </label>
-                                <p class="pl-1">or drag and drop</p>
+            <?php 
+            $images = [];
+            if (!empty($inventory->item_image)) $images[] = ['file' => $inventory->item_image, 'label' => 'Main Image'];
+            if (!empty($inventory->item_image_2)) $images[] = ['file' => $inventory->item_image_2, 'label' => 'Image 2'];
+            if (!empty($inventory->item_image_3)) $images[] = ['file' => $inventory->item_image_3, 'label' => 'Image 3'];
+            ?>
+            
+            <!-- Shows current Image -->
+            <?php if (!empty($images)): ?>
+                <div class="form-group mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-3">Current Images</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <?php foreach ($images as $index => $image): ?>
+                            <div class="relative">
+                                <img src="/storage/items-img/<?= htmlspecialchars($image['file']) ?>"
+                                     alt="<?= htmlspecialchars($inventory->item_name) ?> - <?= $image['label'] ?>"
+                                     class="w-full h-32 object-contain rounded-lg border border-gray-200">
+                                <div class="absolute bottom-2 left-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
+                                    <?= $image['label'] ?>
+                                </div>
                             </div>
-                            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                            <p class="text-xs text-gray-400">Leave empty to keep current image</p>
-                        </div>
-
-                        <!-- Image Preview (hidden by default) -->
-                        <div id="image-preview" class="hidden"></div>
+                        <?php endforeach ?>
                     </div>
                 </div>
+            <?php endif ?>
+
+            <!-- Update Images -->
+            <div class="form-group">
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Update Images (Optional)
+                </label>
+                <p class="text-xs text-gray-500 mb-4">Upload new images to replace existing ones. Leave empty to keep current images.</p>
+                
+                <div class="grid grid-cols-1 gap-4">
+                    <!-- Image 1 -->
+                    <div class="image-upload-container">
+                        <label class="block text-xs font-medium text-gray-600 mb-2">Main Image</label>
+                        <div class="mt-1 flex justify-center px-4 pt-4 pb-4 border-2 border-gray-300 border-dashed rounded-lg hover:border-[#815331] transition-colors">
+                            <div class="space-y-1 text-center">
+                                <div id="upload-placeholder-1">
+                                    <svg class="mx-auto h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <div class="text-xs text-gray-600">
+                                        <label for="image1" class="relative cursor-pointer bg-white rounded-md font-medium text-[#815331] hover:text-[#6b4428]">
+                                            <span>Upload</span>
+                                            <input id="image1" name="item_image_1" type="file" accept="image/*" class="sr-only">
+                                        </label>
+                                    </div>
+                                    <p class="text-xs text-gray-400">PNG, JPG up to 10MB</p>
+                                </div>
+                                <div id="image-preview-1" class="hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image 2 -->
+                    <div class="image-upload-container">
+                        <label class="block text-xs font-medium text-gray-600 mb-2">Image 2</label>
+                        <div class="mt-1 flex justify-center px-4 pt-4 pb-4 border-2 border-gray-300 border-dashed rounded-lg hover:border-[#815331] transition-colors">
+                            <div class="space-y-1 text-center">
+                                <div id="upload-placeholder-2">
+                                    <svg class="mx-auto h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <div class="text-xs text-gray-600">
+                                        <label for="image2" class="relative cursor-pointer bg-white rounded-md font-medium text-[#815331] hover:text-[#6b4428]">
+                                            <span>Upload</span>
+                                            <input id="image2" name="item_image_2" type="file" accept="image/*" class="sr-only">
+                                        </label>
+                                    </div>
+                                    <p class="text-xs text-gray-400">PNG, JPG up to 10MB</p>
+                                </div>
+                                <div id="image-preview-2" class="hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image 3 -->
+                    <div class="image-upload-container">
+                        <label class="block text-xs font-medium text-gray-600 mb-2">Image 3</label>
+                        <div class="mt-1 flex justify-center px-4 pt-4 pb-4 border-2 border-gray-300 border-dashed rounded-lg hover:border-[#815331] transition-colors">
+                            <div class="space-y-1 text-center">
+                                <div id="upload-placeholder-3">
+                                    <svg class="mx-auto h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <div class="text-xs text-gray-600">
+                                        <label for="image3" class="relative cursor-pointer bg-white rounded-md font-medium text-[#815331] hover:text-[#6b4428]">
+                                            <span>Upload</span>
+                                            <input id="image3" name="item_image_3" type="file" accept="image/*" class="sr-only">
+                                        </label>
+                                    </div>
+                                    <p class="text-xs text-gray-400">PNG, JPG up to 10MB</p>
+                                </div>
+                                <div id="image-preview-3" class="hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="text-red-500 text-xs text-left mt-2">
-                    <p><?= error('item_image') ?></p>
+                    <p><?= error('item_image_1') ?></p>
                 </div>
             </div>
         </div>
@@ -183,8 +259,7 @@
                 class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#815331] transition-colors">
                 Cancel
             </a>
-            <button type="submit"
-                class="inline-flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#815331] hover:bg-[#6b4428] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#815331] transition-colors">
+            <button type="submit" class="inline-flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#815331] hover:bg-[#6b4428] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#815331] transition-colors">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
@@ -196,40 +271,112 @@
 
 <script>
     // Image upload preview
-    const imageInput = document.getElementById('image');
-    const imagePreview = document.getElementById('image-preview');
-    const uploadPlaceholder = document.getElementById('upload-placeholder');
+    const imageInput1 = document.getElementById('image1');
+    const imagePreview1 = document.getElementById('image-preview-1');
+    const uploadPlaceholder1 = document.getElementById('upload-placeholder-1');
 
-    imageInput.addEventListener('change', function() {
+    imageInput1.addEventListener('change', function() {
         const file = this.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                imagePreview.innerHTML = `
+                imagePreview1.innerHTML = `
                     <div class="relative">
                         <img src="${e.target.result}" class="w-full h-48 object-cover rounded-lg border border-gray-200" />
-                        <button type="button" onclick="clearImagePreview()" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 shadow-lg transition-colors">
+                        <button type="button" onclick="clearImagePreview1()" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 shadow-lg transition-colors">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
                 `;
-                imagePreview.classList.remove('hidden');
-                uploadPlaceholder.classList.add('hidden');
+                imagePreview1.classList.remove('hidden');
+                uploadPlaceholder1.classList.add('hidden');
             }
             reader.readAsDataURL(file);
         } else {
-            clearImagePreview();
+            clearImagePreview1();
         }
     });
 
     // Function to clear image preview
-    function clearImagePreview() {
-        imagePreview.innerHTML = '';
-        imagePreview.classList.add('hidden');
-        uploadPlaceholder.classList.remove('hidden');
-        imageInput.value = '';
+    function clearImagePreview1() {
+        imagePreview1.innerHTML = '';
+        imagePreview1.classList.add('hidden');
+        uploadPlaceholder1.classList.remove('hidden');
+        imageInput1.value = '';
+    }
+
+    const imageInput2 = document.getElementById('image2');
+    const imagePreview2 = document.getElementById('image-preview-2');
+    const uploadPlaceholder2 = document.getElementById('upload-placeholder-2');
+
+    imageInput2.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview2.innerHTML = `
+                    <div class="relative">
+                        <img src="${e.target.result}" class="w-full h-48 object-cover rounded-lg border border-gray-200" />
+                        <button type="button" onclick="clearImagePreview2()" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 shadow-lg transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                imagePreview2.classList.remove('hidden');
+                uploadPlaceholder2.classList.add('hidden');
+            }
+            reader.readAsDataURL(file);
+        } else {
+            clearImagePreview2();
+        }
+    });
+
+    // Function to clear image preview
+    function clearImagePreview2() {
+        imagePreview2.innerHTML = '';
+        imagePreview2.classList.add('hidden');
+        uploadPlaceholder2.classList.remove('hidden');
+        imageInput2.value = '';
+    }
+
+    const imageInput3 = document.getElementById('image3');
+    const imagePreview3 = document.getElementById('image-preview-3');
+    const uploadPlaceholder3 = document.getElementById('upload-placeholder-3');
+
+    imageInput3.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview3.innerHTML = `
+                    <div class="relative">
+                        <img src="${e.target.result}" class="w-full h-48 object-cover rounded-lg border border-gray-200" />
+                        <button type="button" onclick="clearImagePreview3()" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 shadow-lg transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                imagePreview3.classList.remove('hidden');
+                uploadPlaceholder3.classList.add('hidden');
+            }
+            reader.readAsDataURL(file);
+        } else {
+            clearImagePreview3();
+        }
+    });
+
+    // Function to clear image preview
+    function clearImagePreview3() {
+        imagePreview3.innerHTML = '';
+        imagePreview3.classList.add('hidden');
+        uploadPlaceholder3.classList.remove('hidden');
+        imageInput3.value = '';
     }
 </script>
 
