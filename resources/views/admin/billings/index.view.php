@@ -83,30 +83,30 @@
     <table id="billing-table" class="w-full border-collapse text-sm">
         <thead class="bg-gray-50">
             <tr>
-                <th class="px-5 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Bill ID</th>
-                <th class="px-5 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Order ID</th>
-                <th class="px-5 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Payment Method</th>
-                <th class="px-5 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Status</th>
-                <th class="px-5 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Amount</th>
-                <th class="px-5 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Date Issued</th>
-                <th class="px-5 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Actions</th>
+                <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Bill ID</th>
+                <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Order ID</th>
+                <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Payment Method</th>
+                <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Status</th>
+                <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Amount</th>
+                <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Date Issued</th>
+                <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Actions</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($billings as $billing): ?>
-                <tr>
-                    <td class="px-5 py-4 border-b border-gray-100 text-black-500 font-semibold font-mono">#<?= str_pad($billing->id, 4, '0', STR_PAD_LEFT) ?></td>
-                    <td class="px-5 py-4 border-b border-gray-100 text-gray-500 font-semibold font-mono">#<?= str_pad($billing->orders->id, 4, '0', STR_PAD_LEFT) ?></td>
-                    <td class="px-5 py-4 border-b border-gray-100">
+                <tr class="h-16 hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4 border-b border-gray-100 text-gray-900 font-semibold font-mono align-middle">#<?= str_pad($billing->id, 4, '0', STR_PAD_LEFT) ?></td>
+                    <td class="px-6 py-4 border-b border-gray-100 text-gray-600 font-semibold font-mono align-middle">#<?= str_pad($billing->orders->id, 4, '0', STR_PAD_LEFT) ?></td>
+                    <td class="px-6 py-4 border-b border-gray-100 align-middle">
                         <?php if ($billing->payment_method === 'gcash'): ?>
-                            <span class="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700">
+                            <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-500 px-3 py-1.5 text-xs font-semibold text-white min-w-[100px] justify-center">
                                 <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9l-6 3V7Z" />
                                 </svg>
                                 GCash
                             </span>
                         <?php elseif ($billing->payment_method === 'cash'): ?>
-                            <span class="inline-flex items-center gap-1 rounded-full border border-green-200 bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700">
+                            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white min-w-[100px] justify-center">
                                 <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-width="2" d="M4 8.5h16v7H4z" />
                                     <circle cx="12" cy="12" r="2.25" stroke="currentColor" stroke-width="2" />
@@ -114,30 +114,40 @@
                                 Cash
                             </span>
                         <?php elseif ($billing->payment_method === 'bank_transfer' || $billing->payment_method === 'bank' || $billing->payment_method === 'bank transfer'): ?>
-                            <span class="inline-flex items-center gap-1 rounded-full border border-purple-200 bg-purple-50 px-2.5 py-1 text-xs font-medium text-purple-700">
+                            <span class="inline-flex items-center gap-1.5 rounded-full bg-purple-500 px-3 py-1.5 text-xs font-semibold text-white min-w-[100px] justify-center">
                                 <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M5 10V7l7-4 7 4v3M6 14v6m4-6v6m4-6v6m4-6v6" />
                                 </svg>
                                 Bank Transfer
                             </span>
                         <?php else: ?>
-                            <span class="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-gray-50 px-2.5 py-1 text-xs font-medium text-gray-700">
+                            <span class="inline-flex items-center gap-1.5 rounded-full bg-[#815331] px-3 py-1.5 text-xs font-semibold text-white min-w-[100px] justify-center">
                                 <?= ucfirst($billing->payment_method) ?>
                             </span>
                         <?php endif; ?>
                     </td>
-                    <td class="px-5 py-4 border-b border-gray-100">
+                    <td class="px-6 py-4 border-b border-gray-100 align-middle">
                         <?php if ($billing->payment_status === 'unpaid'): ?>
-                            <span class="inline-block px-3 py-1 rounded-full text-xs font-medium text-center min-w-[80px] bg-red-50 text-red-600 border border-red-200">Unpaid</span>
+                            <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-semibold min-w-[90px] bg-red-500 text-white">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                </svg>
+                                Unpaid
+                            </span>
                         <?php elseif ($billing->payment_status === 'paid'): ?>
-                            <span class="inline-block px-3 py-1 rounded-full text-xs font-medium text-center min-w-[80px] bg-green-50 text-green-600 border border-green-200">Paid</span>
+                            <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-semibold min-w-[90px] bg-emerald-500 text-white">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                Paid
+                            </span>
                         <?php endif ?>
                     </td>
-                    <td class="px-5 py-4 border-b border-gray-100 text-green-600 font-semibold">₱<?= number_format($billing->amount_paid, 2) ?></td>
-                    <td class="px-5 py-4 border-b border-gray-100 text-gray-600"><?= $billing->issued_at ?></td>
-                    <td class="px-5 py-4 border-b border-gray-100">
+                    <td class="px-6 py-4 border-b border-gray-100 text-[#815331] font-bold text-base align-middle">₱<?= number_format($billing->amount_paid, 2) ?></td>
+                    <td class="px-6 py-4 border-b border-gray-100 text-gray-600 font-medium align-middle"><?= date('F j, Y, g:i a', strtotime($billing->issued_at)) ?></td>
+                    <td class="px-6 py-4 border-b border-gray-100 align-middle">
                         <div class="flex gap-2 items-center">
-                            <a href="/admin/billings/show/<?= $billing->id ?>" class="inline-flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200 text-gray-500 bg-gray-50 border border-gray-200 hover:text-gray-700 hover:bg-gray-100 hover:-translate-y-0.5" title="View">
+                            <a href="/admin/billings/show/<?= $billing->id ?>" class="inline-flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-200 text-gray-600 bg-gray-100 border border-gray-200 hover:text-white hover:bg-[#815331] hover:border-[#815331] hover:-translate-y-0.5" title="View">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                     <circle cx="12" cy="12" r="3"></circle>

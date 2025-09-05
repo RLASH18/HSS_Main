@@ -5,7 +5,6 @@ namespace app\controllers\admin;
 use app\core\Controller;
 use app\core\Request;
 use app\models\Billings;
-use app\models\Inventory;
 use app\models\Orders;
 use app\services\MailService;
 
@@ -57,23 +56,6 @@ class OrdersController extends Controller
 
         // Check if this is a new order confirmation
         $isConfirmingOrder = ($status['status'] === 'confirmed' && $order->status !== 'confirmed');
-
-        // Simple inventory check for each order item
-        if ($isConfirmingOrder) {
-            foreach ($order->orderItems() as $orderItem) {
-                $inventory = Inventory::find($orderItem->item_id);
-
-                if (!$inventory || $inventory->quantity < $orderItem->quantity) {
-                    setSweetAlert(
-                        'error',
-                        'Insufficient Stock!',
-                        "Only " . ($inventory ? $inventory->quantity : 0) . " items available, but customer ordered {$orderItem->quantity}."
-                    );
-                    redirect('/admin/orders');
-                    return;
-                }
-            }
-        }
 
         // Update order status
         if (Orders::update($id, $status)) {
