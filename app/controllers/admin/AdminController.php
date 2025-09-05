@@ -28,6 +28,7 @@ class AdminController extends Controller
 
         $salesData = $this->getSalesChartData();
         $stockData = $this->getStockChartData();
+        $movementData = $this->getItemMovementsData();
 
         $data = [
             'title' => 'Dashboard',
@@ -39,7 +40,8 @@ class AdminController extends Controller
             'inventory' => $inventory,
             'addedProducts' => $addedProducts,
             'salesData' => $salesData,
-            'stockData' => $stockData
+            'stockData' => $stockData,
+            'movementData' => $movementData
         ];
 
         return $this->view('admin/dashboard', $data);
@@ -143,6 +145,113 @@ class AdminController extends Controller
         return [
             'labels' => $categories,
             'data' => $quantities,
+        ];
+    }
+
+    /**
+     * Prepare slow/fast moving items data based on sales velocity analysis.
+     * Analyzes item sales over the last 30 days to categorize movement speed.
+     */
+    private function getItemMovementsData()
+    {
+        // Get all inventory items
+        $allItems = Inventory::all();
+
+        // Get date range for analysis (last 30 days)
+        $startDate = date('Y-m-d', strtotime('-30 days'));
+        $endDate = date('Y-m-d');
+
+        $itemMovement = [];
+
+        // Analyze each items sales performance
+        foreach ($allItems as $item) {
+            // Get all order items for this inventory item in the last 30 days
+            $allOrderItems = [];
+            $allOrders = Orders::all();
+
+            foreach ($allOrders as $order) {
+                $orderDate = date('Y-m-d', strtotime($order->created_at));
+                if ($orderDate >= $startDate && $orderDate <= $endDate) {
+                    // Get order items for this order
+                    $orderItems = $order->orderItems ?? [];
+                    foreach ($orderItems as $orderItem) {
+                        if ($orderItem->item_id === $item->id) {
+                            $allOrderItems[] = $orderItem;
+                        }
+                    }
+                }
+            }
+
+            // Calculate total quantity sold
+            $totalSold = 0;
+            foreach ($allOrderItems as $orderItem) {
+                $totalSold += (int)$orderItem->quantity;
+            }
+
+            // Calculate movement rate (sold quantity / current stock)
+            $currentStock = (int) $item->quantity;
+            $movementRate = $currentStock > 0 ? ($totalSold / $currentStock) : 0;
+
+            // Store item movement data
+            $itemMovement[] = [
+                'name' => $item->item_name,
+                'category' => $item->category,
+                'sold' => $totalSold,
+                'stock' => $currentStock,
+                'rate' => $movementRate
+            ];
+        }
+
+        // Sort by movement rate
+        usort($itemMovement, function ($a, $b) {
+            return $b['rate'] <=> $a['rate'];
+        });
+
+        // Categories items
+        $fastMoving = [];
+        $slowMoving = [];
+
+        foreach ($itemMovement as $item) {
+            // Fast moving: movement rate > 0.2 (sold more than 20% of stock) OR sold > 10 items
+            // Slow moving: movement rate < 0.05 (sold less than 5% of stock) AND stock > 50
+            if (($item['rate'] > 0.2 || $item['sold'] > 10) && $item['sold'] > 0) {
+                $fastMoving[] = $item;
+            } elseif ($item['rate'] < 0.05 && $item['stock'] > 50) {
+                $slowMoving[] = $item;
+            }
+        }
+
+        // Limit to top 10 items in each category
+        $fastMoving = array_slice($fastMoving, 0, 10);
+        $slowMoving = array_slice($slowMoving, 0, 10);
+
+        // Prepare data for chart
+        $fastMovingLabels = [];
+        $fastMovingData = [];
+        $slowMovingLabels = [];
+        $slowMovingData = [];
+
+        foreach ($fastMoving as $item) {
+            $fastMovingLabels[] = substr($item['name'], 0, 15) . (strlen($item['name']) > 15 ? '...' : '');
+            $fastMovingData[] = $item['sold'];
+        }
+
+        foreach ($slowMoving as $item) {
+            $slowMovingLabels[] = substr($item['name'], 0, 15) . (strlen($item['name']) > 15 ? '...' : '');
+            $slowMovingData[] = $item['stock'];
+        }
+
+        return [
+            'fastMoving' => [
+                'labels' => $fastMovingLabels,
+                'data' => $fastMovingData,
+                'count' => count($fastMoving),
+            ],
+            'slowMoving' => [
+                'labels' => $slowMovingLabels,
+                'data' => $slowMovingData,
+                'count' => count($slowMoving)
+            ]
         ];
     }
 }

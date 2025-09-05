@@ -79,6 +79,7 @@
             <canvas id="salesChart"></canvas>
         </div>
     </div>
+    <!-- Stock Overview Chart -->
     <div class="chart-2-container bg-white border border-gray-200 rounded-lg shadow-sm p-6">
         <div class="mb-4">
             <h3 class="text-lg font-semibold text-gray-900 mb-1">Stock Overview</h3>
@@ -86,6 +87,17 @@
         <div class="relative h-80">
             <canvas id="stockChart"></canvas>
         </div>
+    </div>
+</div>
+
+<!-- Item Movement Alert Chart -->
+<div class="chart-3-container bg-white border border-gray-200 rounded-lg shadow-sm p-6 mt-5">
+    <div class="mb-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-1">Item Movement Alert</h3>
+        <p class="text-sm text-gray-600">Fast vs Slow Moving Items</p>
+    </div>
+    <div class="relative h-80">
+        <canvas id="movementChart"></canvas>
     </div>
 </div>
 
@@ -102,19 +114,33 @@
                 <div class="flex flex-col justify-center">
                     <p class="date-time mb-1"><?= date("M, d Y", strtotime($order->created_at)) ?></p>
                     <?php if ($order->status === 'pending'): ?>
-                        <p class="flex justify-center rounded-2xl bg-[#ffbe00] text-white text-[10px] p-[2px]">Pending</p>
+                        <p class="flex justify-center rounded-2xl bg-orange-500 text-white text-[10px] px-3 py-1">
+                            Pending
+                        </p>
                     <?php elseif ($order->status === 'confirmed'): ?>
-                        <p class="flex justify-center rounded-2xl bg-teal-500 text-white text-[10px] p-[2px]">Confirmed</p>
+                        <p class="flex justify-center rounded-2xl bg-blue-600 text-white text-[10px] px-3 py-1">
+                            Confirmed
+                        </p>
                     <?php elseif ($order->status === 'assembled'): ?>
-                        <p class="flex justify-center rounded-2xl bg-[#F28C28] text-white text-[10px] p-[2px]">Assembled</p>
+                        <p class="flex justify-center rounded-2xl bg-indigo-600 text-white text-[10px] px-3 py-1">
+                            Assembled
+                        </p>
                     <?php elseif ($order->status === 'shipped'): ?>
-                        <p class="flex justify-center rounded-2xl bg-indigo-500 text-white text-[10px] p-[2px]">Shipped</p>
+                        <p class="flex justify-center rounded-2xl bg-sky-600 text-white text-[10px] px-3 py-1">
+                            Shipped
+                        </p>
                     <?php elseif ($order->status === 'paid'): ?>
-                        <p class="flex justify-center rounded-2xl bg-lime-500 text-white text-[10px] p-[2px]">Paid</p>
+                        <p class="flex justify-center rounded-2xl bg-green-600 text-white text-[10px] px-3 py-1">
+                            Paid
+                        </p>
                     <?php elseif ($order->status === 'cancelled'): ?>
-                        <p class="flex justify-center rounded-2xl bg-red-500 text-white text-[10px] p-[2px]">Cancelled</p>
+                        <p class="flex justify-center rounded-2xl bg-red-600 text-white text-[10px] px-3 py-1">
+                            Cancelled
+                        </p>
                     <?php elseif ($order->status === 'delivered'): ?>
-                        <p class="flex justify-center rounded-2xl bg-green-700 text-white text-[10px] p-[2px]">Delivered</p>
+                        <p class="flex justify-center rounded-2xl bg-emerald-600 text-white text-[10px] px-3 py-1">
+                            Delivered
+                        </p>
                     <?php endif ?>
                 </div>
             </div>
@@ -160,6 +186,7 @@
     // Sales Chart Data from PHP
     const salesData = <?= json_encode($salesData) ?>;
     const stockData = <?= json_encode($stockData) ?>;
+    const movementData = <?= json_encode($movementData) ?>;
 
     // Sales Overview Chart (Area Chart)
     const salesCtx = document.getElementById('salesChart').getContext('2d');
@@ -167,21 +194,23 @@
         type: 'line',
         data: {
             labels: salesData.labels,
-            datasets: [
-                {
-                    label: 'Revenue',
-                    data: salesData.revenue,
-                    borderColor: '#815331',
-                    backgroundColor: 'rgba(129, 83, 49, 0.2)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 0,
-                    pointHoverRadius: 4,
-                    pointBackgroundColor: '#815331',
-                    pointBorderColor: '#815331'
-                }
-            ]
+            datasets: [{
+                label: 'Revenue',
+                data: salesData.revenue,
+                borderColor: '#815331',
+                backgroundColor: 'rgba(129, 83, 49, 0.2)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                pointBackgroundColor: '#815331',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointHoverBackgroundColor: '#815331',
+                pointHoverBorderColor: '#fff',
+                pointHoverBorderWidth: 2
+            }]
         },
         options: {
             responsive: true,
@@ -311,6 +340,147 @@
                     grid: {
                         color: 'rgba(156, 163, 175, 0.2)',
                         lineWidth: 1
+                    },
+                    border: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+
+    // Item Movement Alert Chart (Horizontal Bar Chart)
+    const movementCtx = document.getElementById('movementChart').getContext('2d');
+
+    // Combine fast and slow moving data for display
+    const combinedLabels = [...movementData.fastMoving.labels, ...movementData.slowMoving.labels];
+    const combinedData = [...movementData.fastMoving.data, ...movementData.slowMoving.data];
+    const fastCount = movementData.fastMoving.count;
+    const slowCount = movementData.slowMoving.count;
+
+    // Create color array - brand colors for consistency
+    const backgroundColors = [
+        ...Array(fastCount).fill('#815331'), // Brand color for fast moving
+        ...Array(slowCount).fill('rgba(129, 83, 49, 0.4)') // Lighter brand color for slow moving
+    ];
+
+    const movementChart = new Chart(movementCtx, {
+        type: 'bar',
+        data: {
+            labels: combinedLabels,
+            datasets: [{
+                label: 'Items',
+                data: combinedData,
+                backgroundColor: backgroundColors,
+                borderColor: 'transparent',
+                borderWidth: 0,
+                borderRadius: 4,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y', // Horizontal bars
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: '#374151',
+                        font: {
+                            size: 11
+                        },
+                        generateLabels: function(chart) {
+                            const visibility = (start, end) => {
+                                for (let i = start; i < end; i++) {
+                                    if (!chart.getDataVisibility(i)) {
+                                        return true; // hidden if any item is hidden
+                                    }
+                                }
+                                return false;
+                            };
+
+                            return [{
+                                    text: `Fast Moving (${fastCount})`,
+                                    fillStyle: '#815331',
+                                    strokeStyle: '#815331',
+                                    lineWidth: 1, // needed for strike-through
+                                    hidden: visibility(0, fastCount), // check visibility of fast group
+                                    index: 0
+                                },
+                                {
+                                    text: `Slow Moving (${slowCount})`,
+                                    fillStyle: 'rgba(129, 83, 49, 0.4)',
+                                    strokeStyle: 'rgba(129, 83, 49, 0.4)',
+                                    lineWidth: 2,
+                                    hidden: visibility(fastCount, combinedLabels.length),
+                                    index: 1
+                                }
+                            ];
+                        }
+                    },
+                    onClick: function(e, legendItem, legend) {
+                        const chart = legend.chart;
+                        const index = legendItem.index;
+
+                        if (index === 0) {
+                            // Toggle fast moving items (first fastCount items)
+                            for (let i = 0; i < fastCount; i++) {
+                                chart.toggleDataVisibility(i);
+                            }
+                        } else if (index === 1) {
+                            // Toggle slow moving items (remaining items)
+                            for (let i = fastCount; i < combinedLabels.length; i++) {
+                                chart.toggleDataVisibility(i);
+                            }
+                        }
+
+                        chart.update();
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    callbacks: {
+                        label: function(context) {
+                            const isSlowMoving = context.dataIndex >= fastCount;
+                            const type = isSlowMoving ? 'Slow Moving' : 'Fast Moving';
+                            const value = isSlowMoving ? 'Stock: ' : 'Sold: ';
+                            return type + ' - ' + value + context.parsed.x;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#9CA3AF',
+                        font: {
+                            size: 10
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(156, 163, 175, 0.2)',
+                        lineWidth: 1
+                    },
+                    border: {
+                        display: false
+                    }
+                },
+                y: {
+                    display: true,
+                    ticks: {
+                        color: '#9CA3AF',
+                        font: {
+                            size: 10
+                        }
+                    },
+                    grid: {
+                        display: false
                     },
                     border: {
                         display: false
