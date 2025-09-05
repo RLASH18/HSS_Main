@@ -71,6 +71,7 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
         Route::post('/delivery/update/{id}', 'update');
         Route::get('/delivery/delete/{id}', 'delete');
         Route::post('/delivery/destroy/{id}', 'destroy');
+        Route::get('/delivery/calendar-data', 'getCalendarData');
     });
 });
 

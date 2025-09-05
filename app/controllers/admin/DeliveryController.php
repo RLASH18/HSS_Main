@@ -18,9 +18,16 @@ class DeliveryController extends Controller
         // Eager load the related order, its user, and the items in that order
         $deliveries = Delivery::with(['order.user', 'order.orderItems.items']);
 
+        $pendingDeliveries = Delivery::countWhere(['status' => 'scheduled']);
+        $deliveriesCompleted = Delivery::countWhere(['status' => 'delivered']);
+        $failedDeliveries = Delivery::countWhere(['status' => 'failed']);
+
         $data = [
             'title' => 'Delivery',
-            'deliveries' => $deliveries
+            'deliveries' => $deliveries,
+            'pendingDeliveries' => $pendingDeliveries,
+            'deliveriesCompleted' => $deliveriesCompleted,
+            'failedDeliveries' => $failedDeliveries
         ];
 
         return $this->view('admin/delivery/index', $data);
@@ -34,9 +41,18 @@ class DeliveryController extends Controller
         // Get all orders with status 'assembled'
         $orders = Orders::whereMany(['status' => 'assembled']);
 
+        // Filter out orders that already have deliveries
+        $orderWithoutDeliveries = [];
+        foreach ($orders as $order) {
+            $existingDelivery = Delivery::where(['order_id' => $order->id]);
+            if (!$existingDelivery) {
+                $orderWithoutDeliveries[] = $order;
+            }
+        }
+
         $data = [
             'title' => 'Add Delivery',
-            'orders' => $orders
+            'orders' => $orderWithoutDeliveries
         ];
 
         return $this->view('admin/delivery/create', $data);
@@ -194,6 +210,64 @@ class DeliveryController extends Controller
             SmsService::sendSms($phone, $msg);
         }
     }
+
+    /**
+     * Get calendar data for FullCalendar
+     */
+    public function getCalendarData()
+    {
+        // Get all deliveries with related data
+        $deliveries = Delivery::with(['order.user', 'order.orderItems.items']);
+
+        $events = [];
+
+        foreach ($deliveries as $delivery) {
+            // Get the first item name (or combine multiple items)
+            $itemNames = [];
+            foreach ($delivery->order->orderItems as $orderItem) {
+                $itemNames[] = $orderItem->items->item_name;
+            }
+
+            //Show first 2 items
+            $itemsText = implode(', ', array_slice($itemNames, 0, 2));
+            if (count($itemNames) > 2) {
+                $itemsText .= ' +' . (count($itemNames) - 2) . ' more';
+            }
+
+            // Set color based on status
+            $color = match ($delivery->status) {
+                'scheduled' => '#f59e0b', // yellow
+                'rescheduled' => '#f97316', // orange
+                'in_transit' => '#3b82f6', // blue
+                'delivered' => '#10b981', // green
+                'failed' => '#ef4444', // red
+                default => '#6b7280' // gray
+            };
+
+            $events[] = [
+                'id' => $delivery->id,
+                'title' => $itemsText,
+                'start' => $delivery->scheduled_date,
+                'backgroundColor' => $color,
+                'borderColor' => $color,
+                'textColor' => '#FFFFFF',
+                'extendedProps' => [
+                    'customer' => $delivery->order->user->name,
+                    'driver' => $delivery->driver_name,
+                    'status' => ucfirst(str_replace('_', '', $delivery->status)),
+                    'method' => ucfirst($delivery->delivery_method),
+                    'remarks' => $delivery->remarks,
+                    'total' => number_format($delivery->order->total_amount, 2),
+                    'items' => $itemNames
+                ]
+            ];
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($events);
+        exit;
+    }
+
 
     /**
      * Find delivery or show error
