@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?></title>
     <link rel="stylesheet" href="/assets/css/style.css">
-    <script src="/assets/js/script.js"></script>
+
     <!-- List.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
-    <style>
-       
-    </style>
+
+    <script src="/assets/js/script.js"></script>
 </head>
 
 <body class="bg-gray-50">

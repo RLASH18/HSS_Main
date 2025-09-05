@@ -44,7 +44,7 @@
     <div class="container mx-auto p-6">
         <div class="flex gap-6">
             <!-- Filter Sidebar -->
-            <div class="w-64 bg-gray-50 rounded-lg flex-shrink-0">
+            <div class="w-64 bg-gray-100 border border-gray-100 rounded-lg flex-shrink-0">
                 <div class="p-4 ">
                     <!-- Availability Filter -->
                     <div class="mb-8">
@@ -67,7 +67,7 @@
                     <div class="mb-8">
                         <h3 class="font-semibold text-gray-800 mb-3 flex items-center justify-between">Price</h3>
                         <div class="space-y-3">
-                            <p class="text-sm text-gray-600">The highest price is <span class="text-green-600 font-bold">PHP</span><span class="text-green-600 font-bold" id="max-price">1,449.00</span></p>
+                            <p class="text-sm text-gray-600">The highest price is <span class="text-[#815331] font-bold">₱</span><span class="text-[#815331] font-bold" id="max-price">0.00</span></p>
                             <div class="relative">
                                 <input type="range" id="price-range"
                                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" min="0"
@@ -113,21 +113,36 @@
                 <div class="grid list grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     <?php foreach ($items as $item): ?>
                         <a href="/customer/item/<?= $item->id ?>" class="block-group">
-                            <div class="border border-gray-300 rounded-md overflow-hidden shadow-sm hover:shadow-md transition">
-                                <!-- product image -->
-                                <img src="/storage/items-img/<?= $item->item_image ?>" alt="<?= $item->item_name ?>"
-                                    class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300 mb-1">
+                            <div class="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                                <!-- Product Image Container -->
+                                <div class="bg-gray-100 p-2 flex items-center justify-center h-48">
+                                    <img src="/storage/items-img/<?= $item->item_image ?>" alt="<?= $item->item_name ?>"
+                                        class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300">
+                                </div>
 
-                                <div class="p-4">
-                                    <!-- Price -->
-                                    <h5 class="item-price text-green-600 font-bold text-lg" data-price="<?= $item->unit_price ?>">
-                                        PHP <?= number_format($item->unit_price, 2) ?>
-                                    </h5>
-
+                                <div class="p-4 space-y-2">
                                     <!-- Name -->
-                                    <p class="item-name text-gray-800 font-medium text-base truncate">
+                                    <h3 class="item-name text-gray-900 font-semibold text-base truncate line-clamp-2">
                                         <?= $item->item_name ?>
-                                    </p>
+                                    </h3>
+
+                                    <!-- Price -->
+                                    <div class="flex items-center justify-between">
+                                        <span class="item-price text-[#815331] font-bold text-lg" data-price="<?= $item->unit_price ?>">
+                                            ₱<?= number_format($item->unit_price, 2) ?>
+                                        </span>
+
+                                        <!-- Stock status badge -->
+                                        <?php if ($item->quantity > 0): ?>
+                                            <span class="bg-green-600 text-white text-xs font-medium px-2 py-1 rounded-full">
+                                                In Stock
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="bg-red-600 text-white text-xs font-medium px-2 py-1 rounded-full">
+                                                Out of Stock
+                                            </span>
+                                        <?php endif ?>
+                                    </div>
 
                                     <!-- Brand (hidden for filtering) -->
                                     <span class="item-brand hidden" data-brand="<?= $item->supplier_name ?>">
@@ -139,10 +154,10 @@
                                         <?= $item->quantity > 0 ? 'in-stock' : 'out-of-stock' ?>
                                     </span>
 
-                                    <!-- Quantity -->
-                                    <p class="text-sm text-gray-500 text-right mt-2">
-                                        Qty: <?= $item->quantity  ?>
-                                    </p>
+                                    <!-- Stock Quantity -->
+                                    <div class="flex justify-end text-sm text-gray-500">
+                                        <span class="text-right">(<?= $item->quantity ?>) available</span>
+                                    </div>
                                 </div>
                             </div>
                         </a>
@@ -176,7 +191,7 @@
                     attr: 'data-availability'
                 }
             ],
-            page: 8, // Items per page
+            page: 16, // Items per page
             pagination: true,
         }
 
