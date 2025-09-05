@@ -41,31 +41,31 @@
                     </div>
                     <div class="text-right -mt-4">
                         <?php if ($order->status === 'pending'):  ?>
-                            <span class="status px-3 py-1 rounded-full bg-[#ffbe00] text-white text-sm font-medium">
+                            <span class="status px-3 py-1 rounded-2xl bg-orange-500 text-white text-[10px]">
                                 Pending
                             </span>
                         <?php elseif ($order->status === 'confirmed'):  ?>
-                            <span class="status px-3 py-1 rounded-full bg-teal-500 text-white text-sm font-medium">
+                            <span class="status px-3 py-1 rounded-2xl bg-blue-600 text-white text-[10px]">
                                 Confirmed
                             </span>
                         <?php elseif ($order->status === 'assembled'):  ?>
-                            <span class="status px-3 py-1 rounded-full bg-[#F28C28] text-white text-sm font-medium">
+                            <span class="status px-3 py-1 rounded-2xl bg-indigo-600 text-white text-[10px]">
                                 Assembled
                             </span>
                         <?php elseif ($order->status === 'shipped'):  ?>
-                            <span class="status px-3 py-1 rounded-full bg-indigo-500 text-white text-sm font-medium">
+                            <span class="status px-3 py-1 rounded-2xl bg-sky-600 text-white text-[10px]">
                                 Shipped
                             </span>
                         <?php elseif ($order->status === 'delivered'):  ?>
-                            <span class="status px-3 py-1 rounded-full bg-green-700 text-white text-sm font-medium">
+                            <span class="status px-3 py-1 rounded-2xl bg-emerald-600 text-white text-[10px]">
                                 Delivered
                             </span>
                         <?php elseif ($order->status === 'paid'):  ?>
-                            <span class="status px-3 py-1 rounded-full bg-lime-500 text-white text-sm font-medium">
+                            <span class="status px-3 py-1 rounded-2xl bg-green-600 text-white text-[10px]">
                                 Paid
                             </span>
                         <?php elseif ($order->status === 'cancelled'):  ?>
-                            <span class="status px-3 py-1 rounded-full bg-red-500 text-white text-sm font-medium">
+                            <span class="status px-3 py-1 rounded-2xl bg-red-600 text-white text-[10px]">
                                 Cancelled
                             </span>
                         <?php endif ?>
@@ -96,7 +96,7 @@
                     <div class="progress-container mb-6" data-status="<?= strtolower($order->status) ?>">
                         <div class="flex items-center justify-between relative">
                             <!-- Progress Line -->
-                            <div class="absolute top-4 left-5 right-10 h-0.5 bg-gray-200 z-0">
+                            <div class="absolute top-4 left-10 right-10 h-0.5 bg-gray-200 z-0 transform -translate-x-5">
                                 <div class="progress-line h-full bg-[#815331] transition-all duration-500" style="width: 0%"></div>
                             </div>
 

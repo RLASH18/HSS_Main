@@ -309,13 +309,15 @@ class CheckoutController extends Controller
         $paymentType = [$paymentMethodMapping[$data['payment_method']]];
 
         // Create checkout session with order metadata
+        $orderRef = 'ORD-' . $this->userId . '-' . date('YmdHis');
+        $orderId = $this->userId . time();
         $session = $paymongo->createCheckoutSession(
             $lineItems,
-            "Order",
+            $orderRef,
             $paymentType,
             'http://localhost:8000/customer/payment-success',
             'http://localhost:8000/customer/payment-failed',
-            ['order_id' => null]
+            ['order_id' => $orderId, 'user_id' => $this->userId]
         );
 
         if (!empty($session['data']['attributes']['checkout_url'])) {
