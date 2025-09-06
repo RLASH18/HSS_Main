@@ -271,6 +271,9 @@ class DeliveryController extends Controller
         }
     }
 
+    /**
+     * Send SMS notifications for key status changes
+     */
     private function sendDeliveryStatusNotification($order, $newStatus, $oldStatus)
     {
         $user = $order->user();
@@ -281,10 +284,10 @@ class DeliveryController extends Controller
         if (!in_array($newStatus, $notificationStatuses)) return;
 
         $messages = [
-            'scheduled' => "Hi {$user->name}, your order #{$order->id} is ready! Delivery scheduled. We'll notify you when it's out for delivery. 📦 [ABG Prime Builders Supplies Inc.]",
-            'in_transit' => "Hi {$user->name}, your order #{$order->id} is now out for delivery! Our driver will contact you shortly. 🚚 [ABG Prime Builders Supplies Inc.]",
-            'delivered' => "Hi {$user->name}, your order #{$order->id} has been successfully delivered! Thank you for building with us! ✅ [ABG Prime Builders Supplies Inc.]",
-            'failed' => "Hi {$user->name}, we couldn't deliver your order #{$order->id} today. We'll reschedule and contact you soon. 📞 [ABG Prime Builders Supplies Inc.]"
+            'scheduled' => "Hi {$user->name}, your order #{$order->id} is ready! Delivery scheduled. We'll notify you when it's out for delivery.\n\n📦 [ABG Prime Builders Supplies Inc.]",
+            'in_transit' => "Hi {$user->name}, your order #{$order->id} is now out for delivery! Our driver will contact you shortly.\n\n🚚 [ABG Prime Builders Supplies Inc.]",
+            'delivered' => "Hi {$user->name}, your order #{$order->id} has been successfully delivered! Thank you for building with us!\n\n✅ [ABG Prime Builders Supplies Inc.]",
+            'failed' => "Hi {$user->name}, we couldn't deliver your order #{$order->id} today. We'll reschedule and contact you soon.\n\n📞 [ABG Prime Builders Supplies Inc.]"
         ];
 
         $message = $messages[$newStatus] ?? null;
@@ -349,7 +352,6 @@ class DeliveryController extends Controller
         echo json_encode($events);
         exit;
     }
-
 
     /**
      * Find delivery or show error

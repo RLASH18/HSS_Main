@@ -291,12 +291,19 @@ class CheckoutController extends Controller
 
         foreach ($items as $item) {
             $inventory = Inventory::find($item->item_id);
+
+            // Truncate description if too long
+            $description = $inventory->description ?? 'Order item';
+            if (strlen($description) > 255) {
+                $description = substr($description, 0, 252) . '...';
+            }
+
             $lineItems[] = [
                 'name' => $inventory->item_name,
                 'amount' => (int) ($item->item->unit_price * 100), // Convert to cent
                 'currency' => 'PHP',
                 'quantity' => (int) $item->quantity,
-                'description' => $inventory->description ?? 'Order item'
+                'description' => $description
             ];
         }
 

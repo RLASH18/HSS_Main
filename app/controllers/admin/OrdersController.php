@@ -219,7 +219,7 @@ class OrdersController extends Controller
 
             // Set actual delivery date when delivered
             if ($newDeliveryStatus === 'delivered') {
-                $updateData['actual_delivery_date'] === date('Y-m-d H:i:s');
+                $updateData['actual_delivery_date'] = date('Y-m-d H:i:s');
             }
 
             Delivery::update($delivery->id, $updateData);
@@ -241,10 +241,10 @@ class OrdersController extends Controller
         if (!$user || empty($user->contact_number)) return;
 
         $messages = [
-            'scheduled' => "Hi {$user->name}, your order #{$order->id} is ready! Delivery scheduled for tomorrow. We'll notify you when it's out for delivery. 📦 [ABG Prime Builders Supplies Inc.]",
-            'in_transit' => "Hi {$user->name}, your order #{$order->id} is now out for delivery! Our driver will contact you shortly. 🚚 [ABG Prime Builders Supplies Inc.]",
-            'delivered' => "Hi {$user->name}, your order #{$order->id} has been successfully delivered! Thank you for building with us! ✅ [ABG Prime Builders Supplies Inc.]",
-            'failed' => "Hi {$user->name}, we couldn't deliver your order #{$order->id} today. We'll reschedule and contact you soon. 📞 [ABG Prime Builders Supplies Inc.]"
+            'scheduled' => "Hi {$user->name}, your order #{$order->id} is ready! Delivery scheduled for tomorrow. We'll notify you when it's out for delivery.\n\n📦 [ABG Prime Builders Supplies Inc.]",
+            'in_transit' => "Hi {$user->name}, your order #{$order->id} is now out for delivery! Our driver will contact you shortly.\n\n🚚 [ABG Prime Builders Supplies Inc.]",
+            'delivered' => "Hi {$user->name}, your order #{$order->id} has been successfully delivered! Thank you for building with us!\n\n✅ [ABG Prime Builders Supplies Inc.]",
+            'failed' => "Hi {$user->name}, we couldn't deliver your order #{$order->id} today. We'll reschedule and contact you soon.\n\n📞 [ABG Prime Builders Supplies Inc.]"
         ];
 
         $message = $messages[$deliveryStatus] ?? null;
