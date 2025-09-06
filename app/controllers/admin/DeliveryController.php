@@ -212,6 +212,88 @@ class DeliveryController extends Controller
     }
 
     /**
+     * Sync order status based on delivery status changes
+     */
+    private function syncOrderStatus($orderId, $newDeliveryStatus, $oldDeliveryStatus = null)
+    {
+        if (!$orderId) return;
+
+        $order = Orders::find($orderId);
+        if (!$order) return;
+
+        // Enhanced status mapping with business logic
+        $statusMapping = [
+            'scheduled' => 'assembled',
+            'rescheduled' => 'assembled',
+            'in_transit' => 'shipped',
+            'delivered' => 'delivered',
+            'failed' => 'assembled' // Reset to assembled for retry
+        ];
+
+        $newOrderStatus = $statusMapping[$newDeliveryStatus] ?? null;
+
+        // Only update if the mapping exists and status is different
+        if ($newOrderStatus && $order->status !== $newOrderStatus) {
+            Orders::update($orderId, ['status' => $newOrderStatus]);
+
+            // Send SMS notification for status change
+            $this->sendDeliveryStatusNotification($order, $newDeliveryStatus, $oldDeliveryStatus);
+        }
+
+        // Set actual delivery date when delivered
+        if ($newDeliveryStatus === 'delivered' && $oldDeliveryStatus !== 'delivered') {
+            Delivery::update($order->id, ['actual_delivery_date' => date('Y-m-d H:i:s')]);
+        }
+
+        // Handle failed delivery retry logic
+        if ($newDeliveryStatus === 'failed' && $oldDeliveryStatus !== 'failed') {
+            $this->handleFailedDelivery($orderId);
+        }
+    }
+
+    /**
+     * Handle failed delivery - reset for retry and notify
+     */
+    private function handleFailedDelivery($orderId)
+    {
+        $order = Orders::find($orderId);
+        if (!$order) return;
+
+        // Reset order to assembled status for retry
+        Orders::update($orderId, ['status' => 'assembled']);
+
+        // Update delivery remarks to indicate retry needed
+        $delivery = Delivery::where(['order_id' => $orderId]);
+        if ($delivery) {
+            $currentRemarks = $delivery->remarks ?? '';
+            $retryRemarks = $currentRemarks . "\n[RETRY NEEDED] Delivery failed on " . date('Y-m-d H:i:s');
+            Delivery::update($delivery->id, ['remarks' => $retryRemarks]);
+        }
+    }
+
+    private function sendDeliveryStatusNotification($order, $newStatus, $oldStatus)
+    {
+        $user = $order->user();
+        if (!$user || empty($user->contact_number)) return;
+
+        // Only send notifications for key status changes
+        $notificationStatuses = ['scheduled', 'in_transit', 'delivered', 'failed'];
+        if (!in_array($newStatus, $notificationStatuses)) return;
+
+        $messages = [
+            'scheduled' => "Hi {$user->name}, your order #{$order->id} is ready! Delivery scheduled. We'll notify you when it's out for delivery. 📦 [ABG Prime Builders Supplies Inc.]",
+            'in_transit' => "Hi {$user->name}, your order #{$order->id} is now out for delivery! Our driver will contact you shortly. 🚚 [ABG Prime Builders Supplies Inc.]",
+            'delivered' => "Hi {$user->name}, your order #{$order->id} has been successfully delivered! Thank you for building with us! ✅ [ABG Prime Builders Supplies Inc.]",
+            'failed' => "Hi {$user->name}, we couldn't deliver your order #{$order->id} today. We'll reschedule and contact you soon. 📞 [ABG Prime Builders Supplies Inc.]"
+        ];
+
+        $message = $messages[$newStatus] ?? null;
+        if ($message) {
+            SmsService::sendSms($user->contact_number, $message);
+        }
+    }
+
+    /**
      * Get calendar data for FullCalendar
      */
     public function getCalendarData()
