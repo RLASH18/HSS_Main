@@ -2,7 +2,7 @@
 
 <div class="w-full bg-white border border-gray-100 rounded-lg shadow-sm" id="categories-section">
     <div class="container w-[90%] mx-auto p-6">
-        <div class="flex justify-between items-center -mb-4">
+        <div class="flex items-center justify-between -mb-4">
             <h1 class="text-3xl font-bold">Categories</h1>
             <?php if (!empty($selectedCategory)): ?>
                 <div class="flex items-center">
@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="w-[80%] mx-auto p-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-auto container">
+        <div class="container grid grid-cols-1 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             <?php foreach ($categories as $category): ?>
                 <?php
                 $categorySlug = strtolower(str_replace([' ', '&'], '_', $category));
@@ -40,32 +40,32 @@
     </div>
 </div>
 
-<div class="w-full bg-white border border-gray-100 rounded-lg shadow-sm mt-8">
-    <div class="container mx-auto p-6">
+<div class="w-full mt-8 bg-white border border-gray-100 rounded-lg shadow-sm">
+    <div class="container p-6 mx-auto">
         <div class="flex gap-6">
             <!-- Filter Sidebar -->
-            <div class="w-64 bg-gray-100 border border-gray-100 rounded-lg flex-shrink-0">
+            <div class="flex-shrink-0 w-64 bg-gray-100 border border-gray-100 rounded-lg">
                 <div class="p-4 ">
                     <!-- Availability Filter -->
                     <div class="mb-8">
-                        <h3 class="font-semibold text-gray-800 mb-3">Availability</h3>
+                        <h3 class="mb-3 font-semibold text-gray-800">Availability</h3>
                         <div class="space-y-2">
                             <label class="flex items-center">
                                 <input type="checkbox" class="w-4 h-4 rounded-full focus:ring-[#815331] availability-filter" value="in-stock"
                                     style="accent-color: #000;">
-                                <span class="text-sm text-gray-700 ml-1">In stock</span>
+                                <span class="ml-1 text-sm text-gray-700">In stock</span>
                             </label>
                             <label class="flex items-center">
                                 <input type="checkbox" class="w-4 h-4 rounded-full availability-filter" value="out-of-stock"
                                     style="accent-color: red;">
-                                <span class="text-sm text-gray-700 ml-1">Out of stock</span>
+                                <span class="ml-1 text-sm text-gray-700">Out of stock</span>
                             </label>
                         </div>
                     </div>
 
                     <!-- Price Filter -->
                     <div class="mb-8">
-                        <h3 class="font-semibold text-gray-800 mb-3 flex items-center justify-between">Price</h3>
+                        <h3 class="flex items-center justify-between mb-3 font-semibold text-gray-800">Price</h3>
                         <div class="space-y-3">
                             <p class="text-sm text-gray-600">The highest price is <span class="text-[#815331] font-bold">₱</span><span class="text-[#815331] font-bold" id="max-price">0.00</span></p>
                             <div class="relative">
@@ -73,7 +73,7 @@
                                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" min="0"
                                     max="1449" value="1449" step="1">
                             </div>
-                            <div class="mt-2 flex text-center justify-between">
+                            <div class="flex justify-between mt-2 text-center">
                                 <span class="text-sm font-medium text-gray-700">
                                     Min: ₱
                                     <input type="number" id="current-min-price"
@@ -99,30 +99,30 @@
 
                     <!-- Brand Filter -->
                     <div class="mb-8">
-                        <h3 class="font-semibold text-gray-800 mb-3 flex items-center justify-between">Brand</h3>
+                        <h3 class="flex items-center justify-between mb-3 font-semibold text-gray-800">Brand</h3>
                         <div class="space-y-2" id="brand-filters">
                             <!-- Brands will be populated dynamically -->
                         </div>
-                        <button class="text-sm text-blue-600 hover:underline mt-2" id="show-more-brands">Show more</button>
+                        <button class="mt-2 text-sm text-blue-600 hover:underline" id="show-more-brands">Show more</button>
                     </div>
                 </div>
             </div>
 
             <!-- Products Grid -->
             <div class="flex-1" id="item-list">
-                <div class="grid list grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 gap-6 list sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     <?php foreach ($items as $item): ?>
                         <a href="/customer/item/<?= $item->id ?>" class="block-group">
-                            <div class="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                            <div class="overflow-hidden transition-all duration-300 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-lg hover:-translate-y-1">
                                 <!-- Product Image Container -->
-                                <div class="bg-gray-100 p-2 flex items-center justify-center h-48">
-                                    <img src="/storage/items-img/<?= $item->item_image ?>" alt="<?= $item->item_name ?>"
-                                        class="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300">
+                                <div class="flex items-center justify-center h-48 p-2 bg-gray-100">
+                                    <img src="/storage/items-img/<?= $item->item_image_1 ?>" alt="<?= $item->item_name ?>"
+                                        class="object-contain max-w-full max-h-full transition-transform duration-300 group-hover:scale-105">
                                 </div>
 
                                 <div class="p-4 space-y-2">
                                     <!-- Name -->
-                                    <h3 class="item-name text-gray-900 font-semibold text-base truncate line-clamp-2">
+                                    <h3 class="text-base font-semibold text-gray-900 truncate item-name line-clamp-2">
                                         <?= $item->item_name ?>
                                     </h3>
 
@@ -134,23 +134,23 @@
 
                                         <!-- Stock status badge -->
                                         <?php if ($item->quantity > 0): ?>
-                                            <span class="bg-green-600 text-white text-xs font-medium px-2 py-1 rounded-full">
+                                            <span class="px-2 py-1 text-xs font-medium text-white bg-green-600 rounded-full">
                                                 In Stock
                                             </span>
                                         <?php else: ?>
-                                            <span class="bg-red-600 text-white text-xs font-medium px-2 py-1 rounded-full">
+                                            <span class="px-2 py-1 text-xs font-medium text-white bg-red-600 rounded-full">
                                                 Out of Stock
                                             </span>
                                         <?php endif ?>
                                     </div>
 
                                     <!-- Brand (hidden for filtering) -->
-                                    <span class="item-brand hidden" data-brand="<?= $item->supplier_name ?>">
+                                    <span class="hidden item-brand" data-brand="<?= $item->supplier_name ?>">
                                         <?= $item->supplier_name ?>
                                     </span>
 
                                     <!-- Availability (hidden for filtering) -->
-                                    <span class="item-availability hidden" data-availability="<?= $item->quantity > 0 ? 'in-stock' : 'out-of-stock' ?>">
+                                    <span class="hidden item-availability" data-availability="<?= $item->quantity > 0 ? 'in-stock' : 'out-of-stock' ?>">
                                         <?= $item->quantity > 0 ? 'in-stock' : 'out-of-stock' ?>
                                     </span>
 
@@ -165,7 +165,7 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="pagination mt-6 flex justify-center"></div>
+                <div class="flex justify-center mt-6 pagination"></div>
             </div>
         </div>
     </div>
@@ -228,7 +228,7 @@
                 brandContainer.innerHTML += `
                     <label class="flex items-center ${!isVisible ? 'hidden brand-extra' : ''}">
                         <input type="checkbox" class="w-4 h-4 rounded-full focus:ring-[#815331] brand-filter" value="${brand}" checked>
-                        <span class="text-sm text-gray-700 ml-1">${brand}</span>
+                        <span class="ml-1 text-sm text-gray-700">${brand}</span>
                     </label>
                 `;
                 brandCount++;
