@@ -164,8 +164,9 @@ class OrdersController extends Controller
             $this->createDeliveryForOrder($orderId);
         }
 
-        // Update existing delivery status when order status changes
+        // Update existing delivery and billing status when order status changes
         $this->syncDeliveryStatus($orderId, $newStatus, $oldStatus);
+        $this->syncBillingStatus($orderId, $newStatus, $oldStatus);
     }
 
     /**
@@ -229,6 +230,28 @@ class OrdersController extends Controller
             if ($order) {
                 $this->sendStatusNotification($order, $newDeliveryStatus);
             }
+        }
+    }
+
+    /**
+     * Sync billing status based on order status changes
+     */
+    private function syncBillingStatus($orderId, $newOrderStatus, $oldOrderStatus)
+    {
+        // Only proceed if order status changed to paid
+        if ($newOrderStatus !== 'paid' || $oldOrderStatus === 'paid') {
+            return;
+        }
+
+        // Find billing record for this order
+        $billings = Billings::where(['order_id' => $orderId]);
+        if (!$billings) return;
+
+        // Only update cash on delivery billings that are currently paid
+        if ($billings->payment_method === 'cash' && $billings->payment_status === 'unpaid') {
+            $updateData = ['payment_status' => 'paid'];
+
+            Billings::update($billings->id, $updateData);
         }
     }
 
