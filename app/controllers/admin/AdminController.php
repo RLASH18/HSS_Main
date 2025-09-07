@@ -3,6 +3,7 @@
 namespace app\controllers\admin;
 
 use app\core\Controller;
+use app\core\Request;
 use app\models\Billings;
 use app\models\Inventory;
 use app\models\Orders;
@@ -52,9 +53,79 @@ class AdminController extends Controller
      */
     public function settings()
     {
-        return $this->view('admin/settings/index', [
-            'title' => 'Settings'
+        $admin = User::where(['role' => 'admin']);
+
+        $data = [
+            'title' => 'Settings',
+            'admin' => $admin
+        ];
+
+        return $this->view('admin/settings', $data);
+    }
+
+    public function settingsUpdateProfile(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required',
+            'username' => 'required|unique:users,username,' . auth()->id,
+            'email' => 'required|email|unique:users,email,' . auth()->id,
+            'contact_number' => 'required|min:11|max:11',
+            'address' => 'required',
+            'current_password' => 'nullable',
+            'new_password' => 'nullable|min:6',
+            'confirm_password' => 'nullable|match:new_password'
         ]);
+
+        $admin = auth();
+
+        // Only check current password if user wants to change password
+        if (!empty($data['new_password'])) {
+            if (empty($data['current_password'])) {
+                setSweetAlert('error', 'Validation Error', 'Current password is required to set a new password.');
+                redirect('/admin/settings');
+            }
+
+            // Check if current password matches
+            if (!password_verify($data['current_password'], $admin->password)) {
+                setSweetAlert('error', 'Invalid Password', 'Your current password is incorrect.');
+                redirect('/admin/settings');
+            }
+
+            // Replace with hashed new password
+            $data['password'] = password_hash($data['new_password'], PASSWORD_DEFAULT);
+        }
+
+        // Remove fields we don't need to store
+        unset($data['current_password'], $data['new_password'], $data['confirm_password'], $data['_token']);
+
+        // Check if there are actual changes to make
+        $hasChanges = false;
+        foreach ($data as $key => $value) {
+            // Convert both values to strings for comparison and trim whitespace
+            $currentValue = trim((string)($admin->$key ?? ''));
+            $newValue = trim((string)$value);
+            
+            if ($currentValue !== $newValue) {
+                $hasChanges = true;
+                break;
+            }
+        }
+
+        if (!$hasChanges) {
+            setSweetAlert('info', 'No Changes', 'No changes were made to your profile.');
+            redirect('/admin/settings');
+        }
+
+        // Update the admin user record
+        $updated = User::update($data, ['id' => $admin->id]);
+
+        if ($updated) {
+            setSweetAlert('success', 'Profile Updated', 'Your profile has been updated successfully.');
+        } else {
+            setSweetAlert('error', 'Update Failed', 'Failed to update your profile. Please try again.');
+        }
+
+        redirect('/admin/settings');
     }
 
     /**

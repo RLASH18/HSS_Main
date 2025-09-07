@@ -36,6 +36,7 @@ Route::group(['middleware' => 'admin', 'prefix' => '/admin'], function () {
     Route::controller(AdminController::class, function () {
         Route::get('/dashboard', 'dashboard');
         Route::get('/settings', 'settings');
+        Route::post('/settings/update', 'settingsUpdateProfile');
         Route::post('/logout', 'logout');
     });
 
