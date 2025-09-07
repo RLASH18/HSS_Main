@@ -76,7 +76,7 @@ window.showSweetAlert = function (type, title, message) {
                 background: ${config.bg} !important;
                 border: 2px solid ${config.border} !important;
                 border-radius: 12px !important;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.1) !important;
+                box-shadow: 0 3px 6px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.08) !important;
                 backdrop-filter: blur(10px) !important;
                 animation: slideInBottomRight 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
                 min-width: 320px !important;
