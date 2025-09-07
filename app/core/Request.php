@@ -161,7 +161,7 @@ class Request
 
                 // Rule: match – field must match another field (e.g., confirmPassword = password)
                 if ($ruleName === 'match' && $value !== ($data[$param] ?? '')) {
-                    $errors[$field][] = "This field must match $param.";
+                    $errors[$field][] = "This field must match " . str_replace('_', ' ', $param) . ".";
                 }
 
                 // Rule: image – ensure a image is uploaded with no errors
