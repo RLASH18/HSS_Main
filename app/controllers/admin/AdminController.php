@@ -52,7 +52,7 @@ class AdminController extends Controller
      */
     public function settings()
     {
-        return $this->view('admin/settings', [
+        return $this->view('admin/settings/index', [
             'title' => 'Settings'
         ]);
     }

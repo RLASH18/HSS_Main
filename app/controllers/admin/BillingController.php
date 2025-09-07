@@ -39,8 +39,11 @@ class BillingController extends Controller
 
     public function show($id)
     {
+        $billings = Billings::find($id);
+
         $data = [
-            'title' => 'Billing Details'
+            'title' => 'Billing Details',
+            'billings' => $billings
         ];
 
         return $this->view('admin/billings/show', $data);
