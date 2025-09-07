@@ -83,14 +83,15 @@
                                 <div class="flex items-center border border-gray-300 rounded-lg">
                                     <!-- Decrease quantity -->
                                     <button class="p-2 transition-colors qty-btn hover:bg-gray-50" data-cart-id="<?= $cart->id ?>"
-                                        data-action="decrease" <?= $cart->quantity <= 1 ? 'disabled' : '' ?>>
+                                        data-action="decrease" data-max-stock="<?= $cart->item->quantity ?>" <?= $cart->quantity <= 1 ? 'disabled' : '' ?>>
                                         <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
                                         </svg>
                                     </button>
 
-                                    <!-- Current quantity -->
-                                    <span class="w-16 font-medium text-center text-gray-900"><?= $cart->quantity ?></span>
+                                    <!-- Editable quantity input -->
+                                    <input type="number" class="qty-input w-16 px-2 py-1 font-medium text-center text-gray-900 border-0 focus:ring-0 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                        value="<?= $cart->quantity ?>" min="1" max="<?= $cart->item->quantity ?>" data-cart-id="<?= $cart->id ?>" data-max-stock="<?= $cart->item->quantity ?>">
 
                                     <!-- Increase quantity -->
                                     <button class="p-2 transition-colors qty-btn hover:bg-gray-50" data-cart-id="<?= $cart->id ?>"
@@ -189,8 +190,14 @@
             selected.forEach(cb => total += parseFloat(cb.dataset.price));
 
             document.getElementById('selectedCount').textContent = count;
-            document.getElementById('selectedSubtotal').textContent = '₱' + total.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2});
-            document.getElementById('selectedTotal').textContent = '₱' + total.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('selectedSubtotal').textContent = '₱' + total.toLocaleString('en-PH', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            document.getElementById('selectedTotal').textContent = '₱' + total.toLocaleString('en-PH', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
 
             checkoutBtn.disabled = count === 0;
             selectAll.checked = count === checkboxes.length;
@@ -223,8 +230,8 @@
                 const cartId = this.dataset.cartId;
                 const action = this.dataset.action;
                 const maxStock = parseInt(this.dataset.maxStock) || 0;
-                const quantityEl = this.closest('.cart-item').querySelector('.text-center');
-                let currentQty = parseInt(quantityEl.textContent);
+                const quantityEl = this.closest('.cart-item').querySelector('.qty-input');
+                let currentQty = parseInt(quantityEl.value) || 1; // Default to 1 if empty or invalid
 
                 // Calculate new quantity
                 let newQty = action === 'increase' ? currentQty + 1 : currentQty - 1;
@@ -238,6 +245,9 @@
                 if (action === 'decrease' && newQty < 1) {
                     return; // Don't allow quantity less than 1
                 }
+
+                // Temporarily disable the button to prevent double clicks
+                this.disabled = true;
 
                 // Send update request to server
                 fetch('/customer/update-cart', {
@@ -255,29 +265,129 @@
                     .then(data => {
                         if (data.success) {
                             // Update quantity display
-                            quantityEl.textContent = newQty;
+                            quantityEl.value = newQty;
 
                             // Update item total price
                             const itemTotalEl = this.closest('.cart-item').querySelector('.item-total');
-                            itemTotalEl.textContent = '₱' + parseFloat(data.itemTotal).toFixed(2);
+                            itemTotalEl.textContent = '₱' + parseFloat(data.itemTotal).toLocaleString('en-PH', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            });
 
-                            // Enable/disable buttons based on quantity
-                            const decreaseBtn = this.closest('.cart-item').querySelector('[data-action="decrease"]');
-                            const increaseBtn = this.closest('.cart-item').querySelector('[data-action="increase"]');
+                            // Update button states for this cart item
+                            updateButtonStates(this.closest('.cart-item'), newQty, maxStock);
 
-                            decreaseBtn.disabled = newQty <= 1;
-                            increaseBtn.disabled = newQty >= maxStock;
+                            // Update checkbox data-price for summary calculation
+                            const checkbox = this.closest('.cart-item').querySelector('.item-checkbox');
+                            if (checkbox) {
+                                checkbox.dataset.price = data.itemTotal;
+                            }
 
                             // Refresh checkout summary
                             updateSummary();
                         } else {
-                            alert(data.message);
+                            alert(data.message || 'Failed to update quantity');
                         }
                     })
                     .catch(err => {
-                        console.error(err);
+                        console.error('Error updating quantity:', err);
                         alert('An error occurred while updating quantity.');
+                    })
+                    .finally(() => {
+                        // Re-enable the button
+                        this.disabled = false;
                     });
+            });
+        });
+
+        // Function to update button states
+        function updateButtonStates(cartItem, quantity, maxStock) {
+            const decreaseBtn = cartItem.querySelector('[data-action="decrease"]');
+            const increaseBtn = cartItem.querySelector('[data-action="increase"]');
+
+            if (decreaseBtn) {
+                decreaseBtn.disabled = quantity <= 1;
+            }
+            if (increaseBtn) {
+                increaseBtn.disabled = quantity >= maxStock;
+            }
+        }
+
+        // Quantity input change event
+        document.querySelectorAll('.qty-input').forEach(input => {
+            // Handle blur event to ensure value is always valid
+            input.addEventListener('blur', function() {
+                if (!this.value || parseInt(this.value) < 1) {
+                    this.value = 1;
+                }
+            });
+
+            input.addEventListener('change', function() {
+                const cartId = this.dataset.cartId;
+                const maxStock = parseInt(this.dataset.maxStock) || 0;
+                let newQty = parseInt(this.value) || 1; // Default to 1 if empty or invalid
+
+                // Validation: prevent exceeding stock or going below 1
+                if (newQty < 1) {
+                    newQty = 1;
+                    this.value = 1;
+                }
+
+                if (newQty > maxStock) {
+                    alert(`Sorry, only ${maxStock} items available in stock.`);
+                    newQty = maxStock;
+                    this.value = maxStock;
+                }
+
+                // Only send request if quantity actually changed
+                const currentDisplayQty = parseInt(this.value);
+                if (currentDisplayQty === newQty) {
+                    // Send update request to server
+                    fetch('/customer/update-cart', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '<?= $_SESSION["_csrf"] ?? "" ?>'
+                            },
+                            body: JSON.stringify({
+                                id: cartId,
+                                quantity: newQty
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Update item total price
+                                const itemTotalEl = this.closest('.cart-item').querySelector('.item-total');
+                                itemTotalEl.textContent = '₱' + parseFloat(data.itemTotal).toLocaleString('en-PH', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                });
+
+                                // Update button states for this cart item
+                                updateButtonStates(this.closest('.cart-item'), newQty, maxStock);
+
+                                // Update checkbox data-price for summary calculation
+                                const checkbox = this.closest('.cart-item').querySelector('.item-checkbox');
+                                if (checkbox) {
+                                    checkbox.dataset.price = data.itemTotal;
+                                }
+
+                                // Refresh checkout summary
+                                updateSummary();
+                            } else {
+                                alert(data.message || 'Failed to update quantity');
+                                // Revert to previous value on error
+                                location.reload();
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error updating quantity:', err);
+                            alert('An error occurred while updating quantity.');
+                            // Revert to previous value on error
+                            location.reload();
+                        });
+                }
             });
         });
     });
