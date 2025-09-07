@@ -264,7 +264,7 @@ class OrdersController extends Controller
         if (!$user || empty($user->contact_number)) return;
 
         $messages = [
-            'scheduled' => "Hi {$user->name}, your order #{$order->id} is ready! Delivery scheduled for tomorrow. We'll notify you when it's out for delivery.\n\n📦 [ABG Prime Builders Supplies Inc.]",
+            'scheduled' => "Hi {$user->name}, your order #{$order->id} is ready! Delivery is scheduled within 3 days. We'll notify you once it's out for delivery.\n\n📦 [ABG Prime Builders Supplies Inc.]",
             'in_transit' => "Hi {$user->name}, your order #{$order->id} is now out for delivery! Our driver will contact you shortly.\n\n🚚 [ABG Prime Builders Supplies Inc.]",
             'delivered' => "Hi {$user->name}, your order #{$order->id} has been successfully delivered! Thank you for building with us!\n\n✅ [ABG Prime Builders Supplies Inc.]",
             'failed' => "Hi {$user->name}, we couldn't deliver your order #{$order->id} today. We'll reschedule and contact you soon.\n\n📞 [ABG Prime Builders Supplies Inc.]"

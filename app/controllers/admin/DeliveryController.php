@@ -73,6 +73,14 @@ class DeliveryController extends Controller
         ]);
 
         if (Delivery::insert($deliveries)) {
+            // Sync order status
+            $this->syncOrderStatus(
+                $deliveries['order_id'],
+                $deliveries['status'],
+                $oldDeliveryStatus ?? null
+            );
+
+            // Send notification within the delivery day
             $this->notifyDeliveryDay(
                 $deliveries['order_id'],
                 $deliveries['scheduled_date'],
@@ -136,6 +144,14 @@ class DeliveryController extends Controller
         ]);
 
         if (Delivery::update($id, $deliveries)) {
+            // Sync order status
+            $this->syncOrderStatus(
+                $deliveries['order_id'],
+                $deliveries['status'],
+                $oldDeliveryStatus ?? null
+            );
+
+            // Send notification within the delivery day
             $this->notifyDeliveryDay(
                 $deliveries['order_id'],
                 $deliveries['scheduled_date'],
@@ -200,9 +216,9 @@ class DeliveryController extends Controller
             $phone = $user->contact_number;
 
             if ($deliveryMethod === 'delivery') {
-                $msg = "Hi {$user->name}, your order #{$order->id} is scheduled for delivery today. Driver: {$driverName}. Thank you for building with us!\n\n🚚 [ABG Prime Builders Supplies Inc.]";
+                $msg = "Reminder: Your order #{$order->id} will be delivered today ({$scheduledDate}). Driver: {$driverName}. Please ensure someone is available to receive it.\n\n🚚 [ABG Prime Builders Supplies Inc.]";
             } elseif ($deliveryMethod === 'pickup') {
-                $msg = "Hi {$user->name}, your order #{$order->id} is ready for pickup today. We look forward to seeing you!\n\n📦 [ABG Prime Builders Supplies Inc.]";
+                $msg = "Reminder: Your order #{$order->id} is ready for pickup today ({$scheduledDate}). We look forward to seeing you!\n\n📦 [ABG Prime Builders Supplies Inc.]";
             } else {
                 return;
             }
@@ -284,7 +300,7 @@ class DeliveryController extends Controller
         if (!in_array($newStatus, $notificationStatuses)) return;
 
         $messages = [
-            'scheduled' => "Hi {$user->name}, your order #{$order->id} is ready! Delivery scheduled. We'll notify you when it's out for delivery.\n\n📦 [ABG Prime Builders Supplies Inc.]",
+            'scheduled' => "Hi {$user->name}, your order #{$order->id} has been scheduled for delivery within the next 3 days. We'll notify you once it's on the way.\n\n📦 [ABG Prime Builders Supplies Inc.]",
             'in_transit' => "Hi {$user->name}, your order #{$order->id} is now out for delivery! Our driver will contact you shortly.\n\n🚚 [ABG Prime Builders Supplies Inc.]",
             'delivered' => "Hi {$user->name}, your order #{$order->id} has been successfully delivered! Thank you for building with us!\n\n✅ [ABG Prime Builders Supplies Inc.]",
             'failed' => "Hi {$user->name}, we couldn't deliver your order #{$order->id} today. We'll reschedule and contact you soon.\n\n📞 [ABG Prime Builders Supplies Inc.]"
