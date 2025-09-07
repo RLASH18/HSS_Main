@@ -78,28 +78,66 @@ abstract class Model
     }
 
     /**
-     * Updates an existing record in the database by primary key.
+     * Updates an existing record in the database.
      * Only fillable fields are used.
      *
-     * @param mixed $id The value of the primary key
-     * @param array $data Key-value pairs to update
+     * @param mixed $dataOrId The data array or primary key ID
+     * @param array $conditionsOrData Conditions array or data array (depending on first param)
      * @return bool True if update was successful
      */
-    public static function update($id, array $data): bool
+    public static function update($dataOrId, array $conditionsOrData = []): bool
     {
+        // Handle both calling patterns:
+        // 1. update($id, $data) - legacy format
+        // 2. update($data, $conditions) - new format
+        
+        if (is_array($dataOrId)) {
+            // New format: update($data, $conditions)
+            $data = $dataOrId;
+            $conditions = $conditionsOrData;
+            
+            // If no conditions provided, assume updating by primary key using auth()->id
+            if (empty($conditions)) {
+                $conditions = [static::primaryKey() => auth()->id];
+            }
+        } else {
+            // Legacy format: update($id, $data)
+            $id = $dataOrId;
+            $data = $conditionsOrData;
+            $conditions = [static::primaryKey() => $id];
+        }
+
         $data = static::filterFillable($data);
         $table = static::tableName();
-        $primaryKey = static::primaryKey();
         $columns = array_keys($data);
         $setClause = implode(', ', array_map(fn($col) => "$col = :$col", $columns));
 
-        $sql = "UPDATE $table SET $setClause WHERE $primaryKey = :$primaryKey";
+        // Build WHERE clause from conditions
+        $whereParts = [];
+        foreach ($conditions as $key => $value) {
+            if ($value === null) {
+                $whereParts[] = "$key IS NULL";
+            } else {
+                $whereParts[] = "$key = :where_$key";
+            }
+        }
+        $whereClause = implode(' AND ', $whereParts);
+
+        $sql = "UPDATE $table SET $setClause WHERE $whereClause";
         $stmt = self::prepare($sql);
 
+        // Bind data values
         foreach ($data as $key => $value) {
             $stmt->bindValue(":$key", $value);
         }
-        $stmt->bindValue(":$primaryKey", $id);
+
+        // Bind condition values
+        foreach ($conditions as $key => $value) {
+            if ($value !== null) {
+                $stmt->bindValue(":where_$key", $value);
+            }
+        }
+
         return $stmt->execute();
     }
 
