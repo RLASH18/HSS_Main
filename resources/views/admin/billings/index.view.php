@@ -80,7 +80,7 @@
 
 <!-- Billing table -->
 <div class="custom-datatable bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
-    <table id="billing-table" class="w-full border-collapse text-sm">
+    <table id="billing-table" class="w-full border-collapse table-fixed text-sm">
         <thead class="bg-gray-50">
             <tr>
                 <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Bill ID</th>
@@ -144,7 +144,7 @@
                         <?php endif ?>
                     </td>
                     <td class="px-6 py-4 border-b border-gray-100 text-[#815331] font-bold text-base align-middle">₱<?= number_format($billing->amount_paid, 2) ?></td>
-                    <td class="px-6 py-4 border-b border-gray-100 text-gray-600 font-medium align-middle"><?= date('F j, Y, g:i a', strtotime($billing->issued_at)) ?></td>
+                    <td class="px-6 py-4 border-b border-gray-100 text-gray-600 font-medium align-middle"><?= date('F j, Y', strtotime($billing->issued_at)) ?></td>
                     <td class="px-6 py-4 border-b border-gray-100 align-middle">
                         <div class="flex gap-2 items-center">
                             <a href="/admin/billings/show/<?= $billing->id ?>" class="inline-flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-200 text-gray-600 bg-gray-100 border border-gray-200 hover:text-white hover:bg-[#815331] hover:border-[#815331] hover:-translate-y-0.5" title="View">

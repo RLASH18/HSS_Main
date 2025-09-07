@@ -43,7 +43,7 @@
 
 <!-- Inventory table -->
 <div class="custom-datatable bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200">
-    <table id="inventory-table" class="w-full border-collapse text-sm">
+    <table id="inventory-table" class="w-full border-collapse table-fixed text-sm">
         <thead class="bg-gray-50">
             <tr>
                 <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">ID</th>
@@ -60,7 +60,7 @@
             <?php foreach ($inventory as $item): ?>
                 <tr class="h-16 hover:bg-gray-50 transition-colors duration-150">
                     <td class="px-6 py-4 border-b border-gray-100 text-gray-900 font-semibold font-mono align-middle">#<?= str_pad($item->id, 4, '0', STR_PAD_LEFT) ?></td>
-                    <td class="px-6 py-4 border-b border-gray-100 text-gray-900 font-semibold align-middle"><?= $item->item_name ?></td>
+                    <td class="px-6 py-4 border-b border-gray-100 text-gray-900 font-semibold align-middle truncate" title="<?= $item->item_name ?>"><?= $item->item_name ?></td>
                     <td class="px-6 py-4 border-b border-gray-100 text-gray-600 font-medium align-middle"><?= $item->category ?></td>
                     <td class="px-6 py-4 border-b border-gray-100 text-[#815331] font-bold text-base align-middle">₱<?= number_format($item->unit_price, 2) ?></td>
                     <td class="px-6 py-4 border-b border-gray-100 text-gray-900 font-semibold !text-left align-middle"><?= $item->quantity ?></td>
