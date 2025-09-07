@@ -96,5 +96,50 @@
         </div>
     </header>
 
+    <!-- Breadcrumb Navigation -->
+    <nav class="bg-white border-b border-gray-200 py-3">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <a href="/customer/home" class="flex items-center text-gray-600 hover:text-[#815331] transition-colors duration-200">
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Home
+                </a>
+                <?php
+                // Extract the main title part
+                $breadcrumbTitle = preg_replace('/^ABG Prime Builders Supplies Inc\. \| /', '', $title);
+
+                // Check if this is a category page
+                if (strpos($breadcrumbTitle, 'Category: ') === 0) {
+                    $categoryName = str_replace('Category: ', '', $breadcrumbTitle);
+                ?>
+                    <span class="text-gray-400">/</span>
+                    <span class="text-gray-800 font-medium"><?= htmlspecialchars($categoryName) ?></span>
+                <?php
+                }
+                // Check if this is a product page (has an item object)
+                elseif (isset($items) && is_object($items) && isset($items->category) && isset($items->item_name)) {
+                ?>
+                    <span class="text-gray-400">/</span>
+                    <a href="/customer/home/category/<?= urlencode($items->category) ?>" class="text-gray-600 hover:text-[#815331] transition-colors duration-200">
+                        <?= htmlspecialchars($items->category) ?>
+                    </a>
+                    <span class="text-gray-400">/</span>
+                    <span class="text-gray-800 font-medium"><?= htmlspecialchars($items->item_name) ?></span>
+                <?php
+                }
+                // Check if this is a profile or other specific page
+                elseif ($breadcrumbTitle && $breadcrumbTitle !== 'Customer Dashboard') {
+                ?>
+                    <span class="text-gray-400">/</span>
+                    <span class="text-gray-800 font-medium"><?= htmlspecialchars($breadcrumbTitle) ?></span>
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+    </nav>
+
     <div class="py-4 my-5">
         <div class="max-w-7xl mx-auto px-4">
