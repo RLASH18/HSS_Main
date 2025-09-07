@@ -133,11 +133,11 @@ class InventoryController extends Controller
         if ($image1) {
             // Delete old image if exists
             if (!empty($existing->item_image)) {
-                FileHandler::delete('public/storage/items-img/', $existing->item_image);
+                FileHandler::delete('public/storage/items-img/', $existing->item_image_1);
             }
             $inventory['item_image_1'] = $image1->store('public/storage/items-img');
         } else {
-            $inventory['item_image_1'] = $existing->item_image;
+            $inventory['item_image_1'] = $existing->item_image_1;
         }
 
         // Handle image 2
@@ -195,7 +195,7 @@ class InventoryController extends Controller
         $item = $this->findInventoryOrFail($id);
 
         // Delete all image files if they exist
-        if (!empty($item->item_image)) {
+        if (!empty($item->item_image_1)) {
             FileHandler::delete('public/storage/items-img/', $item->item_image_1);
         }
         if (!empty($item->item_image_2)) {
