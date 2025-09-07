@@ -197,7 +197,12 @@
             <!-- Description Tab -->
             <div id="content-description" class="tab-content">
                 <div class="p-6 prose max-w-none">
-                    <h3 class="mb-4 text-lg font-semibold text-gray-900">Product Description</h3>
+                    <h3 class="flex items-center mb-6 text-lg font-semibold text-gray-900">
+                        <svg class="w-5 h-5 mr-2 text-[#815331]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6.2V5h11v1.2M8 5v14m-3 0h6m2-6.8V11h8v1.2M17 11v8m-1.5 0h3" />
+                        </svg>
+                        Product Description
+                    </h3>
                     <p class="leading-relaxed text-gray-700"><?= $items->description ?></p>
                 </div>
             </div>
