@@ -153,7 +153,20 @@
                     </div>
                 </div>
 
-                <!-- Password -->
+                <!-- Current Password -->
+                <div>
+                    <label for="current_password" class="block text-sm font-medium text-gray-700 mb-2">
+                        Current Password
+                    </label>
+                    <input type="password" id="current_password" name="current_password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-transparent transition-colors <?= isInvalid('current_password') ? 'border-red-300 bg-red-50' : '' ?>"
+                        placeholder="Enter your current password">
+                    <p class="mt-1 text-xs text-gray-500">Required only when changing password.</p>
+                    <div class="text-red-500 text-xs text-left mb-2">
+                        <p><?= error('current_password') ?></p>
+                    </div>
+                </div>
+
+                <!-- New Password -->
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
                         New Password

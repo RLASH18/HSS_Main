@@ -134,22 +134,35 @@ class CustomerController extends Controller
             'email' => 'required|email|unique:users,email,' . auth()->id,
             'birthdate' => 'nullable',
             'gender' => 'nullable',
-            'contact_number' => 'required',
+            'contact_number' => 'required|min:11|max:11',
             'address' => 'required',
+            'current_password' => 'nullable',
             'password' => 'nullable|min:6',
-            'password_confirmation' => 'match:password',
+            'password_confirmation' => 'nullable|match:password',
             'profile_picture' => 'nullable'
         ]);
 
-        // Remove password_confirmation from data before database update
-        unset($data['password_confirmation']);
-
-        // Hash new password if provided, otherwise ignore
+        // Only check current password if user wants to change password
         if (!empty($data['password'])) {
+            if (empty($data['current_password'])) {
+                setSweetAlert('error', 'Validation Error', 'Current password is required to set a new password.');
+                redirect('/customer/edit-profile');
+            }
+
+            // Check if current password matches
+            if (!password_verify($data['current_password'], $user->password)) {
+                setSweetAlert('error', 'Invalid Password', 'Your current password is incorrect.');
+                redirect('/customer/edit-profile');
+            }
+
+            // Replace with hashed new password
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
         } else {
             unset($data['password']);
         }
+
+        // Remove fields we don't need to store
+        unset($data['current_password'], $data['password_confirmation'], $data['_token']);
 
         // Handle profile picture upload and replace old one if exists
         $profile = FileHandler::fromRequest('profile_picture');
@@ -159,13 +172,38 @@ class CustomerController extends Controller
             }
             $data['profile_picture'] = $profile->store('public/storage/profile-img');
         } else {
-            $data['profile_picture'] = $user->profile_picture;
+            // Keep existing profile picture, don't include in change detection
+            unset($data['profile_picture']);
+        }
+
+        // Check if there are actual changes to make
+        $hasChanges = false;
+        
+        foreach ($data as $key => $value) {
+            // Convert both values to strings for comparison and trim whitespace
+            $currentValue = trim((string)($user->$key ?? ''));
+            $newValue = trim((string)$value);
+            
+            if ($currentValue !== $newValue) {
+                $hasChanges = true;
+                break;
+            }
+        }
+
+        if (!$hasChanges) {
+            setSweetAlert('info', 'No Changes', 'No changes were made to your profile.');
+            redirect('/customer/edit-profile');
+        }
+
+        // Add back profile picture if it was uploaded
+        if ($profile) {
+            $data['profile_picture'] = $profile->store('public/storage/profile-img');
         }
 
         if (User::update($user->id, $data)) {
             setSweetAlert('success', 'Updated!', 'Profile info has been updated.');
         } else {
-            setSweetAlert('error', 'Oops!', 'Couldn’t update the your profile.');
+            setSweetAlert('error', 'Oops!', 'Couldn\'t update your profile.');
         }
 
         redirect('/customer/profile');
