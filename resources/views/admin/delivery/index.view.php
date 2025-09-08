@@ -67,7 +67,7 @@
                 <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Item name</th>
                 <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Customer</th>
                 <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Unit price</th>
-                <th class="px-6 py-4 text-center font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Status</th>
+                <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Status</th>
                 <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Driver</th>
                 <th class="px-6 py-4 text-left font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Scheduled Date</th>
                 <th class="px-6 py-4 text-center font-semibold text-gray-700 text-xs uppercase tracking-wide border-b border-gray-200">Action</th>
@@ -77,21 +77,27 @@
             <?php foreach ($deliveries as $delivery): ?>
                 <tr class="h-16 hover:bg-gray-50 transition-colors duration-150">
                     <td class="px-6 py-4 border-b border-gray-100 text-gray-900 font-semibold font-mono align-middle">#<?= str_pad($delivery->id, 4, '0', STR_PAD_LEFT) ?></td>
-                    <td class="px-6 py-4 border-b border-gray-100 text-gray-900 font-semibold align-middle"><?= $delivery->order->orderItems[0]->items->item_name ?></td>
+                    <td class="px-6 py-4 border-b border-gray-100 text-gray-900 font-semibold align-middle truncate" title="<?= implode(', ', array_map(function($item) { return $item->items->item_name; }, $delivery->order->orderItems)) ?>">
+                        <?php $items = array_map(function($item) { return $item->items->item_name; }, $delivery->order->orderItems) ?>
+                        <?= implode(', ', array_slice($items, 0, 2)) ?>
+                        <?php if (count($items) > 2): ?>
+                            <span class="text-gray-500"> + <?= count($items) - 2 ?> more</span>
+                        <?php endif ?>
+                    </td>
                     <td class="px-6 py-4 border-b border-gray-100 text-gray-600 font-medium align-middle"><?= $delivery->order->user->name ?></td>
                     <td class="px-6 py-4 border-b border-gray-100 text-[#815331] font-bold text-base align-middle">₱<?= number_format($delivery->order->total_amount, 2) ?></td>
                     <td class="px-6 py-4 border-b border-gray-100 align-middle">
                         <?php if ($delivery->status === "scheduled"): ?>
-                            <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-semibold min-w-[100px] bg-yellow-100 text-yellow-800">
+                            <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-semibold min-w-[100px] bg-yellow-500 text-white">
                                 Scheduled
                             </span>
                         <?php elseif ($delivery->status === "rescheduled"): ?>
-                            <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-semibold min-w-[100px] bg-orange-100 text-orange-800">
+                            <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-semibold min-w-[100px] bg-orange-500 text-white">
                                 Rescheduled
                             </span>
                         <?php elseif ($delivery->status === "in_transit"): ?>
-                            <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-semibold min-w-[100px] bg-blue-100 text-blue-800">In
-                                Transit
+                            <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-semibold min-w-[100px] bg-blue-500 text-white">
+                                In Transit
                             </span>
                         <?php elseif ($delivery->status === "delivered"): ?>
                             <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-semibold min-w-[100px] bg-emerald-500 text-white">
@@ -192,7 +198,7 @@
                 const content = `
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-xl font-semibold text-gray-900">Delivery #000${event.id}</h3>
+                            <h3 class="text-xl font-semibold text-gray-900">Delivery #${event.id}</h3>
                             <span class="px-3 py-1 text-sm font-medium rounded-full" style="background-color: ${event.backgroundColor}20; color: ${event.backgroundColor};">
                                 ${props.status}
                             </span>

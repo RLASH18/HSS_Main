@@ -21,60 +21,81 @@
 <form action="/admin/delivery/update/<?= $deliveries->id ?>" method="post">
     <?= csrf_token() ?>
 
-    <div class="space-y-6">
-        <!-- Order ID -->
-        <div class="form-group">
-            <label for="order_display" class="block text-sm font-medium text-gray-700 mb-2">Order ID</label>
-            <div class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 cursor-not-allowed">
-                Order #<?= str_pad($deliveries->order_id, 4, '0', STR_PAD_LEFT) ?> - <?= htmlspecialchars($deliveries->order->user->name ?? 'Unknown Customer') ?>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="space-y-6">
+            <!-- Order ID -->
+            <div class="form-group">
+                <label for="order_display" class="block text-sm font-medium text-gray-700 mb-2">Order ID</label>
+                <div class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 cursor-not-allowed">
+                    Order #<?= str_pad($deliveries->order_id, 4, '0', STR_PAD_LEFT) ?> - <?= htmlspecialchars($deliveries->order->user->name ?? 'Unknown Customer') ?>
+                </div>
+                <input type="hidden" name="order_id" value="<?= $deliveries->order_id ?>">
             </div>
-            <input type="hidden" name="order_id" value="<?= $deliveries->order_id ?>">
-        </div>
 
-        <!-- Delivery Method -->
-        <div class="form-group">
-            <label for="delivery_method" class="block text-sm font-medium text-gray-700 mb-2">Delivery Method <span class="text-red-500">*</span></label>
-            <select name="delivery_method" id="delivery_method" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('delivery_method') ? 'border-red-300 bg-red-50' : '' ?>">
-                <?php $selectedMethod = old('delivery_method') ?: $deliveries->delivery_method ?>
-                <option value="pickup" <?= $selectedMethod === 'pickup' ? 'selected' : '' ?>>Pickup</option>
-                <option value="delivery" <?= $selectedMethod === 'delivery' ? 'selected' : '' ?>>Delivery</option>
-            </select>
-            <div class="text-red-500 text-xs text-left mt-2">
-                <p><?= error('delivery_method') ?></p>
+            <!-- Delivery Method -->
+            <div class="form-group">
+                <label for="delivery_method" class="block text-sm font-medium text-gray-700 mb-2">Delivery Method <span class="text-red-500">*</span></label>
+                <select name="delivery_method" id="delivery_method" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('delivery_method') ? 'border-red-300 bg-red-50' : '' ?>">
+                    <?php $selectedMethod = old('delivery_method') ?: $deliveries->delivery_method ?>
+                    <option value="pickup" <?= $selectedMethod === 'pickup' ? 'selected' : '' ?>>Pickup</option>
+                    <option value="delivery" <?= $selectedMethod === 'delivery' ? 'selected' : '' ?>>Delivery</option>
+                </select>
+                <div class="text-red-500 text-xs text-left mt-2">
+                    <p><?= error('delivery_method') ?></p>
+                </div>
             </div>
-        </div>
 
-        <!-- Scheduled Date -->
-        <div class="form-group">
-            <label for="scheduled_date" class="block text-sm font-medium text-gray-700 mb-2">Scheduled Date <span class="text-red-500">*</span></label>
-            <input type="date" id="scheduled_date" name="scheduled_date" value="<?= $deliveries->scheduled_date ?>" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('scheduled_date') ? 'border-red-300 bg-red-50' : '' ?>">
-            <div class="text-red-500 text-xs text-left mt-2">
-                <p><?= error('scheduled_date') ?></p>
+            <!-- Scheduled Date -->
+            <div class="form-group">
+                <label for="scheduled_date" class="block text-sm font-medium text-gray-700 mb-2">Scheduled Date <span class="text-red-500">*</span></label>
+                <input type="date" id="scheduled_date" name="scheduled_date" value="<?= $deliveries->scheduled_date ?>" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('scheduled_date') ? 'border-red-300 bg-red-50' : '' ?>">
+                <div class="text-red-500 text-xs text-left mt-2">
+                    <p><?= error('scheduled_date') ?></p>
+                </div>
             </div>
-        </div>
 
-        <!-- Driver Name -->
-        <div class="form-group">
-            <label for="driver_name" class="block text-sm font-medium text-gray-700 mb-2">Driver Name <span class="text-red-500">*</span></label>
-            <input type="text" id="driver_name" name="driver_name" value="<?= $deliveries->driver_name ?>" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('driver_name') ? 'border-red-300 bg-red-50' : '' ?>">
-            <div class="text-red-500 text-xs text-left mt-2">
-                <p><?= error('driver_name') ?></p>
-            </div>
-        </div>
-
-        <!-- Remarks -->
-        <div class="form-group">
-            <label for="remarks" class="block text-sm font-medium text-gray-700 mb-2">Remarks</label>
-            <textarea name="remarks" id="remarks" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors resize-none <?= isInvalid('remarks') ? 'border-red-300 bg-red-50' : '' ?>"><?= $deliveries->remarks ?></textarea>
-            <div class="text-red-500 text-xs text-left mt-2">
-                <p><?= error('remarks') ?></p>
+            <!-- Driver Name -->
+            <div class="form-group">
+                <label for="driver_name" class="block text-sm font-medium text-gray-700 mb-2">Driver Name <span class="text-red-500">*</span></label>
+                <input type="text" id="driver_name" name="driver_name" value="<?= $deliveries->driver_name ?>" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('driver_name') ? 'border-red-300 bg-red-50' : '' ?>">
+                <div class="text-red-500 text-xs text-left mt-2">
+                    <p><?= error('driver_name') ?></p>
+                </div>
             </div>
         </div>
 
-        <input type="hidden" name="status" value="scheduled">
+        <div class="space-y-6">
 
-        <!-- Form Actions -->
-        <div class="flex items-center justify-end space-x-4 pt-4 border-t border-gray-200">
+            <!-- Delivery Status -->
+            <div class="form-group">
+                <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Delivery Status <span class="text-red-500">*</span></label>
+                <select name="status" id="status" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('status') ? 'border-red-300 bg-red-50' : '' ?>">
+                    <?php $selectedStatus = old('status') ?: $deliveries->status ?>
+                    <option value="scheduled" <?= $selectedStatus === 'scheduled' ? 'selected' : '' ?>>Scheduled</option>
+                    <option value="in_transit" <?= $selectedStatus === 'in_transit' ? 'selected' : '' ?>>In transit</option>
+                    <option value="delivered" <?= $selectedStatus === 'delivered' ? 'selected' : '' ?>>Delivered</option>
+                    <option value="failed" <?= $selectedStatus === 'failed' ? 'selected' : '' ?>>Failed</option>
+                </select>
+                <div class="text-red-500 text-xs text-left mt-2">
+                    <p><?= error('status') ?></p>
+                </div>
+            </div>
+
+            <!-- Remarks -->
+            <div class="form-group">
+                <label for="remarks" class="block text-sm font-medium text-gray-700 mb-2">Remarks</label>
+                <textarea name="remarks" id="remarks" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors resize-none <?= isInvalid('remarks') ? 'border-red-300 bg-red-50' : '' ?>"><?= $deliveries->remarks ?></textarea>
+                <div class="text-red-500 text-xs text-left mt-2">
+                    <p><?= error('remarks') ?></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="mt-8 pt-6 border-t border-gray-200">
+        <div class="flex items-center justify-end space-x-4">
+
             <a href="/admin/delivery" class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#815331] transition-colors">
                 Cancel
             </a>

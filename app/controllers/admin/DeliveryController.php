@@ -346,7 +346,7 @@ class DeliveryController extends Controller
             };
 
             $events[] = [
-                'id' => $delivery->id,
+                'id' => str_pad($delivery->id, 4, '0', STR_PAD_LEFT),
                 'title' => $itemsText,
                 'start' => $delivery->scheduled_date,
                 'backgroundColor' => $color,

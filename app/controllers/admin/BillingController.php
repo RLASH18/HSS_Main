@@ -4,6 +4,9 @@ namespace app\controllers\admin;
 
 use app\core\Controller;
 use app\models\Billings;
+use app\models\Inventory;
+use app\models\OrderItems;
+use app\models\Orders;
 
 class BillingController extends Controller
 {
@@ -41,9 +44,29 @@ class BillingController extends Controller
     {
         $billings = Billings::find($id);
 
+        // Load the associated order with user and order items
+        $order = null;
+        $orderItems = [];
+
+        if ($billings && $billings->order_id) {
+            $order = Orders::find($billings->order_id);
+            if ($order) {
+                // Load user data
+                $order->user = $order->user();
+
+                // Load order items with inventory details
+                $orderItems = OrderItems::whereMany(['order_id' => $order->id]);
+                foreach ($orderItems as $item) {
+                    $item->inventory = Inventory::find($item->item_id);
+                }
+            }
+        }
+
         $data = [
             'title' => 'Billing Details',
-            'billings' => $billings
+            'billings' => $billings,
+            'order' => $order,
+            'orderItems' => $orderItems
         ];
 
         return $this->view('admin/billings/show', $data);

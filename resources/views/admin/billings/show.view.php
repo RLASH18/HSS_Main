@@ -1,245 +1,384 @@
 <?php layout('admin/header') ?>
 
-<!-- Header section -->
 <div class="flex items-start justify-between mb-8">
     <div class="flex-1">
-        <h1 class="mb-2 text-3xl font-bold leading-tight text-gray-900">Billing Details</h1>
-        <p class="text-base font-normal text-gray-600">View and manage billing information for order #<?= $billings->order_id ?></p>
+        <h1 class="mb-2 text-3xl font-bold text-gray-900">Billing Details</h1>
+        <p class="text-gray-600">View billing information for order #<?= str_pad($billings->order_id, 4, '0', STR_PAD_LEFT) ?></p>
     </div>
-    <div class="flex gap-3">
-        <a href="/admin/billings" class="px-4 py-2 text-sm font-medium text-gray-700 transition-colors bg-gray-100 rounded-lg hover:bg-gray-200">
+    <div class="flex space-x-3">
+        <a href="/admin/billings"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#815331] transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
             Back to Billings
         </a>
-        <?php if ($billings->payment_status === 'unpaid'): ?>
-            <button onclick="markAsPaid(<?= $billings->id ?>)" class="px-4 py-2 text-sm font-medium text-white transition-colors bg-green-600 rounded-lg hover:bg-green-700">
-                Mark as Paid
-            </button>
-        <?php endif; ?>
+        <button onclick="printBilling()"
+            class="inline-flex items-center px-4 py-2 bg-[#815331] text-white rounded-lg text-sm font-medium hover:bg-[#6d4429] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#815331] transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Print Billing
+        </button>
     </div>
 </div>
 
-<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-    <!-- Billing Information -->
-    <div class="space-y-6 lg:col-span-2">
-        <!-- Payment Status Card -->
-        <div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">Payment Information</h3>
-                <div class="flex items-center gap-2">
-                    <?php if ($billings->payment_status === 'paid'): ?>
-                        <span class="inline-flex items-center px-3 py-1 text-sm font-medium text-green-800 bg-green-100 rounded-full">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
-                            Paid
-                        </span>
-                    <?php else: ?>
-                        <span class="inline-flex items-center px-3 py-1 text-sm font-medium text-red-800 bg-red-100 rounded-full">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                            </svg>
-                            Unpaid
-                        </span>
-                    <?php endif; ?>
+<div>
+    <!-- Payment Status Alert -->
+    <?php if ($billings->payment_status === 'paid'): ?>
+        <div class="bg-green-50 border-green-200 text-green-800 border rounded-lg p-4 mb-8">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium">Payment Completed</h3>
+                    <div class="mt-1 text-sm">
+                        <p>Amount: ₱<?= number_format($billings->amount_paid, 2) ?></p>
+                    </div>
                 </div>
             </div>
-            
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block mb-1 text-sm font-medium text-gray-700">Billing ID</label>
-                        <p class="font-mono text-lg font-semibold text-gray-900">#<?= str_pad($billings->id, 6, '0', STR_PAD_LEFT) ?></p>
-                    </div>
-                    <div>
-                        <label class="block mb-1 text-sm font-medium text-gray-700">Payment Method</label>
-                        <div class="flex items-center gap-2">
-                            <?php if ($billings->payment_method === 'cash'): ?>
-                                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
-                                    <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="text-sm font-medium text-gray-900">Cash on Delivery</span>
-                            <?php elseif ($billings->payment_method === 'gcash'): ?>
-                                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="text-sm font-medium text-gray-900">GCash</span>
-                            <?php else: ?>
-                                <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="text-sm font-medium text-gray-900">Bank Transfer</span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block mb-1 text-sm font-medium text-gray-700">Amount Paid</label>
-                        <p class="text-2xl font-bold text-[#815331]">₱<?= number_format($billings->amount_paid, 2) ?></p>
+        </div>
+    <?php else: ?>
+        <div class="bg-red-50 border-red-200 text-red-800 border rounded-lg p-4 mb-8">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium">Payment Pending</h3>
+                    <div class="mt-1 text-sm">
+                        <p>Amount Due: ₱<?= number_format($billings->amount_paid, 2) ?></p>
                     </div>
                 </div>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block mb-1 text-sm font-medium text-gray-700">Order ID</label>
-                        <a href="/admin/orders/show/<?= $billings->order_id ?>" class="font-mono text-lg font-semibold text-blue-600 transition-colors hover:text-blue-800">
-                            #<?= str_pad($billings->order_id, 6, '0', STR_PAD_LEFT) ?>
-                        </a>
+            </div>
+        </div>
+    <?php endif ?>
+
+    <!-- 2-Column Grid Layout -->
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+
+        <!-- Left Column - Billing Information -->
+        <div class="space-y-6">
+            <h3 class="pb-2 text-lg font-semibold text-gray-900 border-b border-gray-200">Billing Information</h3>
+
+            <!-- Billing ID -->
+            <div class="form-group">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Billing ID</label>
+                <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
+                    #<?= str_pad($billings->id, 4, '0', STR_PAD_LEFT) ?>
+                </div>
+            </div>
+
+            <!-- Order ID -->
+            <div class="form-group">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Order ID</label>
+                <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
+                    #<?= str_pad($billings->order_id, 4, '0', STR_PAD_LEFT) ?>
+                </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="form-group">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Payment Method</label>
+                <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
+                    <div class="flex items-center gap-2">
+                        <?php if ($billings->payment_method === 'cash'): ?>
+                            <svg class="w-5 h-5 text-green-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="2" d="M4 8.5h16v7H4z" />
+                                <circle cx="12" cy="12" r="2.25" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            <span>Cash on Delivery</span>
+                        <?php elseif ($billings->payment_method === 'gcash'): ?>
+                            <svg class="w-5 h-5 text-blue-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9l-6 3V7Z" />
+                            </svg>
+                            <span>GCash</span>
+                        <?php else: ?>
+                            <svg class="w-5 h-5 text-purple-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M5 10V7l7-4 7 4v3M6 14v6m4-6v6m4-6v6m4-6v6" />
+                            </svg>
+                            <span>Bank Transfer</span>
+                        <?php endif ?>
                     </div>
-                    <div>
-                        <label class="block mb-1 text-sm font-medium text-gray-700">Issued Date</label>
-                        <p class="text-sm text-gray-900"><?= date('F d, Y g:i A', strtotime($billings->issued_at)) ?></p>
-                    </div>
-                    <div>
-                        <label class="block mb-1 text-sm font-medium text-gray-700">Days Since Issued</label>
-                        <p class="text-sm text-gray-600"><?= floor((time() - strtotime($billings->issued_at)) / (60 * 60 * 24)) ?> days ago</p>
+                </div>
+            </div>
+
+            <!-- Amount -->
+            <div class="form-group">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Amount</label>
+                <div class="w-full px-4 py-3 font-bold text-[#815331] border border-gray-200 rounded-lg bg-gray-50">
+                    ₱<?= number_format($billings->amount_paid, 2) ?>
+                </div>
+            </div>
+
+            <!-- Timestamps -->
+            <div class="grid grid-cols-1 gap-4">
+                <div class="form-group">
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Issued Date</label>
+                    <div class="w-full px-4 py-3 text-sm text-gray-600 border border-gray-200 rounded-lg bg-gray-50">
+                        <?= date('M d, Y \a\t g:i A', strtotime($billings->issued_at)) ?>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Order Details -->
-        <?php if (isset($order)): ?>
-        <div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
-            <h3 class="mb-4 text-lg font-semibold text-gray-900">Order Details</h3>
-            <div class="space-y-4">
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                    <div>
-                        <label class="block mb-1 text-sm font-medium text-gray-700">Customer</label>
-                        <p class="text-sm font-medium text-gray-900"><?= $order->user->name ?? 'N/A' ?></p>
-                        <p class="text-xs text-gray-500"><?= $order->user->email ?? 'N/A' ?></p>
+        <!-- Right Column - Customer & Order Info -->
+        <div class="space-y-6">
+            <h3 class="pb-2 text-lg font-semibold text-gray-900 border-b border-gray-200">Customer & Order Details</h3>
+
+            <?php if (isset($order) && $order): ?>
+                <!-- Customer Info -->
+                <div class="form-group">
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Customer Name</label>
+                    <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
+                        <?= htmlspecialchars($order->user->name ?? 'N/A') ?>
                     </div>
-                    <div>
-                        <label class="block mb-1 text-sm font-medium text-gray-700">Order Status</label>
-                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                            <?php if ($order->status === 'pending'): ?>bg-yellow-100 text-yellow-800
-                            <?php elseif ($order->status === 'confirmed'): ?>bg-blue-100 text-blue-800
-                            <?php elseif ($order->status === 'shipped'): ?>bg-indigo-100 text-indigo-800
-                            <?php elseif ($order->status === 'delivered'): ?>bg-green-100 text-green-800
-                            <?php elseif ($order->status === 'cancelled'): ?>bg-red-100 text-red-800
-                            <?php else: ?>bg-gray-100 text-gray-800<?php endif; ?>">
+                </div>
+
+                <div class="form-group">
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Customer Email</label>
+                    <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
+                        <?= htmlspecialchars($order->user->email ?? 'N/A') ?>
+                    </div>
+                </div>
+
+                <!-- Order Status -->
+                <div class="form-group">
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Order Status</label>
+                    <div class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 font-bold">
+                        <span class="inline-flex items-center
+                        <?php if ($order->status === 'pending'): ?>text-yellow-800
+                        <?php elseif ($order->status === 'confirmed'): ?>text-blue-800
+                        <?php elseif ($order->status === 'shipped'): ?>text-indigo-800
+                        <?php elseif ($order->status === 'delivered'): ?>text-green-800
+                        <?php elseif ($order->status === 'cancelled'): ?>text-red-800
+                        <?php elseif ($order->status === 'paid'): ?>text-emerald-800
+                        <?php else: ?>text-gray-800<?php endif ?>">
                             <?= ucfirst($order->status) ?>
                         </span>
                     </div>
-                    <div>
-                        <label class="block mb-1 text-sm font-medium text-gray-700">Total Amount</label>
-                        <p class="text-lg font-bold text-[#815331]">₱<?= number_format($order->total_amount, 2) ?></p>
+                </div>
+
+                <!-- Delivery Address -->
+                <div class="form-group">
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Delivery Address</label>
+                    <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 min-h-[80px]">
+                        <?= htmlspecialchars($order->delivery_address ?? 'No address provided') ?>
                     </div>
                 </div>
-                
-                <div>
-                    <label class="block mb-1 text-sm font-medium text-gray-700">Delivery Address</label>
-                    <p class="text-sm text-gray-900"><?= $order->delivery_address ?? 'N/A' ?></p>
-                </div>
-            </div>
+            <?php endif ?>
         </div>
-        <?php endif; ?>
     </div>
 
-    <!-- Actions Sidebar -->
-    <div class="space-y-6">
-        <!-- Quick Actions -->
-        <div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
-            <h3 class="mb-4 text-lg font-semibold text-gray-900">Quick Actions</h3>
-            <div class="space-y-3">
-                <?php if ($billings->payment_status === 'unpaid'): ?>
-                    <button onclick="markAsPaid(<?= $billings->id ?>)" class="w-full px-4 py-2 text-sm font-medium text-white transition-colors bg-green-600 rounded-lg hover:bg-green-700">
-                        Mark as Paid
-                    </button>
-                    <button onclick="sendReminder(<?= $billings->id ?>)" class="w-full px-4 py-2 text-sm font-medium text-white transition-colors bg-yellow-600 rounded-lg hover:bg-yellow-700">
-                        Send Payment Reminder
-                    </button>
-                <?php endif; ?>
-                <button onclick="printBilling(<?= $billings->id ?>)" class="w-full px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-700">
-                    Print Billing
-                </button>
-                <button onclick="downloadPDF(<?= $billings->id ?>)" class="w-full px-4 py-2 text-sm font-medium text-white transition-colors bg-purple-600 rounded-lg hover:bg-purple-700">
-                    Download PDF
-                </button>
+    <!-- Ordered Items Section -->
+    <?php if (isset($orderItems) && !empty($orderItems)): ?>
+        <div class="mt-8">
+            <h3 class="pb-4 text-lg font-semibold text-gray-900 border-b border-gray-200">Ordered Item(s)</h3>
+
+            <div class="mt-6 space-y-4">
+                <?php foreach ($orderItems as $item): ?>
+                    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+                        <div class="flex items-center space-x-4">
+                            <!-- Item Image -->
+                            <div class="flex-shrink-0">
+                                <?php if (isset($item->inventory) && !empty($item->inventory->item_image_1)): ?>
+                                    <img src="/storage/items-img/<?= htmlspecialchars($item->inventory->item_image_1) ?>"
+                                        alt="<?= htmlspecialchars($item->inventory->item_name ?? 'Item') ?>"
+                                        class="object-cover w-16 h-16 border border-gray-200 rounded-lg">
+                                <?php else: ?>
+                                    <div class="flex items-center justify-center w-16 h-16 bg-gray-100 border border-gray-200 rounded-lg">
+                                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                <?php endif ?>
+                            </div>
+
+                            <!-- Item Details -->
+                            <div class="flex-1">
+                                <span class="text-sm font-medium text-gray-900">
+                                    <?= htmlspecialchars($item->inventory->item_name ?? 'Unknown Item') ?>
+                                </span>
+                                <p class="text-sm text-gray-500">
+                                    <?= htmlspecialchars($item->inventory->category ?? 'N/A') ?>
+                                </p>
+                                <div class="flex items-center mt-1 space-x-4 text-sm text-gray-600">
+                                    <span>Qty: <?= $item->quantity ?></span>
+                                    <span>Unit Price: ₱<?= number_format($item->unit_price, 2) ?></span>
+                                    <span class="font-medium text-[#815331]">
+                                        Subtotal: ₱<?= number_format($item->quantity * $item->unit_price, 2) ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach ?>
             </div>
         </div>
+    <?php endif ?>
 
-        <!-- Payment History -->
-        <div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
-            <h3 class="mb-4 text-lg font-semibold text-gray-900">Payment Timeline</h3>
-            <div class="space-y-3">
-                <div class="flex items-start gap-3">
-                    <div class="w-2 h-2 mt-2 bg-blue-500 rounded-full"></div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">Billing Created</p>
-                        <p class="text-xs text-gray-500"><?= date('M d, Y g:i A', strtotime($billings->issued_at)) ?></p>
-                    </div>
-                </div>
-                <?php if ($billings->payment_status === 'paid'): ?>
-                <div class="flex items-start gap-3">
-                    <div class="w-2 h-2 mt-2 bg-green-500 rounded-full"></div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">Payment Received</p>
-                        <p class="text-xs text-gray-500">₱<?= number_format($billings->amount_paid, 2) ?></p>
-                    </div>
-                </div>
-                <?php else: ?>
-                <div class="flex items-start gap-3">
-                    <div class="w-2 h-2 mt-2 bg-red-500 rounded-full"></div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">Payment Pending</p>
-                        <p class="text-xs text-gray-500">Awaiting payment</p>
-                    </div>
-                </div>
-                <?php endif; ?>
+    <!-- Action Buttons -->
+    <div class="pt-6 mt-8 border-t border-gray-200">
+        <div class="flex items-center justify-between">
+            <div class="flex space-x-4">
+                <a href="/admin/billings"
+                    class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#815331] transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Back to Billings
+                </a>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-function markAsPaid(billingId) {
-    if (confirm('Are you sure you want to mark this billing as paid?')) {
-        fetch(`/admin/billings/${billingId}/mark-paid`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Error updating payment status');
-            }
-        })
-        .catch(error => {
-            alert('Error updating payment status');
-        });
+    function printBilling() {
+        const printWindow = window.open('', '_blank');
+
+        const printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Billing #<?= str_pad($billings->id, 4, '0', STR_PAD_LEFT) ?></title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 40px;
+                    color: #333;
+                }
+                .print-header {
+                    text-align: center;
+                    margin-bottom: 30px;
+                }
+                .print-header h1 {
+                    color: #815331;
+                    margin: 0;
+                    font-size: 24px;
+                }
+                .print-header h2 {
+                    margin: 5px 0;
+                    font-size: 20px;
+                    color: #444;
+                }
+                .print-header p {
+                    font-size: 14px;
+                    color: #666;
+                }
+                .billing-info {
+                    margin-bottom: 25px;
+                    background: #faf9f8;
+                }
+                .billing-info p {
+                    margin: 4px 0;
+                    font-size: 14px;
+                    line-height: 1.6; 
+                }
+                .items-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 40px;
+                    font-size: 14px;
+                }
+                .items-table th, .items-table td {
+                    border: 1px solid #ddd;
+                    padding: 10px;
+                    text-align: left;
+                }
+                .items-table th {
+                    background-color: #815331;
+                    text-align: center;
+                }
+                .items-table td {
+                    background: #fff;
+                }
+                .items-table tr:nth-child(even) td {
+                    background: #f9f6f4;
+                }
+                .total {
+                    margin-top: 25px;
+                    text-align: right;
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: #815331;
+                }
+                .footer {
+                    margin-top: 40px; 
+                    text-align: center; 
+                    font-size: 12px;
+                }
+                @media print {
+                    .no-print {
+                        display: none;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="print-header">
+                <h1>ABG Prime Builder Supplies Inc.</h1>
+                <h2>Billing Statement</h2>
+                <p>Billing ID: #<?= str_pad($billings->id, 4, '0', STR_PAD_LEFT) ?></p>
+            </div>
+            
+            <div class="billing-info">
+                <p><strong>Customer:</strong> <?= htmlspecialchars($order->user->name ?? 'N/A') ?></p>
+                <p><strong>Email:</strong> <?= htmlspecialchars($order->user->email ?? 'N/A') ?></p>
+                <p><strong>Order ID:</strong> #<?= str_pad($billings->order_id, 4, '0', STR_PAD_LEFT) ?></p>
+                <p><strong>Payment Method:</strong> <?= ucfirst($billings->payment_method) ?></p>
+                <p><strong>Status:</strong> <?= ucfirst($billings->payment_status) ?></p>
+                <p><strong>Date:</strong> <?= date('M d, Y g:i A', strtotime($billings->issued_at)) ?></p>
+            </div>
+            
+            <?php if (isset($orderItems) && !empty($orderItems)): ?>
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($orderItems as $item): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($item->inventory->item_name ?? 'Unknown Item') ?></td>
+                                <td><?= htmlspecialchars($item->inventory->category ?? 'N/A') ?></td>
+                                <td style="text-align:center;"><?= $item->quantity ?></td>
+                                <td style="text-align:right;">₱<?= number_format($item->unit_price, 2) ?></td>
+                                <td style="text-align:right;">₱<?= number_format($item->quantity * $item->unit_price, 2) ?></td>
+                            </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
+            <?php endif ?>
+            
+            <div class="total">
+                <p>Total Amount: ₱<?= number_format($billings->amount_paid, 2) ?></p>
+            </div>
+
+            <div class="footer">
+                <p>Thank you for your business!</p>
+                <p>For inquiries, please contact us at your convenience.</p>
+            </div>
+        </body>
+        </html>
+    `;
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
     }
-}
-
-function sendReminder(billingId) {
-    if (confirm('Send payment reminder to customer?')) {
-        fetch(`/admin/billings/${billingId}/send-reminder`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Payment reminder sent successfully');
-            } else {
-                alert('Error sending reminder');
-            }
-        });
-    }
-}
-
-function printBilling(billingId) {
-    window.open(`/admin/billings/${billingId}/print`, '_blank');
-}
-
-function downloadPDF(billingId) {
-    window.open(`/admin/billings/${billingId}/pdf`, '_blank');
-}
 </script>
 
 <?php layout('admin/footer') ?>
