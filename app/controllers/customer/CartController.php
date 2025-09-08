@@ -83,46 +83,10 @@ class CartController extends Controller
      */
     public function update(Request $request, Response $response)
     {
-        // Handle JSON requests from AJAX calls
-        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-        if (strpos($contentType, 'application/json') !== false) {
-            $input = json_decode(file_get_contents('php://input'), true);
-            if (!$input) {
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Invalid JSON data'
-                ]);
-                exit;
-            }
-            $data = $input;
-        } else {
-            // Handle regular form data
-            $data = $request->validate([
-                'id' => 'required',
-                'quantity' => 'required|min:1'
-            ]);
-        }
-
-        // Validate required fields
-        if (!isset($data['id']) || !isset($data['quantity'])) {
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'ID and quantity are required'
-            ]);
-            exit;
-        }
-
-        // Validate quantity is at least 1
-        if ($data['quantity'] < 1) {
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'Quantity must be at least 1'
-            ]);
-            exit;
-        }
+        $data = $request->validate([
+            'id' => 'required',
+            'quantity' => 'required|min:1'
+        ]);
 
         $carts = $this->findCartOrFail($data['id']);
 
