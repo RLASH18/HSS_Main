@@ -54,7 +54,7 @@
         <div class="flex-shrink-0">
             <div class="w-20 h-20 rounded-full bg-gray-300 overflow-hidden flex items-center justify-center text-gray-600 text-2xl font-semibold">
                 <?php if (!empty($users->profile_picture)): ?>
-                    <img src="/storage/profile-img/<?= htmlspecialchars($users->profile_picture) ?>"
+                    <img src="/storage/profile-img/<?= $users->profile_picture ?>"
                         alt="Profile Picture"
                         class="w-full h-full object-cover">
                 <?php else: ?>
@@ -66,9 +66,9 @@
         <!-- User Info -->
         <div class="flex-1">
             <h2 class="text-xl font-semibold text-gray-900 mb-1">
-                <?= htmlspecialchars(($users->name ?? '')) ?>
+                <?= $users->name ?? '' ?>
             </h2>
-            <p class="text-gray-500 mb-3">@<?= htmlspecialchars($users->username) ?></p>
+            <p class="text-gray-500 mb-3">@<?= $users->username ?></p>
 
             <div class="flex items-center space-x-4 text-sm text-gray-600">
                 <div class="flex items-center">
@@ -77,7 +77,7 @@
                 </div>
                 <div class="flex items-center">
                     <span class="text-gray-400">ID:</span>
-                    <span class="ml-1 font-medium">#<?= str_pad(htmlspecialchars($users->id), 4, '0', STR_PAD_LEFT) ?></span>
+                    <span class="ml-1 font-medium">#<?= str_pad($users->id, 4, '0', STR_PAD_LEFT) ?></span>
                 </div>
             </div>
         </div>
@@ -108,7 +108,7 @@
                     </svg>
                     <span class="text-sm font-medium text-gray-700">Email:</span>
                 </div>
-                <p class="text-gray-900 ml-6"><?= htmlspecialchars($users->email) ?></p>
+                <p class="text-gray-900 ml-6"><?= $users->email ?></p>
             </div>
 
             <div>
@@ -121,7 +121,7 @@
                     </svg>
                     <span class="text-sm font-medium text-gray-700">Phone:</span>
                 </div>
-                <p class="text-gray-900 ml-6"><?= htmlspecialchars($users->contact_number) ?></p>
+                <p class="text-gray-900 ml-6"><?= $users->contact_number ?></p>
             </div>
 
             <div>
@@ -137,7 +137,7 @@
                     <span class="text-sm font-medium text-gray-700">Address:</span>
                 </div>
                 <div class="text-gray-900 ml-6">
-                    <p><?= htmlspecialchars($users->address) ?></p>
+                    <p><?= $users->address ?></p>
                 </div>
             </div>
         </div>
@@ -176,7 +176,7 @@
                     </svg>
                     <span class="text-sm font-medium text-gray-700">Gender:</span>
                 </div>
-                <p class="text-gray-900 ml-6"><?= htmlspecialchars($users->gender) ?></p>
+                <p class="text-gray-900 ml-6"><?= $users->gender ?></p>
             </div>
         </div>
     </div>

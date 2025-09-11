@@ -3,7 +3,7 @@
 <!-- Header Section -->
 <div class="flex justify-between items-start mb-8">
     <div class="flex-1">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2 leading-tight">Add New Item</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2 leading-tight">Add New Inventory Item</h1>
         <p class="text-gray-600 text-base font-normal">Fill in the details below to add a new item to your inventory</p>
     </div>
     <div class="flex space-x-3">

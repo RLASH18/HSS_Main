@@ -63,6 +63,9 @@ class AdminController extends Controller
         return $this->view('admin/settings', $data);
     }
 
+    /**
+     * Update admin profile details
+     */
     public function settingsUpdateProfile(Request $request)
     {
         $data = $request->validate([

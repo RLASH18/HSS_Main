@@ -27,7 +27,7 @@
             <div class="form-group">
                 <label for="order_display" class="block text-sm font-medium text-gray-700 mb-2">Order ID</label>
                 <div class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 cursor-not-allowed">
-                    Order #<?= str_pad($deliveries->order_id, 4, '0', STR_PAD_LEFT) ?> - <?= htmlspecialchars($deliveries->order->user->name ?? 'Unknown Customer') ?>
+                    Order #<?= str_pad($deliveries->order_id, 4, '0', STR_PAD_LEFT) ?> - <?= $deliveries->order->user->name ?? 'Unknown Customer' ?>
                 </div>
                 <input type="hidden" name="order_id" value="<?= $deliveries->order_id ?>">
             </div>

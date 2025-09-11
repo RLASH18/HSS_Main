@@ -2,7 +2,7 @@
 
 <div class="flex items-start justify-between mb-8">
     <div class="flex-1">
-        <h1 class="mb-2 text-3xl font-bold leading-tight text-gray-900">Edit Item</h1>
+        <h1 class="mb-2 text-3xl font-bold leading-tight text-gray-900">Edit Inventory Item</h1>
         <p class="text-base font-normal text-gray-600">Update the details below to modify the item in your inventory</p>
     </div>
     <div class="flex space-x-3">

@@ -49,7 +49,7 @@
                         <option value="" disabled selected>Select Order ID</option>
                         <?php foreach ($orders as $order): ?>
                             <option value="<?= $order->id ?>" <?= old('order_id') == $order->id ? 'selected' : '' ?>>
-                                Order #<?= str_pad($order->id, 4, '0', STR_PAD_LEFT) ?> - <?= htmlspecialchars($order->user->name) ?>
+                                Order #<?= str_pad($order->id, 4, '0', STR_PAD_LEFT) ?> - <?= $order->user->name ?>
                             </option>
                         <?php endforeach ?>
                     </select>
@@ -140,7 +140,7 @@
                 <?php foreach ($orders as $order): ?>
                     <?= $order->id ?>: {
                         delivery_method: '<?= $order->delivery_method ?? 'pickup' ?>',
-                        customer_name: '<?= htmlspecialchars($order->user->name) ?>'
+                        customer_name: '<?= $order->user->name ?>'
                     },
                 <?php endforeach ?>
             };

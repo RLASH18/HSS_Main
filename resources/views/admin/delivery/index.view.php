@@ -14,12 +14,12 @@
 <div class="admin-cards-container grid grid-cols-3 gap-5 my-4">
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
-            <p>Pending Deliveries</p>
+            <p class="font-semibold text-gray-900">Pending Deliveries</p>
             <p><?= $pendingDeliveries ?></p>
         </div>
         <div class="p-2 flex items-center justify-center">
             <div class="icon-admin">
-                <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M8.96456 18C8.72194 19.6961 7.26324 21 5.5 21C3.73676 21 2.27806 19.6961 2.03544 18H1V6C1 5.44772 1.44772 5 2 5H16C16.5523 5 17 5.44772 17 6V8H20L23 12.0557V18H20.9646C20.7219 19.6961 19.2632 21 17.5 21C15.7368 21 14.2781 19.6961 14.0354 18H8.96456ZM15 7H3V15.0505C3.63526 14.4022 4.52066 14 5.5 14C6.8962 14 8.10145 14.8175 8.66318 16H14.3368C14.5045 15.647 14.7296 15.3264 15 15.0505V7ZM17 13H21V12.715L18.9917 10H17V13ZM17.5 19C18.1531 19 18.7087 18.5826 18.9146 18C18.9699 17.8436 19 17.6753 19 17.5C19 16.6716 18.3284 16 17.5 16C16.6716 16 16 16.6716 16 17.5C16 17.6753 16.0301 17.8436 16.0854 18C16.2913 18.5826 16.8469 19 17.5 19ZM7 17.5C7 16.6716 6.32843 16 5.5 16C4.67157 16 4 16.6716 4 17.5C4 17.6753 4.03008 17.8436 4.08535 18C4.29127 18.5826 4.84689 19 5.5 19C6.15311 19 6.70873 18.5826 6.91465 18C6.96992 17.8436 7 17.6753 7 17.5Z" />
                 </svg>
             </div>
@@ -27,12 +27,12 @@
     </div>
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
-            <p>Deliveries Completed</p>
+            <p class="font-semibold text-gray-900">Deliveries Completed</p>
             <p><?= $deliveriesCompleted ?></p>
         </div>
         <div class="p-2 flex items-center justify-center">
             <div class="icon-admin">
-                <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M9.9997 15.1709L19.1921 5.97852L20.6063 7.39273L9.9997 17.9993L3.63574 11.6354L5.04996 10.2212L9.9997 15.1709Z" />
                 </svg>
             </div>
@@ -40,12 +40,12 @@
     </div>
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
-            <p>Failed Deliveries</p>
+            <p class="font-semibold text-gray-900">Failed Deliveries</p>
             <p><?= $failedDeliveries ?></p>
         </div>
         <div class="p-2 flex items-center justify-center">
             <div class="icon-admin">
-                <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" />
                 </svg>
             </div>

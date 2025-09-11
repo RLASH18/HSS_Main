@@ -9,12 +9,12 @@
 <div class="admin-cards-container grid grid-cols-4 gap-5 my-4">
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
-            <p>Total Orders</p>
+            <p class="font-semibold text-gray-900">Total Orders</p>
             <p><?= $orders ?></p>
         </div>
         <div class="p-2 flex items-center justify-center">
             <div class="icon-admin">
-                <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                <svg class="w-8 h-8 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 6h8m-8 6h8m-8 6h8M4 16a2 2 0 1 1 3.321 1.5L4 20h5M4 5l2-1v6m-2 0h4" />
@@ -24,12 +24,12 @@
     </div>
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
-            <p>Customers</p>
+            <p class="font-semibold text-gray-900">Customers</p>
             <p><?= $customers ?></p>
         </div>
         <div class="p-2 flex items-center justify-center">
             <div class="icon-admin">
-                <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                <svg class="w-8 h-8 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-width="2"
                         d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -39,12 +39,12 @@
     </div>
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
-            <p>Revenue</p>
+            <p class="font-semibold text-gray-900">Revenue</p>
             <p>₱ <?= number_format($revenue, 2) ?></p>
         </div>
         <div class="p-2 flex items-center justify-center">
             <div class="icon-admin">
-                <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                <svg class="w-8 h-8 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M6 10h9.231M6 14h9.231M18 5.086A5.95 5.95 0 0 0 14.615 4c-3.738 0-6.769 3.582-6.769 8s3.031 8 6.769 8A5.94 5.94 0 0 0 18 18.916" />
@@ -54,12 +54,12 @@
     </div>
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
-            <p>Inventory</p>
+            <p class="font-semibold text-gray-900">Inventory</p>
             <p><?= $inventory ?></p>
         </div>
         <div class="p-2 flex items-center justify-center">
             <div class="icon-admin">
-                <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                <svg class="w-8 h-8 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
                         d="M4.07141 14v6h5.99999v-6H4.07141Zm4.5-4h6.99999l-3.5-6-3.49999 6Zm7.99999 10c1.933 0 3.5-1.567 3.5-3.5s-1.567-3.5-3.5-3.5-3.5 1.567-3.5 3.5 1.567 3.5 3.5 3.5Z" />
@@ -103,7 +103,7 @@
 
 <div class="grid grid-cols-3 gap-5 my-4">
     <div class="recent-orders-container bg-white border border-gray-200 rounded-lg shadow-sm p-4">
-        <h1 class="mb-3">Recent Orders</h1>
+        <h1 class="font-semibold text-gray-900 mb-4">Recent Orders</h1>
         <?php foreach ($recentOrders as $order):  ?>
             <div class="flex align-center justify-between my-3">
                 <div>
@@ -148,7 +148,7 @@
         <?php endforeach ?>
     </div>
     <div class="new-customers-container bg-white border border-gray-200 rounded-lg shadow-sm p-4">
-        <h1 class="mb-3">New Customers</h1>
+        <h1 class="font-semibold text-gray-900 mb-4">New Customers</h1>
         <?php foreach ($newCustomers as $newCustomer): ?>
             <div class="flex align-center justify-between my-3">
                 <div>
@@ -165,19 +165,28 @@
         <?php endforeach ?>
     </div>
     <div class="added-products-container bg-white border border-gray-200 rounded-lg shadow-sm p-4">
-        <h1 class="mb-3">Added Products</h1>
+        <h1 class="font-semibold text-gray-900 mb-4">Added Products</h1>
         <?php foreach ($addedProducts as $item): ?>
-            <div class="flex justify-between my-3">
-                <div>
-                    <p class="product-name"><?= $item->item_name ?></p>
-                    <p class="item-category"><?= $item->category ?></p>
+            <div class="flex items-start justify-between my-3">
+                <!-- Left: item name + category -->
+                <div class="min-w-0 flex-1 pr-3">
+                    <p class="product-name text-sm font-medium text-gray-900 truncate" title="<?= $item->item_name ?>">
+                        <?= $item->item_name ?>
+                    </p>
+                    <p class="item-category text-xs text-gray-600 truncate">
+                        <?= $item->category ?>
+                    </p>
                 </div>
-                <div>
-                    <p class="quantity"><?= $item->quantity ?> pcs</p>
-                    <p class="date-time"><?= date("M, d g:i:a", strtotime($item->created_at)) ?></p>
+
+                <!-- Right: quantity + date -->
+                <div class="text-right shrink-0">
+                    <p class="quantity text-sm"><?= $item->quantity ?> pcs</p>
+                    <p class="date-time text-xs text-gray-500">
+                        <?= date("M, d g:i:a", strtotime($item->created_at)) ?>
+                    </p>
                 </div>
             </div>
-            <hr class="horizontal-line">
+            <hr class="horizontal-line border-gray-200">
         <?php endforeach ?>
     </div>
 </div>

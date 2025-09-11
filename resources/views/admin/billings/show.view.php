@@ -136,14 +136,14 @@
                 <div class="form-group">
                     <label class="block mb-2 text-sm font-medium text-gray-700">Customer Name</label>
                     <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
-                        <?= htmlspecialchars($order->user->name ?? 'N/A') ?>
+                        <?= $order->user->name ?? 'N/A' ?>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="block mb-2 text-sm font-medium text-gray-700">Customer Email</label>
                     <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
-                        <?= htmlspecialchars($order->user->email ?? 'N/A') ?>
+                        <?= $order->user->email ?? 'N/A' ?>
                     </div>
                 </div>
 
@@ -152,13 +152,13 @@
                     <label class="block mb-2 text-sm font-medium text-gray-700">Order Status</label>
                     <div class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 font-bold">
                         <span class="inline-flex items-center
-                        <?php if ($order->status === 'pending'): ?>text-yellow-800
-                        <?php elseif ($order->status === 'confirmed'): ?>text-blue-800
-                        <?php elseif ($order->status === 'shipped'): ?>text-indigo-800
-                        <?php elseif ($order->status === 'delivered'): ?>text-green-800
-                        <?php elseif ($order->status === 'cancelled'): ?>text-red-800
-                        <?php elseif ($order->status === 'paid'): ?>text-emerald-800
-                        <?php else: ?>text-gray-800<?php endif ?>">
+                        <?php if ($order->status === 'pending'): ?>text-yellow-600
+                        <?php elseif ($order->status === 'confirmed'): ?>text-blue-600
+                        <?php elseif ($order->status === 'shipped'): ?>text-indigo-600
+                        <?php elseif ($order->status === 'delivered'): ?>text-green-600
+                        <?php elseif ($order->status === 'cancelled'): ?>text-red-600
+                        <?php elseif ($order->status === 'paid'): ?>text-emerald-600
+                        <?php else: ?>text-gray-600<?php endif ?>">
                             <?= ucfirst($order->status) ?>
                         </span>
                     </div>
@@ -168,7 +168,7 @@
                 <div class="form-group">
                     <label class="block mb-2 text-sm font-medium text-gray-700">Delivery Address</label>
                     <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 min-h-[80px]">
-                        <?= htmlspecialchars($order->delivery_address ?? 'No address provided') ?>
+                        <?= $order->delivery_address ?? 'No address provided' ?>
                     </div>
                 </div>
             <?php endif ?>
@@ -187,8 +187,8 @@
                             <!-- Item Image -->
                             <div class="flex-shrink-0">
                                 <?php if (isset($item->inventory) && !empty($item->inventory->item_image_1)): ?>
-                                    <img src="/storage/items-img/<?= htmlspecialchars($item->inventory->item_image_1) ?>"
-                                        alt="<?= htmlspecialchars($item->inventory->item_name ?? 'Item') ?>"
+                                    <img src="/storage/items-img/<?= $item->inventory->item_image_1 ?>"
+                                        alt="<?= $item->inventory->item_name ?? 'Item' ?>"
                                         class="object-cover w-16 h-16 border border-gray-200 rounded-lg">
                                 <?php else: ?>
                                     <div class="flex items-center justify-center w-16 h-16 bg-gray-100 border border-gray-200 rounded-lg">
@@ -202,10 +202,10 @@
                             <!-- Item Details -->
                             <div class="flex-1">
                                 <span class="text-sm font-medium text-gray-900">
-                                    <?= htmlspecialchars($item->inventory->item_name ?? 'Unknown Item') ?>
+                                    <?= $item->inventory->item_name ?? 'Unknown Item' ?>
                                 </span>
                                 <p class="text-sm text-gray-500">
-                                    <?= htmlspecialchars($item->inventory->category ?? 'N/A') ?>
+                                    <?= $item->inventory->category ?? 'N/A' ?>
                                 </p>
                                 <div class="flex items-center mt-1 space-x-4 text-sm text-gray-600">
                                     <span>Qty: <?= $item->quantity ?></span>
@@ -328,8 +328,8 @@
             </div>
             
             <div class="billing-info">
-                <p><strong>Customer:</strong> <?= htmlspecialchars($order->user->name ?? 'N/A') ?></p>
-                <p><strong>Email:</strong> <?= htmlspecialchars($order->user->email ?? 'N/A') ?></p>
+                <p><strong>Customer:</strong> <?= $order->user->name ?? 'N/A' ?></p>
+                <p><strong>Email:</strong> <?= $order->user->email ?? 'N/A' ?></p>
                 <p><strong>Order ID:</strong> #<?= str_pad($billings->order_id, 4, '0', STR_PAD_LEFT) ?></p>
                 <p><strong>Payment Method:</strong> <?= ucfirst($billings->payment_method) ?></p>
                 <p><strong>Status:</strong> <?= ucfirst($billings->payment_status) ?></p>
@@ -350,8 +350,8 @@
                     <tbody>
                         <?php foreach ($orderItems as $item): ?>
                             <tr>
-                                <td><?= htmlspecialchars($item->inventory->item_name ?? 'Unknown Item') ?></td>
-                                <td><?= htmlspecialchars($item->inventory->category ?? 'N/A') ?></td>
+                                <td><?= $item->inventory->item_name ?? 'Unknown Item' ?></td>
+                                <td><?= $item->inventory->category ?? 'N/A' ?></td>
                                 <td style="text-align:center;"><?= $item->quantity ?></td>
                                 <td style="text-align:right;">₱<?= number_format($item->unit_price, 2) ?></td>
                                 <td style="text-align:right;">₱<?= number_format($item->quantity * $item->unit_price, 2) ?></td>

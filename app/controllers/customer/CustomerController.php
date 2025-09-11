@@ -39,6 +39,9 @@ class CustomerController extends Controller
         return $this->view('customer/index', $data);
     }
 
+    /**
+     * Filter inventory items by category and render the customer view
+     */
     public function categoryFilter($category)
     {
         $decodedCategory = urldecode($category);

@@ -11,7 +11,7 @@
 <div class="admin-cards-container grid grid-cols-2 gap-5 my-4">
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
-            <p>Total Revenue</p>
+            <p class="font-semibold text-gray-900">Total Revenue</p>
             <p class="mt-1">₱ <?= number_format($revenue, 2) ?></p>
             <p class="text-sm text-gray-500 mt-6">From paid transactions</p>
         </div>
@@ -27,7 +27,7 @@
     </div>
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
-            <p>Pending amount</p>
+            <p class="font-semibold text-gray-900">Pending amount</p>
             <p class="mt-1">₱ <?= number_format($pending, 2) ?></p>
             <p class="text-sm text-gray-500 mt-6">Awaiting payment</p>
         </div>
@@ -44,7 +44,7 @@
     </div>
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
-            <p>Total Transactions</p>
+            <p class="font-semibold text-gray-900">Total Transactions</p>
             <p class="mt-1"><?= $total ?></p>
             <p class="text-sm text-gray-500 mt-6">All billing records</p>
         </div>
@@ -61,7 +61,7 @@
     </div>
     <div class="flex p-3 bg-white border border-gray-200 rounded-lg shadow-sm justify-between">
         <div class="p-2">
-            <p>Success Rate</p>
+            <p class="font-semibold text-gray-900">Success Rate</p>
             <p class="mt-1"><?= number_format($rate, 2) ?>%</p>
             <p class="text-sm text-gray-500 mt-6">Payment completion</p>
         </div>

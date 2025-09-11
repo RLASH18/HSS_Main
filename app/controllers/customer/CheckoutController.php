@@ -262,9 +262,6 @@ class CheckoutController extends Controller
     /**
      * Redirects customer to PayMongo checkout if online payment
      */
-    /**
-     * Redirects customer to PayMongo checkout if online payment
-     */
     private function handlePayMongoPayment(array $data, array $items, bool $fromCart)
     {
         // Skip if payment method not supported

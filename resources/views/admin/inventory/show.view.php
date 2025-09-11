@@ -2,7 +2,7 @@
 
 <div class="flex items-start justify-between mb-8">
     <div class="flex-1">
-        <h1 class="mb-2 text-3xl font-bold text-gray-900"><?= htmlspecialchars($inventory->item_name) ?></h1>
+        <h1 class="mb-2 text-3xl font-bold text-gray-900">Inventory Item Details</h1>
         <p class="text-gray-600">View detailed information about this inventory item</p>
     </div>
     <div class="flex space-x-3">
@@ -91,15 +91,15 @@
             <div class="form-group">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Supplier Name</label>
                 <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
-                    <?= htmlspecialchars($inventory->supplier_name) ?>
+                    <?= $inventory->supplier_name ?>
                 </div>
             </div>
 
             <!-- Item Name -->
             <div class="form-group">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Item Name</label>
-                <div class="w-full px-4 py-3 font-semibold text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
-                    <?= htmlspecialchars($inventory->item_name) ?>
+                <div class="w-full px-4 py-3 text-[#815331] font-bold border border-gray-200 rounded-lg bg-gray-50">
+                    <?= $inventory->item_name ?>
                 </div>
             </div>
 
@@ -107,7 +107,7 @@
             <div class="form-group">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Description</label>
                 <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 min-h-[100px]">
-                    <?= htmlspecialchars($inventory->description ?? 'No description provided') ?>
+                    <?= $inventory->description ?? 'No description provided' ?>
                 </div>
             </div>
 
@@ -115,7 +115,7 @@
             <div class="form-group">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Category</label>
                 <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
-                    <?= htmlspecialchars($inventory->category) ?>
+                    <?= $inventory->category ?>
                 </div>
             </div>
 
@@ -143,7 +143,7 @@
             <!-- Unit Price -->
             <div class="form-group">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Unit Price</label>
-                <div class="w-full px-4 py-3 font-bold text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
+                <div class="w-full px-4 py-3 text-[#815331] font-bold border border-gray-200 rounded-lg bg-gray-50">
                     ₱<?= number_format($inventory->unit_price, 2) ?>
                 </div>
             </div>
@@ -152,14 +152,25 @@
             <div class="grid grid-cols-2 gap-4">
                 <div class="form-group">
                     <label class="block mb-2 text-sm font-medium text-gray-700">Current Stock</label>
-                    <div class="w-full px-4 py-3 font-semibold text-center text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
-                        <?= htmlspecialchars($inventory->quantity) ?>
+                    <?php
+                    // Decide stock status color
+                    if ($inventory->quantity <= 0) {
+                        $stockClass = "text-red-600";
+                    } elseif ($inventory->quantity <= $inventory->restock_threshold) {
+                        $stockClass = "text-orange-600";
+                    } else {
+                        $stockClass = "text-green-600";
+                    }
+                    ?>
+                    <div class="w-full px-4 py-3 font-semibold text-center border rounded-lg <?= $stockClass ?>">
+                        <?= $inventory->quantity ?>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="block mb-2 text-sm font-medium text-gray-700">Restock Level</label>
                     <div class="w-full px-4 py-3 font-semibold text-center text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
-                        <?= htmlspecialchars($inventory->restock_threshold) ?>
+                        <?= $inventory->restock_threshold ?>
                     </div>
                 </div>
             </div>
@@ -180,7 +191,7 @@
 
                     <!-- Main Image Display -->
                     <div class="w-full p-2 mb-4 overflow-hidden border border-gray-200 rounded-lg shadow-sm">
-                        <img id="mainImage" src="/storage/items-img/<?= htmlspecialchars($images[0]) ?>" alt="<?= htmlspecialchars($inventory->item_name) ?>"
+                        <img id="mainImage" src="/storage/items-img/<?= $images[0] ?>" alt="<?= $inventory->item_name ?>"
                             class="object-contain w-full max-h-96">
                     </div>
 
@@ -190,7 +201,7 @@
                             <?php foreach ($images as $index => $image): ?>
                                 <button type="button" onclick="selectImage(<?= $index ?>)"
                                     class="thumbnail-btn flex-shrink-0 border-2 rounded-lg overflow-hidden transition-all <?= $index === 0 ? 'border-[#815331]' : 'border-gray-200 hover:border-gray-300' ?>">
-                                    <img src="/storage/items-img/<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($inventory->item_name) ?> - Image <?= $index + 1 ?>"
+                                    <img src="/storage/items-img/<?= $image ?>" alt="<?= $inventory->item_name ?> - Image <?= $index + 1 ?>"
                                         class="object-cover w-16 h-16">
                                 </button>
                             <?php endforeach ?>

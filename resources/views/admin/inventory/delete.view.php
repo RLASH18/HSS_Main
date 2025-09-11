@@ -2,7 +2,7 @@
 
 <div class="flex items-start justify-between mb-8">
     <div class="flex-1">
-        <h1 class="mb-2 text-3xl font-bold text-gray-900">Delete Item</h1>
+        <h1 class="mb-2 text-3xl font-bold text-gray-900">Delete Inventory Item</h1>
         <p class="text-gray-600">Are you sure you want to delete this item? This action cannot be undone.</p>
     </div>
     <div class="flex space-x-3">
@@ -54,15 +54,15 @@
             <div class="form-group">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Supplier Name</label>
                 <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
-                    <?= htmlspecialchars($inventory->supplier_name) ?>
+                    <?= $inventory->supplier_name ?>
                 </div>
             </div>
 
             <!-- Item Name -->
             <div class="form-group">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Item Name</label>
-                <div class="w-full px-4 py-3 font-semibold text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
-                    <?= htmlspecialchars($inventory->item_name) ?>
+                <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
+                    <?= $inventory->item_name ?>
                 </div>
             </div>
 
@@ -70,7 +70,7 @@
             <div class="form-group">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Description</label>
                 <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 min-h-[100px]">
-                    <?= htmlspecialchars($inventory->description ?? 'No description provided') ?>
+                    <?= $inventory->description ?? 'No description provided' ?>
                 </div>
             </div>
 
@@ -78,7 +78,7 @@
             <div class="form-group">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Category</label>
                 <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
-                    <?= htmlspecialchars($inventory->category) ?>
+                    <?= $inventory->category ?>
                 </div>
             </div>
 
@@ -115,7 +115,7 @@
             <div class="form-group">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Current Quantity</label>
                 <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
-                    <?= htmlspecialchars($inventory->quantity) ?> units
+                    <?= $inventory->quantity ?> units
                 </div>
             </div>
 
@@ -123,7 +123,7 @@
             <div class="form-group">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Restock Threshold</label>
                 <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
-                    <?= htmlspecialchars($inventory->restock_threshold) ?> units
+                    <?= $inventory->restock_threshold ?> units
                 </div>
             </div>
 
@@ -145,7 +145,7 @@
                     <div class="grid grid-cols-1 <?= count($images) > 1 ? 'sm:grid-cols-2' : '' ?> <?= count($images) > 2 ? 'lg:grid-cols-3' : '' ?> gap-3">
                         <?php foreach ($images as $index => $image): ?>
                             <div class="relative">
-                                <img src="/storage/items-img/<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($inventory->item_name) ?> - Image <?= $index + 1 ?>"
+                                <img src="/storage/items-img/<?= $image ?>" alt="<?= $inventory->item_name ?> - Image <?= $index + 1 ?>"
                                      class="object-contain w-full h-32 border border-gray-200 rounded-lg">
                                 <div class="absolute px-2 py-1 text-xs text-white bg-black rounded bottom-2 left-2 bg-opacity-60">
                                     Image <?= $index + 1 ?>
