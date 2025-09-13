@@ -1,10 +1,10 @@
 <?php layout('admin/header') ?>
 
 <!-- Header Section -->
-<div class="flex justify-between items-start mb-8">
+<div class="flex items-start justify-between mb-8">
     <div class="flex-1">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2 leading-tight">Delivery Details</h1>
-        <p class="text-gray-600 text-base font-normal">Complete information about delivery #<?= $deliveries->id ?></p>
+        <h1 class="mb-2 text-3xl font-bold leading-tight text-gray-900">Delivery Details</h1>
+        <p class="text-base font-normal text-gray-600">Complete information about delivery #<?= $deliveries->id ?></p>
     </div>
     <div class="flex space-x-3">
         <a href="/admin/delivery"
@@ -19,35 +19,35 @@
 
 <div>
     <!-- 2-Column Grid Layout -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <!-- Left Column: Info -->
         <div class="space-y-6">
-            <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">Customer Information</h3>
+            <h3 class="pb-2 text-lg font-semibold text-gray-900 border-b border-gray-200">Customer Information</h3>
 
             <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Delivery ID</label>
-                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Delivery ID</label>
+                <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
                     #<?= str_pad($deliveries->id, 4, '0', STR_PAD_LEFT) ?>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Order ID</label>
-                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Order ID</label>
+                <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
                     #<?= str_pad($deliveries->order_id, 4, '0', STR_PAD_LEFT) ?>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Customer Name</label>
-                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Customer Name</label>
+                <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
                     <?= $deliveries->order->user->name ?>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Customer Address</label>
-                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Customer Address</label>
+                <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
                     <?= $deliveries->order->user->address ?: 'No address provided' ?>
                 </div>
             </div>
@@ -55,11 +55,11 @@
 
         <!-- Right Column -->
         <div class="space-y-6">
-            <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4">Delivery Information</h3>
+            <h3 class="pb-2 mb-4 text-lg font-semibold text-gray-900 border-b border-gray-200">Delivery Information</h3>
 
             <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Delivery Method</label>
-                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 flex items-center gap-2">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Delivery Method</label>
+                <div class="flex items-center w-full gap-2 px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
                     <?php if ($deliveries->delivery_method === 'pickup') : ?>
                         <svg class="w-5 h-5 text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M7.61713 8.71233L10.8222 6.38373C11.174 6.12735 11.6087 5.98543 12.065 6.0008C13.1764 6.02813 14.1524 6.75668 14.4919 7.82036C14.6782 8.40431 14.8481 8.79836 15.0017 9.0025C15.914 10.2155 17.3655 11 19.0002 11V13C16.8255 13 14.8825 12.0083 13.5986 10.4526L12.901 14.4085L14.9621 16.138L17.1853 22.246L15.3059 22.93L13.266 17.3256L9.87576 14.4808C9.32821 14.0382 9.03139 13.3192 9.16231 12.5767L9.67091 9.6923L8.99407 10.1841L6.86706 13.1116L5.24902 11.9361L7.60016 8.7L7.61713 8.71233ZM13.5002 5.5C12.3956 5.5 11.5002 4.60457 11.5002 3.5C11.5002 2.39543 12.3956 1.5 13.5002 1.5C14.6047 1.5 15.5002 2.39543 15.5002 3.5C15.5002 4.60457 14.6047 5.5 13.5002 5.5ZM10.5286 18.6813L7.31465 22.5116L5.78257 21.226L8.75774 17.6803L9.50426 15.5L11.2954 17L10.5286 18.6813Z" />
@@ -74,28 +74,28 @@
             </div>
 
             <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Scheduled Date</label>
-                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Scheduled Date</label>
+                <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
                     <?= date('M d, Y', strtotime($deliveries->scheduled_date)) ?>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Remarks</label>
-                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Remarks</label>
+                <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
                     <?= $deliveries->remarks ?: 'None' ?>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Driver Name</label>
-                <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Driver Name</label>
+                <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
                     <?= $deliveries->driver_name ?>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                <label class="block mb-2 text-sm font-medium text-gray-700">Status</label>
                 <?php
                 if ($deliveries->status === 'scheduled') {
                     $statusClass = "text-blue-600";
@@ -117,20 +117,20 @@
     </div>
     
     <div class="form-group">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Location Map</label>
-        <div id="map" class="w-full h-80 rounded-lg border border-gray-300 bg-gray-100"></div>
-        <div class="mt-2 flex space-x-2">
+        <label class="block mb-2 text-sm font-medium text-gray-700">Location Map</label>
+        <div id="map" class="w-full bg-gray-100 border border-gray-300 rounded-lg h-80"></div>
+        <div class="flex mt-2 space-x-2">
             <button onclick="openInMaps()" type="button" class="inline-flex items-center px-3 py-1 border border-[#815331] rounded-lg text-sm font-medium text-[#815331] hover:bg-[#815331] hover:text-white transition-colors">
                 Open in Maps
             </button>
-            <button onclick="refreshMap()" type="button" class="inline-flex items-center px-3 py-1 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+            <button onclick="refreshMap()" type="button" class="inline-flex items-center px-3 py-1 text-sm font-medium text-gray-700 transition-colors border border-gray-300 rounded-lg hover:bg-gray-50">
                 Refresh Map
             </button>
         </div>
     </div>
 
     <!-- Action Buttons -->
-    <div class="mt-8 pt-6 border-t border-gray-200">
+    <div class="pt-6 mt-8 border-t border-gray-200">
         <div class="flex items-center justify-between">
             <div class="flex space-x-4">
                 <a href="/admin/delivery"
@@ -138,7 +138,7 @@
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    Back to Inventory
+                    Back to Deliveries
                 </a>
             </div>
         </div>

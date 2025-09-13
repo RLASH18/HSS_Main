@@ -4,7 +4,7 @@
 <div class="mb-8">
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="mb-2 text-3xl font-bold text-black-900"><?= ucfirst($items->item_name) ?></h1>
+            <h1 class="mb-2 text-3xl font-bold text-black-900">Product Highlights</h1>
             <p class="text-black-600">Check the details and choose quantity to buy</p>
         </div>
         <a href="/customer/home"
