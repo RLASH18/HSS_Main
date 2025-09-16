@@ -538,16 +538,24 @@
                 const userLat = position.coords.latitude;
                 const userLng = position.coords.longitude;
 
-                const storeLat = 14.6981; // Store location
-                const storeLng = 121.0921;
-                const maxDistance = 15; // Accepts users within 5 km radius
+                // Coordinates for L28, Block 11, km 17 Commonwealth Ave, Quezon City
+                const storeLat = 14.6997;
+                const storeLng = 121.0916;
+                const maxDistance = 5; // Accepts users within 5 km radius
 
                 const distance = getDistanceInKm(userLat, userLng, storeLat, storeLng);
 
+                // Debug information (remove in production)
+                // console.log('User coordinates:', userLat, userLng);
+                // console.log('Store coordinates:', storeLat, storeLng);
+                // console.log('Distance:', distance.toFixed(3), 'km');
+                // console.log('Max allowed distance:', maxDistance, 'km');
+
                 if (distance > maxDistance) {
-                    alert("Sorry! We currently deliver only within a limited area of Quezon City.");
+                    alert(`Sorry! You are ${distance.toFixed(2)}km away. We currently deliver only within ${maxDistance}km of our store in Quezon City.`);
                     window.location.href = "/not-allowed";
                 } else {
+                    console.log('Location check passed!');
                     sessionStorage.setItem("locationChecked", "true");
                     // Set session variable for server-side validation
                     fetch('/set-location-session', {

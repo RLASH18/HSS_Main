@@ -50,7 +50,7 @@
 
                         <!-- Item Details -->
                         <div class="flex-1 min-w-0">
-                            <h4 class="text-sm font-medium text-gray-900"><?= $item->item->item_name ?></h4>
+                            <span class="text-sm font-medium text-gray-900"><?= $item->item->item_name ?></span>
                             <div class="flex items-center mt-1 space-x-2">
                                 <span class="text-sm text-gray-500">Qty: <?= $item->quantity ?></span>
                                 <span class="text-sm text-gray-500">×</span>

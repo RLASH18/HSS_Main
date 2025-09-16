@@ -26,7 +26,7 @@
 <div>
     <!-- Payment Status Alert -->
     <?php if ($billings->payment_status === 'paid'): ?>
-        <div class="bg-green-50 border-green-200 text-green-800 border rounded-lg p-4 mb-8">
+        <div class="p-4 mb-8 text-green-800 border border-green-200 rounded-lg bg-green-50">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
@@ -42,7 +42,7 @@
             </div>
         </div>
     <?php else: ?>
-        <div class="bg-red-50 border-red-200 text-red-800 border rounded-lg p-4 mb-8">
+        <div class="p-4 mb-8 text-red-800 border border-red-200 rounded-lg bg-red-50">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
@@ -150,7 +150,7 @@
                 <!-- Order Status -->
                 <div class="form-group">
                     <label class="block mb-2 text-sm font-medium text-gray-700">Order Status</label>
-                    <div class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 font-bold">
+                    <div class="w-full px-4 py-3 font-bold border border-gray-200 rounded-lg bg-gray-50">
                         <span class="inline-flex items-center
                         <?php if ($order->status === 'pending'): ?>text-yellow-600
                         <?php elseif ($order->status === 'confirmed'): ?>text-blue-600
@@ -207,10 +207,12 @@
                                 <p class="text-sm text-gray-500">
                                     <?= $item->inventory->category ?? 'N/A' ?>
                                 </p>
-                                <div class="flex items-center mt-1 space-x-4 text-sm text-gray-600">
-                                    <span>Qty: <?= $item->quantity ?></span>
-                                    <span>Unit Price: ₱<?= number_format($item->unit_price, 2) ?></span>
-                                    <span class="font-medium text-[#815331]">
+                                <div class="flex items-center mt-1 text-sm text-gray-600">
+                                    <div class="flex space-x-4">
+                                        <span>Qty: <?= $item->quantity ?></span>
+                                        <span>Unit Price: ₱<?= number_format($item->unit_price, 2) ?></span>
+                                    </div>
+                                    <span class="ml-auto font-semibold text-base text-[#815331]">
                                         Subtotal: ₱<?= number_format($item->quantity * $item->unit_price, 2) ?>
                                     </span>
                                 </div>
