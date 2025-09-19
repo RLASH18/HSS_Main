@@ -206,7 +206,7 @@ class OrdersController extends Controller
         $delivery = Delivery::where(['order_id' => $orderId]);
         if (!$delivery) return;
 
-        // Enhanced status mapping with business login
+        // Enhanced status mapping with business logic
         $statusMapping = [
             'shipped' => 'in_transit',
             'delivered' => 'delivered'

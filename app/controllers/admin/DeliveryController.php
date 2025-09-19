@@ -79,14 +79,7 @@ class DeliveryController extends Controller
                 $deliveries['status'],
                 $oldDeliveryStatus ?? null
             );
-
-            // Send notification within the delivery day
-            $this->notifyDeliveryDay(
-                $deliveries['order_id'],
-                $deliveries['scheduled_date'],
-                $deliveries['delivery_method'],
-                $deliveries['driver_name']
-            );
+            
             setSweetAlert('success', 'Success', 'Delivery added successfully.');
         } else {
             setSweetAlert('error', 'Error', 'Failed to add delivery. Please try again.');
@@ -151,13 +144,6 @@ class DeliveryController extends Controller
                 $oldDeliveryStatus ?? null
             );
 
-            // Send notification within the delivery day
-            $this->notifyDeliveryDay(
-                $deliveries['order_id'],
-                $deliveries['scheduled_date'],
-                $deliveries['delivery_method'],
-                $deliveries['driver_name']
-            );
             setSweetAlert('success', 'Updated', 'Delivery details have been updated.');
         } else {
             setSweetAlert('error', 'Error', 'Couldn’t update delivery. Try again.');
@@ -195,36 +181,6 @@ class DeliveryController extends Controller
         }
 
         redirect('/admin/delivery');
-    }
-
-    /**
-     *  Sends scheduled delivery/pickup SMS on the morning of the set date.
-     */
-    private function notifyDeliveryDay($orderId, $scheduledDate, $deliveryMethod, $driverName)
-    {
-        $today = date('Y-m-d');
-        $currentHour = (int) date('H'); // 24-hour format
-
-        // Only run if today is the scheduled day and it's between 7AM–8AM
-        if ($today === $scheduledDate && $currentHour >= 7 && $currentHour < 9) {
-            $order = Orders::find($orderId);
-            if (!$order) return;
-
-            $user = $order->user();
-            if (!$user || empty($user->contact_number)) return;
-
-            $phone = $user->contact_number;
-
-            if ($deliveryMethod === 'delivery') {
-                $msg = "Reminder: Your order #{$order->id} will be delivered today ({$scheduledDate}). Driver: {$driverName}. Please ensure someone is available to receive it.\n\n🚚 [ABG Prime Builders Supplies Inc.]";
-            } elseif ($deliveryMethod === 'pickup') {
-                $msg = "Reminder: Your order #{$order->id} is ready for pickup today ({$scheduledDate}). We look forward to seeing you!\n\n📦 [ABG Prime Builders Supplies Inc.]";
-            } else {
-                return;
-            }
-
-            SmsService::sendSms($phone, $msg);
-        }
     }
 
     /**
