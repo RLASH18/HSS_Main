@@ -88,6 +88,8 @@ Route::group(['middleware' => 'auth', 'prefix' => '/customer'], function () {
         Route::get('/profile', 'profile');
         Route::get('/edit-profile', 'editProfile');
         Route::post('/update-profile', 'updateProfile');
+        Route::get('/contact', 'contact');
+        Route::post('/send-contact', 'sendContact');
         Route::post('/logout', 'logout');
     });
 
