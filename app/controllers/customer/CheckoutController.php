@@ -23,10 +23,70 @@ class CheckoutController extends Controller
     }
 
     /**
+     * Check if the current user's profile is complete for checkout
+     */
+    private function isProfileComplete(): bool
+    {
+        $user = auth();
+
+        if (!$user) {
+            return false;
+        }
+
+        // Required fields for checkout
+        $requiredFields = ['name', 'email', 'contact_number', 'address'];
+
+        foreach ($requiredFields as $field) {
+            if (empty($user->$field) || trim($user->$field) === '') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Get missing profile fields for the current user
+     */
+    private function getMissingProfileFields(): array
+    {
+        $user = auth();
+
+        if (!$user) {
+            return ['Full Name', 'Email Address', 'Contact Number', 'Address'];
+        }
+
+        $requiredFields = [
+            'name' => 'Full Name',
+            'email' => 'Email Address',
+            'contact_number' => 'Contact Number',
+            'address' => 'Address'
+        ];
+
+        $missing = [];
+
+        foreach ($requiredFields as $field => $label) {
+            if (empty($user->$field) || trim($user->$field) === '') {
+                $missing[] = $label;
+            }
+        }
+
+        return $missing;
+    }
+
+    /**
      * Display checkout page with items from the cart
      */
     public function checkout($cartIds = null)
     {
+        // Check if user profile is complete before allowing checkout
+        if (!$this->isProfileComplete()) {
+            $missingFields = $this->getMissingProfileFields();
+            $fieldsList = implode(', ', $missingFields);
+            setSweetAlert('warning', 'Complete Your Profile', "Please complete your profile before checkout. Missing: {$fieldsList}");
+            redirect('/customer/edit-profile');
+        }
+
         // Get selected cart items (can be comma-separated IDs)
         $selectedCartIds = $cartIds ? explode(',', $cartIds) : [];
         $cartItems = [];
@@ -126,6 +186,14 @@ class CheckoutController extends Controller
      */
     public function buyNow(Request $request)
     {
+        // Check if user profile is complete before allowing checkout
+        if (!$this->isProfileComplete()) {
+            $missingFields = $this->getMissingProfileFields();
+            $fieldsList = implode(', ', $missingFields);
+            setSweetAlert('warning', 'Complete Your Profile', "Please complete your profile before checkout. Missing: {$fieldsList}");
+            redirect('/customer/edit-profile');
+        }
+
         $data = $request->validate([
             'item_id' => 'required',
             'quantity' => 'required|integer|min:1'
@@ -423,7 +491,7 @@ class CheckoutController extends Controller
             redirect('/customer/my-orders');
         }
 
-        $pendingOrderData= $_SESSION['pending_order_data'];
+        $pendingOrderData = $_SESSION['pending_order_data'];
         unset($_SESSION['pending_order_data']);
 
         $orderId = $this->storeOrderWithItems($pendingOrderData['data'], $pendingOrderData['items'], $pendingOrderData['from_cart']);
@@ -460,7 +528,9 @@ class CheckoutController extends Controller
         $this->createBillingForOrder($order);
         $this->sendOrderConfirmationEmail($order);
 
-        $message = $isTestMode ? 'Your test payment has been confirmed and billing has been generated.' : 'Your payment has been confirmed and billing has been generated';
+        $message = $isTestMode 
+            ? 'Your test payment has been confirmed and billing has been generated.' 
+            : 'Your payment has been confirmed and billing has been generated';
 
         setSweetAlert('success', 'Payment Confirmed', $message);
         redirect('/customer/my-orders');
@@ -502,47 +572,5 @@ class CheckoutController extends Controller
         ]);
 
         MailService::send($user->email, $subject, $body);
-    }
-
-    /**
-     * Handle PayMongo webhook events (server → server confirmation)
-     */
-    public function paymentWebhook(Response $response)
-    {
-        // Get raw POST data
-        $payload = file_get_contents('php://input');
-
-        $paymongo = new PayMongoService();
-
-        // Parse and validate webhook payload using service
-        $webhookData = $paymongo->parseCheckoutWebhookPayload($payload);
-
-        if (!$webhookData || !$webhookData['order_id']) {
-            $response->setStatusCode(200);
-            exit('OK');
-        }
-
-        // Find order
-        $order = Orders::find($webhookData['order_id']);
-        if (!$order) {
-            $response->setStatusCode(200);
-            exit('OK');
-        }
-
-        // Only process if order is still pending
-        if ($order->status === 'pending') {
-            // Update order status to confirmed
-            Orders::update($webhookData['order_id'], [
-                'status' => 'confirmed',
-                'updated_at' => date('Y-m-d H:i:s')
-            ]);
-
-            // Create billing record and send order confirmation
-            $this->createBillingForOrder($order);
-            $this->sendOrderConfirmationEmail($order);
-        }
-
-        $response->setStatusCode(200);
-        exit('OK');
     }
 }

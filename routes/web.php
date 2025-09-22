@@ -110,5 +110,3 @@ Route::group(['middleware' => 'auth', 'prefix' => '/customer'], function () {
         Route::get('/cleanup-payment', 'cleanupPendingPayment');
     });
 });
-
-Route::post('/webhook/paymongo', [CheckoutController::class, 'paymentWebhook']);
