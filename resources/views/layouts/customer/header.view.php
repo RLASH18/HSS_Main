@@ -44,8 +44,8 @@
                 <div class="flex items-center gap-2 flex-shrink-0">
                     <!-- Profile Icon -->
                     <a href="/customer/profile" class="header-icon">
-                        <svg class="w-6 h-6 text-gray-700 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        <svg class="w-6 h-6 text-gray-700 mb-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>
                         <span class="text-xs text-gray-600">Profile</span>
                     </a>
@@ -53,22 +53,19 @@
                     <!-- Cart Icon with Badge -->
                     <a href="/customer/my-cart" class="header-icon">
                         <div class="relative">
-                            <svg class="w-6 h-6 text-gray-700 mb-1 mr-1" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312" />
+                            <svg class="w-6 h-6 text-gray-700 mb-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312" />
                             </svg>
-                            <span class="my-badge" id="cartBadge">
-                                <?php
-                                if (auth()) {
-                                    $cartCount = \app\models\Cart::whereMany(['user_id' => auth()->id]);
-                                    echo count($cartCount);
-                                } else {
-                                    echo '0';
+
+                            <?php
+                            if (auth()) {
+                                $cartItems = \app\models\Cart::whereMany(['user_id' => auth()->id]);
+                                $cartCount = count($cartItems);
+                                if ($cartCount > 0) {
+                                    echo '<span class="my-badge" id="cartBadge">' . $cartCount . '</span>';
                                 }
-                                ?>
-                            </span>
+                            }
+                            ?>
                         </div>
                         <span class="text-xs text-gray-600">My Cart</span>
                     </a>
@@ -76,26 +73,35 @@
                     <!-- Orders Icon -->
                     <a href="/customer/my-orders" class="header-icon">
                         <div class="relative">
-                            <svg class="w-6 h-6 text-gray-700 mb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M4.5 7.65311V16.3469L12 20.689L19.5 16.3469V7.65311L12 3.311L4.5 7.65311ZM12 1L21.5 6.5V17.5L12 23L2.5 17.5V6.5L12 1ZM6.49896 9.97065L11 12.5765V17.625H13V12.5765L17.501 9.97066L16.499 8.2398L12 10.8445L7.50104 8.2398L6.49896 9.97065Z" />
+                            <svg class="w-6 h-6 text-gray-700 mb-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10V6a3 3 0 0 1 3-3v0a3 3 0 0 1 3 3v4m3-2 .917 11.923A1 1 0 0 1 17.92 21H6.08a1 1 0 0 1-.997-1.077L6 8h12Z" />
                             </svg>
-                            <span class="my-badge" id="cartBadge">
-                                <?php
-                                if (auth()) {
-                                    $cartCount = \app\models\Orders::whereMany(['user_id' => auth()->id]);
-                                    echo count($cartCount);
-                                } else {
-                                    echo '0';
+
+                            <?php
+                            if (auth()) {
+                                // Only count orders that are pending or confirmed (not paid/completed)
+                                $pendingOrders = \app\models\Orders::whereMany(['user_id' => auth()->id]);
+                                $activeOrderCount = 0;
+
+                                foreach ($pendingOrders as $order) {
+                                    // Only count orders that are not in final states
+                                    if (in_array($order->status, ['pending', 'confirmed', 'assembled', 'shipped', 'delivered'])) {
+                                        $activeOrderCount++;
+                                    }
                                 }
-                                ?>
-                            </span>
+
+                                if ($activeOrderCount > 0) {
+                                    echo '<span class="my-badge" id="orderBadge">' . $activeOrderCount . '</span>';
+                                }
+                            }
+                            ?>
                         </div>
                         <span class="text-xs text-gray-600">Orders</span>
                     </a>
                 </div>
             </div>
         </div>
-        
+
         <!-- Breadcrumb Navigation -->
         <div class="bg-white border-b border-gray-200">
             <div class="container mx-auto px-4 lg:px-8 py-3">
