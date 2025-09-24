@@ -19,7 +19,7 @@ class Inventory extends Model
     public static function fillable(): array
     {
         return [
-            'supplier_name',
+            'brand_name',
             'item_name',
             'description',
             'category',

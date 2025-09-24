@@ -145,8 +145,8 @@
                                     </div>
 
                                     <!-- Brand (hidden for filtering) -->
-                                    <span class="hidden item-brand" data-brand="<?= $item->supplier_name ?>">
-                                        <?= $item->supplier_name ?>
+                                    <span class="hidden item-brand" data-brand="<?= $item->brand_name ?>">
+                                        <?= $item->brand_name ?>
                                     </span>
 
                                     <!-- Availability (hidden for filtering) -->

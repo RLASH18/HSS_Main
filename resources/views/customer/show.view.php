@@ -62,12 +62,12 @@
             <!-- Product Title -->
             <h1 class="text-3xl font-bold text-gray-900"><?= ucfirst($items->item_name) ?></h1>
 
-            <!-- Supplier Info -->
+            <!-- Brand Info -->
             <div class="flex items-center text-sm text-gray-600">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                 </svg>
-                Supplied by: <span class="ml-1 font-medium"><?= $items->supplier_name ?></span>
+                Brand: <span class="ml-1 font-medium"><?= $items->brand_name ?></span>
             </div>
 
             <!-- Stock Status -->
@@ -226,8 +226,8 @@
                                     <dd class="text-sm font-medium text-gray-900"><?= $items->category ?></dd>
                                 </div>
                                 <div class="flex flex-col pb-3 border-b border-gray-200 sm:flex-row sm:justify-between">
-                                    <dt class="mb-1 text-sm font-medium text-gray-600 sm:mb-0">Supplier:</dt>
-                                    <dd class="text-sm font-medium text-gray-900"><?= $items->supplier_name ?></dd>
+                                    <dt class="mb-1 text-sm font-medium text-gray-600 sm:mb-0">Brand:</dt>
+                                    <dd class="text-sm font-medium text-gray-900"><?= $items->brand_name ?></dd>
                                 </div>
                                 <div class="flex flex-col pb-3 border-b border-gray-200 sm:flex-row sm:justify-between">
                                     <dt class="mb-1 text-sm font-medium text-gray-600 sm:mb-0">Stock Available:</dt>
@@ -364,9 +364,9 @@
         <?php if (!empty($items->item_image_1)): ?> "<?= '/storage/items-img/' . $items->item_image_1 ?>"
         <?php endif ?>
         <?php if (!empty($items->item_image_2)): ?><?= !empty($items->item_image_1) ? ',' : '' ?> "<?= '/storage/items-img/' . $items->item_image_2 ?>"
-    <?php endif ?>
-    <?php if (!empty($items->item_image_3)): ?><?= (!empty($items->item_image_1) || !empty($items->item_image_2)) ? ',' : '' ?> "<?= '/storage/items-img/' . $items->item_image_3 ?>"
-    <?php endif ?>
+        <?php endif ?>
+        <?php if (!empty($items->item_image_3)): ?><?= (!empty($items->item_image_1) || !empty($items->item_image_2)) ? ',' : '' ?> "<?= '/storage/items-img/' . $items->item_image_3 ?>"
+        <?php endif ?>
     ].filter(Boolean); // Remove any empty values
 
     let currentImageIndex = 0;

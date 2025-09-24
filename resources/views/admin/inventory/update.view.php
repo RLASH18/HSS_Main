@@ -27,17 +27,17 @@
         <div class="space-y-6">
             <h3 class="pb-2 text-lg font-semibold text-gray-900 border-b border-gray-200">Basic Information</h3>
 
-            <!-- Supplier Name -->
+            <!-- Brand Name -->
             <div class="form-group">
-                <label for="supplier_name" class="block mb-2 text-sm font-medium text-gray-700">
-                    Supplier Name <span class="text-red-500">*</span>
+                <label for="brand_name" class="block mb-2 text-sm font-medium text-gray-700">
+                    brand Name <span class="text-red-500">*</span>
                 </label>
-                <input type="text" name="supplier_name" id="supplier_name"
-                    value="<?= htmlspecialchars($inventory->supplier_name) ?>"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('supplier_name') ? 'border-red-300 bg-red-50' : '' ?>"
-                    placeholder="Enter supplier name">
+                <input type="text" name="brand_name" id="brand_name"
+                    value="<?= htmlspecialchars($inventory->brand_name) ?>"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('brand_name') ? 'border-red-300 bg-red-50' : '' ?>"
+                    placeholder="Enter brand name">
                 <div class="mt-2 text-xs text-left text-red-500">
-                    <p><?= error('supplier_name') ?></p>
+                    <p><?= error('brand_name') ?></p>
                 </div>
             </div>
 

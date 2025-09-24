@@ -41,7 +41,7 @@ class InventoryController extends Controller
     {
         // Validate form inputs
         $inventory = $request->validate([
-            'supplier_name' => 'required',
+            'brand_name' => 'required',
             'item_name' => 'required',
             'description' => 'nullable',
             'category' => 'required',
@@ -109,7 +109,7 @@ class InventoryController extends Controller
     {
         // Validate update inputs
         $inventory = $request->validate([
-            'supplier_name' => 'required',
+            'brand_name' => 'required',
             'item_name' => 'required',
             'description' => 'nullable',
             'category' => 'required',

@@ -8,7 +8,7 @@ class m_0002_create_inventory_table
     {
         $SQL = "CREATE TABLE inventory (
                     id INT AUTO_INCREMENT PRIMARY KEY,
-                    supplier_name VARCHAR(100),
+                    brand_name VARCHAR(100),
                     item_name VARCHAR(100) NOT NULL,
                     description TEXT,
                     category ENUM(
