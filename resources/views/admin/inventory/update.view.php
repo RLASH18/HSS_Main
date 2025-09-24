@@ -60,9 +60,12 @@
                 <label for="description" class="block mb-2 text-sm font-medium text-gray-700">
                     Description
                 </label>
-                <textarea name="description" id="description" rows="4"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors resize-none <?= isInvalid('description') ? 'border-red-300 bg-red-50' : '' ?>"
-                    placeholder="Enter item description"><?= htmlspecialchars($inventory->description) ?></textarea>
+                <!-- Hidden textarea for form submission -->
+                <textarea name="description" id="description" class="hidden"><?= htmlspecialchars($inventory->description) ?></textarea>
+                <!-- Quill editor container -->
+                <div id="description-editor"
+                    class="bg-white border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-[#815331] focus-within:border-[#815331] transition-colors <?= isInvalid('description') ? 'border-red-300 bg-red-50' : '' ?>"
+                    style="min-height: 150px;"></div>
                 <div class="mt-2 text-xs text-left text-red-500">
                     <p><?= error('description') ?></p>
                 </div>
@@ -136,21 +139,20 @@
                 <input type="number" name="restock_threshold" id="restock_threshold" min="0"
                     value="<?= htmlspecialchars($inventory->restock_threshold) ?>"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('restock_threshold') ? 'border-red-300 bg-red-50' : '' ?>"
-                    placeholder="Enter restock threshold"
-                    <?= isInvalid('restock_threshold') ?>>
+                    placeholder="Enter restock threshold">
                 <p class="mt-1 text-xs text-gray-500">Alert when stock falls below this number</p>
                 <div class="mt-2 text-xs text-left text-red-500">
                     <p><?= error('restock_threshold') ?></p>
                 </div>
             </div>
 
-            <?php 
+            <?php
             $images = [];
             if (!empty($inventory->item_image_1)) $images[] = ['file' => $inventory->item_image_1, 'label' => 'Main Image'];
             if (!empty($inventory->item_image_2)) $images[] = ['file' => $inventory->item_image_2, 'label' => 'Image 2'];
             if (!empty($inventory->item_image_3)) $images[] = ['file' => $inventory->item_image_3, 'label' => 'Image 3'];
             ?>
-            
+
             <!-- Shows current Image -->
             <?php if (!empty($images)): ?>
                 <div class="mb-6 form-group">
@@ -159,8 +161,8 @@
                         <?php foreach ($images as $index => $image): ?>
                             <div class="relative">
                                 <img src="/storage/items-img/<?= htmlspecialchars($image['file']) ?>"
-                                     alt="<?= htmlspecialchars($inventory->item_name) ?> - <?= $image['label'] ?>"
-                                     class="object-contain w-full h-32 border border-gray-200 rounded-lg">
+                                    alt="<?= htmlspecialchars($inventory->item_name) ?> - <?= $image['label'] ?>"
+                                    class="object-contain w-full h-32 border border-gray-200 rounded-lg">
                                 <div class="absolute px-2 py-1 text-xs text-white bg-black rounded bottom-2 left-2 bg-opacity-60">
                                     <?= $image['label'] ?>
                                 </div>
@@ -176,7 +178,7 @@
                     Update Images (Optional)
                 </label>
                 <p class="mb-4 text-xs text-gray-500">Upload new images to replace existing ones. Leave empty to keep current images.</p>
-                
+
                 <div class="grid grid-cols-1 gap-4">
                     <!-- Image 1 -->
                     <div class="image-upload-container">
@@ -244,7 +246,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="mt-2 text-xs text-left text-red-500">
                     <p><?= error('item_image_1') ?></p>
                 </div>
@@ -378,6 +380,41 @@
         uploadPlaceholder3.classList.remove('hidden');
         imageInput3.value = '';
     }
+</script>
+
+<script>
+    var quill = new Quill('#description-editor', {
+        modules: {
+            toolbar: [
+                [{
+                    header: [1, 2, false]
+                }],
+                ['bold', 'italic', 'underline'],
+                ['link', 'image'],
+                [{
+                    list: 'ordered'
+                }, {
+                    list: 'bullet'
+                }]
+            ]
+        },
+        placeholder: 'Enter item description',
+        theme: 'snow'
+    });
+
+    // Set initial value
+    quill.root.innerHTML = '<?= addslashes($inventory->description) ?>';
+
+    // Update hidden textarea on change
+    quill.on('text-change', function(delta, oldDelta, source) {
+        if (source === 'user') {
+            document.getElementById('description').value = quill.root.innerHTML;
+        }
+    });
+
+    document.querySelector('form').addEventListener('submit', function() {
+        document.getElementById('description').value = quill.root.innerHTML;
+    });
 </script>
 
 <?php layout('admin/footer') ?>

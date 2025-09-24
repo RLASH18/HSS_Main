@@ -203,7 +203,9 @@
                         </svg>
                         Product Description
                     </h3>
-                    <p class="leading-relaxed text-gray-700"><?= $items->description ?></p>
+                    <div class="leading-relaxed text-gray-700 [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-4 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_li]:mb-2 [&_strong]:font-bold [&_em]:italic [&_u]:underline [&_p]:mb-4">
+                        <?= html_entity_decode($items->description ?? 'No description provided') ?>
+                    </div>
                 </div>
             </div>
 
@@ -359,9 +361,12 @@
 
     // Image gallery functionality
     const images = [
-        <?php if (!empty($items->item_image_1)): ?> "<?= '/storage/items-img/' . $items->item_image_1 ?>"<?php endif ?>
-        <?php if (!empty($items->item_image_2)): ?><?= !empty($items->item_image_1) ? ',' : '' ?> "<?= '/storage/items-img/' . $items->item_image_2 ?>"<?php endif ?>
-        <?php if (!empty($items->item_image_3)): ?><?= (!empty($items->item_image_1) || !empty($items->item_image_2)) ? ',' : '' ?> "<?= '/storage/items-img/' . $items->item_image_3 ?>"<?php endif ?>
+        <?php if (!empty($items->item_image_1)): ?> "<?= '/storage/items-img/' . $items->item_image_1 ?>"
+        <?php endif ?>
+        <?php if (!empty($items->item_image_2)): ?><?= !empty($items->item_image_1) ? ',' : '' ?> "<?= '/storage/items-img/' . $items->item_image_2 ?>"
+    <?php endif ?>
+    <?php if (!empty($items->item_image_3)): ?><?= (!empty($items->item_image_1) || !empty($items->item_image_2)) ? ',' : '' ?> "<?= '/storage/items-img/' . $items->item_image_3 ?>"
+    <?php endif ?>
     ].filter(Boolean); // Remove any empty values
 
     let currentImageIndex = 0;

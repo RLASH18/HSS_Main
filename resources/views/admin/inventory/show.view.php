@@ -107,7 +107,9 @@
             <div class="form-group">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Description</label>
                 <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 min-h-[100px]">
-                    <?= $inventory->description ?? 'No description provided' ?>
+                    <div class="[&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-4 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-4 [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-4 [&_li]:mb-2 [&_strong]:font-bold [&_em]:italic [&_u]:underline [&_p]:mb-4">
+                        <?= html_entity_decode($inventory->description ?? 'No description provided') ?>
+                    </div>
                 </div>
             </div>
 
