@@ -58,9 +58,9 @@ flowchart LR
   Models --> DB[(MySQL)]
 
   Ctrl --> Views[resources/views]
-  App --> Services
+  App --> Services[Services]
   Services --> PayMongo[PayMongo API]
-  Services --> SMTP[Mail (SMTP)]
+  Services --> SMTP[Mail SMTP]
   Services --> SMS[TextBee API]
 ```
 
@@ -231,7 +231,7 @@ flowchart TD
   A[Customer submits checkout] --> B{payment_method}
   B -- cash --> C[Create order + items]
   C --> D[Set status=pending]
-  D --> E[Done (customer orders page)]
+  D --> E[Done - customer orders page]
 
   B -- gcash/bank_transfer --> F[Store pending_order_data in session]
   F --> G[Create PayMongo checkout session]
@@ -240,9 +240,9 @@ flowchart TD
   I --> J[Verify session_id via PayMongo]
   J --> K[Create order + items]
   K --> L[Update status=confirmed]
-  L --> M[Create billing (paid)]
+  L --> M[Create billing - paid]
   M --> N[Send confirmation email]
-  N --> O[Done (customer orders page)]
+  N --> O[Done - customer orders page]
 ```
 
 ### 3.7.3 Order–Delivery Status Mapping
