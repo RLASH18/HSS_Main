@@ -33,30 +33,33 @@ Key implementation artifacts:
 ```mermaid
 flowchart LR
   subgraph Input
-    U1[Customer Actions\n(Browse, Cart, Checkout)]
-    U2[Admin Actions\n(Inventory, Orders, Delivery)]
+    U1[Customer Actions: Browse, Cart, Checkout]
+    U2[Admin Actions: Inventory, Orders, Delivery]
   end
 
   subgraph Process
-    P1[Authentication & Authorization\n(Middlewares)]
-    P2[Business Logic\n(Controllers)]
-    P3[Data Management\n(Models/ORM)]
-    P4[External Services\n(PayMongo, Email, SMS)]
+    P1[Auth & Access Control - Middlewares]
+    P2[Business Logic - Controllers]
+    P3[Data Management - Models]
+    P4[External Services - PayMongo, Email, SMS]
   end
 
   subgraph Output
-    O1[Order Status & Billing]
-    O2[Notifications\n(Email/SMS)]
-    O3[Analytics & Reports]
+    O1[Order Status and Billing]
+    O2[Email and SMS Notifications]
+    O3[Analytics and Reports]
   end
 
-  U1 --> P1 --> P2 --> P3 --> O1
+  U1 --> P1
+  P1 --> P2
+  P2 --> P3
+  P3 --> O1
   U2 --> P1
-  P2 --> P4 --> O2
+  P2 --> P4
+  P4 --> O2
   P3 --> O3
-
-  O1 -->|Feedback| U1
-  O1 -->|Admin Decisions| U2
+  O1 --> U1
+  O1 --> U2
 ```
 
 
@@ -106,21 +109,21 @@ The data flow diagram illustrates how information moves through the system from 
 ```mermaid
 flowchart TD
   C[Customer] --> B[Browse Inventory]
-  B --> INV[(Inventory DB)]
+  B --> INV[Inventory DB]
 
   C --> A[Add to Cart]
-  A --> CART[(Cart DB)]
+  A --> CART[Cart DB]
 
   C --> CO[Checkout]
   CO --> DEC{Payment Method?}
 
   DEC -- Cash --> CREATE[Create Order]
-  DEC -- Online (GCash/Bank) --> PM[PayMongo Checkout Session]
+  DEC -- Online: GCash or Bank --> PM[PayMongo Checkout]
 
-  PM -->|Success| CREATE2[Create Order (after payment)]
-  PM -->|Failure/Cancel| CANCEL[No Order Created]
+  PM -->|Success| CREATE2[Create Order after Payment]
+  PM -->|Failure or Cancel| CANCEL[No Order Created]
 
-  CREATE --> ORD[(Orders DB)]
+  CREATE --> ORD[Orders DB]
   CREATE2 --> ORD
 
   CREATE --> UPD[Update Inventory Stock]
@@ -129,18 +132,18 @@ flowchart TD
   UPD2 --> INV
 
   ORD --> BILL[Create Billing]
-  BILL --> BILLDB[(Billings DB)]
+  BILL --> BILLDB[Billings DB]
 
-  ORD --> DELIVDB[(Delivery DB)]
+  ORD --> DELIVDB[Delivery DB]
   DELIVDB --> SMS[SMS Service]
   ORD --> EMAIL[Email Service]
 
-  ADMIN[Admin] --> M_INV[Manage Inventory]
-  ADMIN --> M_ORD[Manage Orders]
-  ADMIN --> M_DEL[Manage Delivery]
-  M_INV --> INV
-  M_ORD --> ORD
-  M_DEL --> DELIVDB
+  ADMIN[Admin] --> MINV[Manage Inventory]
+  ADMIN --> MORD[Manage Orders]
+  ADMIN --> MDEL[Manage Delivery]
+  MINV --> INV
+  MORD --> ORD
+  MDEL --> DELIVDB
 
   EMAIL --> C
   SMS --> C
