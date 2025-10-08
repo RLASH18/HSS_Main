@@ -711,6 +711,19 @@ footer {
   background-color: #f3f4f6;
 }
 
+.header-icon.active {
+  background-color: #815331 !important;
+  color: white !important;
+}
+
+.header-icon.active svg {
+  color: white !important;
+}
+
+.header-icon.active span {
+  color: white !important;
+}
+
 .my-badge {
   position: absolute;
   top: -8px;

@@ -121,6 +121,31 @@
                     }
                 });
             }
+
+            // Header icon active state functionality
+            const currentPath = window.location.pathname;
+            const headerIcons = document.querySelectorAll('.header-icon');
+
+            headerIcons.forEach(icon => {
+                const route = icon.getAttribute('data-route');
+                if (route && currentPath.startsWith(route)) {
+                    icon.classList.add('active');
+
+                    // Update SVG and text colors to white
+                    const svg = icon.querySelector('svg');
+                    const span = icon.querySelector('span');
+
+                    if (svg) {
+                        svg.classList.remove('text-gray-700');
+                        svg.classList.add('text-white');
+                    }
+
+                    if (span) {
+                        span.classList.remove('text-gray-600');
+                        span.classList.add('text-white');
+                    }
+                }
+            });
         });
     </script>
 </body>

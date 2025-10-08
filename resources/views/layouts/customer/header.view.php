@@ -43,7 +43,7 @@
                 <!-- Right Side Icons -->
                 <div class="flex items-center gap-2 flex-shrink-0">
                     <!-- Profile Icon -->
-                    <a href="/customer/profile" class="header-icon">
+                    <a href="/customer/profile" class="header-icon" data-route="/customer/profile">
                         <svg class="w-6 h-6 text-gray-700 mb-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>
@@ -51,7 +51,7 @@
                     </a>
 
                     <!-- Cart Icon with Badge -->
-                    <a href="/customer/my-cart" class="header-icon">
+                    <a href="/customer/my-cart" class="header-icon" data-route="/customer/my-cart">
                         <div class="relative">
                             <svg class="w-6 h-6 text-gray-700 mb-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312" />
@@ -71,7 +71,7 @@
                     </a>
 
                     <!-- Orders Icon -->
-                    <a href="/customer/my-orders" class="header-icon">
+                    <a href="/customer/my-orders" class="header-icon" data-route="/customer/my-orders">
                         <div class="relative">
                             <svg class="w-6 h-6 text-gray-700 mb-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10V6a3 3 0 0 1 3-3v0a3 3 0 0 1 3 3v4m3-2 .917 11.923A1 1 0 0 1 17.92 21H6.08a1 1 0 0 1-.997-1.077L6 8h12Z" />
