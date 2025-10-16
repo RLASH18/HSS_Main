@@ -17,22 +17,43 @@
     <div id="page-loader">
         <div class="loader-spinner"></div>
     </div>
-    <header class="container px-4 py-4 mx-auto lg:px-8">
-        <div class="flex items-center justify-between">
-            <div class="logo-container">
-                <img src="/assets/img/abg-logo.png" alt="ABG Prime Logo" class="w-auto h-12">
-                <div class="company-text">
-                    <img src="/assets/img/abg-company-name.svg" alt="ABG Company Name" class="w-auto h-5 mt-1">
-                    <img src="/assets/img/abg-company-subtitle.svg" alt="ABG Company Subtitle" class="w-auto h-4 mt-1">
+    
+    <header class="w-full sticky top-0 bg-[#fff] z-50">
+        <div class="container px-4 py-4 mx-auto lg:px-8">
+            <div class="flex items-center justify-between">
+                <div class="logo-container">
+                    <img src="/assets/img/abg-logo.png" alt="ABG Prime Logo" class="w-auto h-10 sm:h-12">
+                    <div class="company-text">
+                        <img src="/assets/img/abg-company-name.svg" alt="ABG Company Name" class="w-auto h-4 mt-1 sm:h-5">
+                        <img src="/assets/img/abg-company-subtitle.svg" alt="ABG Company Subtitle" class="w-auto h-3 mt-1 sm:h-4">
+                    </div>
                 </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex">
+                    <ul class="flex space-x-8 navbar-links">
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#team">Team</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-700 hover:text-[#815331] focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
             </div>
 
-            <nav class="hidden md:flex">
-                <ul class="flex space-x-8 navbar-links">
-                    <li><a href="#hero">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#products">Products</a></li>
-                    <li><a href="#team">Team</a></li>
+            <!-- Mobile Navigation Menu -->
+            <nav id="mobile-menu" class="hidden md:hidden mt-4 pb-4">
+                <ul class="flex flex-col space-y-3">
+                    <li><a href="#hero" class="block py-2 px-4 text-gray-700 hover:bg-[#ece5df] hover:text-[#815331] rounded-lg transition">Home</a></li>
+                    <li><a href="#about" class="block py-2 px-4 text-gray-700 hover:bg-[#ece5df] hover:text-[#815331] rounded-lg transition">About</a></li>
+                    <li><a href="#products" class="block py-2 px-4 text-gray-700 hover:bg-[#ece5df] hover:text-[#815331] rounded-lg transition">Products</a></li>
+                    <li><a href="#team" class="block py-2 px-4 text-gray-700 hover:bg-[#ece5df] hover:text-[#815331] rounded-lg transition">Team</a></li>
                 </ul>
             </nav>
         </div>
@@ -40,18 +61,20 @@
 
     <section class="hero-banner-section" id="hero">
         <div class="px-4 hero-banner-container lg:px-8">
-            <div class="max-w-xl hero-details-container">
-                <h1 class="mb-6 text-4xl font-bold leading-tight md:text-4xl">Build smarter with ABG Prime Builders</h1>
-                <p class="mb-8 text-lg md:text-xl">Shop high-quality tools and materials at unbeatable prices</p>
-                <div class="inline-block shop-now-button">
-                    <a href="/login" class="px-8 py-3 text-lg">Start shopping</a>
-                </div>
-                <div class="inline-block get-started-button">
-                    <a href="/register" class="px-8 py-3 text-lg">Join free</a>
+            <div class="max-w-xl hero-details-container px-4 sm:px-6 md:px-0">
+                <h1 class="mb-5 text-3xl font-bold leading-tight md:text-4xl md:mb-6 lg:text-5xl">Build smarter with ABG Prime Builders</h1>
+                <p class="mb-6 text-lg leading-relaxed md:text-xl md:mb-8">Shop high-quality tools and materials at unbeatable prices</p>
+                <div class="flex flex-col w-full gap-3 sm:flex-row sm:gap-3 sm:w-auto">
+                    <div class="shop-now-button w-full sm:w-auto">
+                        <a href="/login" class="block w-full px-6 py-3 text-base font-medium text-center sm:px-8 md:text-lg">Start shopping</a>
+                    </div>
+                    <div class="get-started-button w-full sm:w-auto">
+                        <a href="/register" class="block w-full px-6 py-3 text-base font-medium text-center sm:px-8 md:text-lg">Join free</a>
+                    </div>
                 </div>
             </div>
-            <div class="flex items-center justify-center hero-image-container">
-                <img src="assets/img/tools.png" alt="Tools" />
+            <div class="flex items-center justify-center hero-image-container px-4 sm:px-6 md:px-0">
+                <img src="assets/img/tools.png" alt="Tools" class="w-full max-w-xs sm:max-w-sm md:max-w-md" />
             </div>
         </div>
     </section>
@@ -392,104 +415,117 @@
         </div>
     </section>
 
-    <section class="py-16 team-section" id="team">
+    <section class="py-12 team-section sm:py-16" id="team">
         <div class="container px-4 mx-auto lg:px-8">
-            <div class="max-w-4xl mx-auto mb-16 text-center team-description">
-                <div class="mb-6 team-description-title">
-                    <p class="text-3xl md:text-4xl font-bold text-[#815331]">Team</p>
+            <div class="max-w-4xl mx-auto mb-10 text-center team-description sm:mb-12 md:mb-16">
+                <div class="mb-4 team-description-title sm:mb-6">
+                    <p class="text-2xl font-bold sm:text-3xl md:text-4xl text-[#815331]">Team</p>
                 </div>
-                <p class="text-base leading-relaxed md:text-lg">
+                <p class="text-sm leading-relaxed sm:text-base md:text-lg">
                     Behind ABG Prime Builders is a dedicated team of individuals who share one goal: to serve the
                     Filipino builder with excellence, innovation, and heart.
                 </p>
             </div>
-            <div class="grid grid-cols-1 gap-8 team-cards-container sm:grid-cols-2 lg:grid-cols-4 justify-items-center">
-                <div class="team-card">
-                    <img src="assets/img/team/dingdong.png" alt="">
+            <div class="grid grid-cols-1 gap-6 team-cards-container sm:grid-cols-2 sm:gap-8 lg:grid-cols-4 justify-items-center">
+                <div class="team-card w-full max-w-[200px] sm:max-w-[220px]">
+                    <img src="assets/img/team/dingdong.png" alt="Ray Lance Gregorio" class="w-24 h-24 sm:w-28 sm:h-28">
                     <div class="team-name">
-                        <p>Ray Lance Gregorio</p>
+                        <p class="text-sm sm:text-base">Ray Lance Gregorio</p>
                     </div>
-                    <p>Leader</p>
+                    <p class="text-xs sm:text-sm">Leader</p>
                 </div>
-                <div class="team-card">
-                    <img src="assets/img/team/ryan.png" alt="">
+                <div class="team-card w-full max-w-[200px] sm:max-w-[220px]">
+                    <img src="assets/img/team/ryan.png" alt="Ryan Lester Lacdang" class="w-24 h-24 sm:w-28 sm:h-28">
                     <div class="team-name">
-                        <p>Ryan Lester Lacdang</p>
+                        <p class="text-sm sm:text-base">Ryan Lester Lacdang</p>
                     </div>
-                    <p>Sidekick</p>
+                    <p class="text-xs sm:text-sm">Sidekick</p>
                 </div>
-                <div class="team-card">
-                    <img src="assets/img/team/zanjoe.png" alt="">
+                <div class="team-card w-full max-w-[200px] sm:max-w-[220px]">
+                    <img src="assets/img/team/zanjoe.png" alt="Zanjoe Lanze Manuel" class="w-24 h-24 sm:w-28 sm:h-28">
                     <div class="team-name">
-                        <p>Zanjoe Lanze Manuel</p>
+                        <p class="text-sm sm:text-base">Zanjoe Lanze Manuel</p>
                     </div>
-                    <p>The Ultimate Weapon</p>
+                    <p class="text-xs sm:text-sm">The Ultimate Weapon</p>
                 </div>
-                <div class="team-card">
-                    <img src="assets/img/team/kian.png" alt="">
+                <div class="team-card w-full max-w-[200px] sm:max-w-[220px]">
+                    <img src="assets/img/team/kian.png" alt="Kian John Morenencia" class="w-24 h-24 sm:w-28 sm:h-28">
                     <div class="team-name">
-                        <p>Kian John Morenencia</p>
+                        <p class="text-sm sm:text-base">Kian John Morenencia</p>
                     </div>
-                    <p>Idea Master</p>
+                    <p class="text-xs sm:text-sm">Idea Master</p>
                 </div>
             </div>
         </div>
     </section>
 
     <footer class="w-full">
-        <div class="container px-4 py-12 mx-auto lg:px-8">
-            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                <div class="space-y-4">
-                    <p class="text-3xl font-bold md:text-4xl">ABG Prime</p>
-                    <p class="text-xl font-bold md:text-2xl">Builders Supplies Inc.</p>
-                    <p class="text-sm">
+        <div class="container px-6 py-10 mx-auto sm:py-12 lg:px-8">
+            <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                <!-- Company Info -->
+                <div class="space-y-3">
+                    <div>
+                        <p class="text-xl font-bold sm:text-2xl md:text-3xl">ABG Prime</p>
+                        <p class="text-base font-bold sm:text-lg md:text-xl">Builders Supplies Inc.</p>
+                    </div>
+                    <p class="text-sm leading-relaxed">
                         Your one-stop shop for tools, materials, and construction essentials. Prime
                         Builders is built to serve every Filipino builder - fast, reliable, and trusted by professionals
                         and DIYers alike.
                     </p>
                 </div>
 
-                <div class="ml-10 space-y-4">
-                    <p class="mb-3 text-xl font-bold">Useful Links</p>
-                    <ul class="space-y-2">
-                        <li>Home</li>
-                        <li>About Us</li>
-                        <li>Hot Deals</li>
-                        <li>Top Products</li>
-                        <li>Team</li>
+                <!-- Useful Links -->
+                <div class="space-y-3">
+                    <p class="text-base font-bold sm:text-lg">Useful Links</p>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#hero" class="hover:text-[#815331] transition inline-flex items-center">
+                            <span class="mr-2">→</span>Home
+                        </a></li>
+                        <li><a href="#about" class="hover:text-[#815331] transition inline-flex items-center">
+                            <span class="mr-2">→</span>About Us
+                        </a></li>
+                        <li><a href="#products" class="hover:text-[#815331] transition inline-flex items-center">
+                            <span class="mr-2">→</span>Hot Deals
+                        </a></li>
+                        <li><a href="#products" class="hover:text-[#815331] transition inline-flex items-center">
+                            <span class="mr-2">→</span>Top Products
+                        </a></li>
+                        <li><a href="#team" class="hover:text-[#815331] transition inline-flex items-center">
+                            <span class="mr-2">→</span>Team
+                        </a></li>
                     </ul>
                 </div>
-                <div class="space-y-4">
-                    <p class="mb-3 text-xl font-bold">Contact Us</p>
-                    <p class="mb-3 text-sm">AICS Bldg., Commonwealth Ave., Holy Spirit Drive, Brgy. Don Antonio Dr,
-                        Quezon City </p>
-                    <div class="space-y-3">
-                        <div class="flex items-center space-x-3">
-                            <svg class="flex-shrink-0 w-5 h-5 text-gray-600" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z" />
+
+                <!-- Contact Info -->
+                <div class="space-y-3 sm:col-span-2 lg:col-span-1">
+                    <p class="text-base font-bold sm:text-lg">Contact Us</p>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-start space-x-2">
+                            <svg class="flex-shrink-0 w-4 h-4 mt-1 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                             </svg>
-                            <p class="text-sm md:text-base">Phone: +63 923 456 7890</p>
+                            <p class="leading-relaxed">AICS Bldg., Commonwealth Ave., Holy Spirit Drive, Brgy. Don Antonio Dr, Quezon City</p>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <svg class="flex-shrink-0 w-5 h-5 text-gray-600" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-                                    d="m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z" />
+                        <div class="flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                             </svg>
-                            <p class="text-sm md:text-base">Email: buildwithzanjoe@gmail.com</p>
+                            <p>+63 923 456 7890</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <svg class="flex-shrink-0 w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                            <p class="break-all">buildwithzanjoe@gmail.com</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="p-2 text-center bg-white">
-            <p>&copy; 2025 <span class="abg-footer">ABG Prime Builders Supplies Inc.</span> - Powered by ABG. Building
-                Better, Together.</p>
+        <div class="px-6 py-4 text-center bg-white">
+            <p class="text-xs sm:text-sm">&copy; 2025 <span class="abg-footer">ABG Prime Builders Supplies Inc.</span> - Powered by ABG. Building Better, Together.</p>
         </div>
     </footer>
 
@@ -498,12 +534,41 @@
             const swiper = new Swiper(".swiper", {
                 // Optional parameters
                 spaceBetween: 20,
-                slidesPerView: 7,
+                slidesPerView: 2,
                 loop: true, // Enable infinite loop
                 loopAdditionalSlides: 3, // Add extra slides for smooth looping
                 autoplay: {
                     delay: 5000, // time in ms between swipes
                     disableOnInteraction: false, // keep autoplay after user interaction
+                },
+
+                // Responsive breakpoints
+                breakpoints: {
+                    // when window width is >= 480px
+                    480: {
+                        slidesPerView: 3,
+                        spaceBetween: 15
+                    },
+                    // when window width is >= 640px
+                    640: {
+                        slidesPerView: 4,
+                        spaceBetween: 20
+                    },
+                    // when window width is >= 768px
+                    768: {
+                        slidesPerView: 5,
+                        spaceBetween: 20
+                    },
+                    // when window width is >= 1024px
+                    1024: {
+                        slidesPerView: 6,
+                        spaceBetween: 20
+                    },
+                    // when window width is >= 1280px
+                    1280: {
+                        slidesPerView: 7,
+                        spaceBetween: 20
+                    }
                 },
 
                 // If we need pagination
@@ -528,6 +593,24 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Close mobile menu when clicking on a link
+                const mobileLinks = mobileMenu.querySelectorAll('a');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+
             const locationChecked = sessionStorage.getItem("locationChecked");
 
             // If not checked yet, do the geolocation validation
