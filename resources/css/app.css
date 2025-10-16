@@ -32,37 +32,85 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f8f9fa;
+  padding: 1rem;
 }
 
 .login-container,
 .register-container {
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   text-align: center;
-  padding: 30px;
+  padding: 20px;
   background-color: #fff;
   border-radius: 12px;
   border: 1.5px solid #eceded;
 }
 
+/* Medium screens (tablets) */
+@media (min-width: 640px) {
+  .login-container,
+  .register-container {
+    padding: 30px;
+  }
+}
+
+/* Small screens (mobile) */
+@media (max-width: 639px) {
+  .login-page-container,
+  .register-page-container {
+    padding: 0.75rem;
+  }
+  
+  .login-container,
+  .register-container {
+    padding: 20px 16px;
+    border-radius: 8px;
+  }
+}
+
 .header-container,
 .register-title {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+}
+
+/* Medium screens and up */
+@media (min-width: 640px) {
+  .header-container,
+  .register-title {
+    margin-bottom: 30px;
+  }
 }
 
 .header-container div + p,
 .register-title div + p {
   color: #8c7d73;
-  font-size: 14px;
+  font-size: 13px;
+}
+
+/* Medium screens and up */
+@media (min-width: 640px) {
+  .header-container div + p,
+  .register-title div + p {
+    font-size: 14px;
+  }
 }
 
 .sign-in-container,
 .signup-header {
-  font-size: 30px;
+  font-size: 24px;
   color: #815331;
   font-weight: bold;
   margin-bottom: 4px;
+}
+
+/* Medium screens and up */
+@media (min-width: 640px) {
+  .sign-in-container,
+  .signup-header {
+    font-size: 30px;
+  }
 }
 
 .input-container input[type="text"],
@@ -71,11 +119,25 @@ html {
 .register-input-label input[type="email"],
 .register-input-label input[type="password"] {
   margin-bottom: 10px;
-  width: 95%;
-  padding: 8px;
-  border-radius: 12px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
   border: 1.5px solid #eceded;
   outline: none;
+  font-size: 14px;
+}
+
+/* Medium screens and up */
+@media (min-width: 640px) {
+  .input-container input[type="text"],
+  .input-container input[type="password"],
+  .register-input-label input[type="text"],
+  .register-input-label input[type="email"],
+  .register-input-label input[type="password"] {
+    width: 95%;
+    padding: 8px;
+    border-radius: 12px;
+  }
 }
 
 input::placeholder,
@@ -89,14 +151,27 @@ textarea::placeholder {
 
 .remember {
   text-align: left;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #815331;
 }
 
 .remember input {
   margin-right: 3px;
   position: relative;
   bottom: 2px;
-  margin-left: 5px;
+  margin-left: 0;
+}
+
+/* Medium screens and up */
+@media (min-width: 640px) {
+  .remember {
+    margin-bottom: 25px;
+  }
+  
+  .remember input {
+    margin-left: 5px;
+  }
 }
 
 .buttons button {
@@ -126,7 +201,7 @@ h4 {
   text-align: center;
   border-bottom: 1.2px solid #bdbbbb;
   line-height: 0.1em;
-  margin: 25px 0;
+  margin: 20px 0;
 }
 
 h4 span {
@@ -134,10 +209,17 @@ h4 span {
   padding: 0 10px;
 }
 
+/* Medium screens and up */
+@media (min-width: 640px) {
+  h4 {
+    margin: 25px 0;
+  }
+}
+
 .buttons .first {
   background-color: #815331;
   color: white;
-  width: 95%;
+  width: 100%;
 }
 
 .buttons .first:hover {
@@ -149,7 +231,7 @@ h4 span {
   border: 1px solid #815331;
   color: #815331;
   background: #fff;
-  width: 95%;
+  width: 100%;
   margin-bottom: 5px;
 }
 
@@ -159,12 +241,28 @@ h4 span {
   font-weight: bold;
 }
 
+/* Medium screens and up */
+@media (min-width: 640px) {
+  .buttons .first,
+  .buttons .second {
+    width: 95%;
+  }
+}
+
 .have-account {
   font-size: 11px;
   text-align: left;
-  width: 95%;
-  margin-left: 10px;
+  width: 100%;
+  margin-left: 0;
   color: #8c7d73;
+}
+
+/* Medium screens and up */
+@media (min-width: 640px) {
+  .have-account {
+    width: 95%;
+    margin-left: 10px;
+  }
 }
 
 input[type="checkbox"] {
@@ -392,11 +490,80 @@ input[type="checkbox"] {
   margin-bottom: 10px;
 }
 
-.about-image-container img {
-  border-radius: 8px;
-  width: 500px;
-  max-width: 32rem;
+.about-image-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.about-image {
+  width: 100%;
+  max-width: 100%;
   height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: block;
+}
+
+/* Responsive sizing */
+@media (min-width: 640px) {
+  .about-image {
+    max-width: 450px;
+  }
+}
+
+@media (min-width: 768px) {
+  .about-image {
+    max-width: 500px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-image {
+    max-width: 550px;
+  }
+}
+
+/* Hover effect */
+.about-image-container .group:hover .about-image {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(129, 83, 49, 0.3);
+}
+
+/* Overlay */
+.about-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(129, 83, 49, 0.9), rgba(108, 68, 41, 0.95));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.about-image-container .group:hover .about-image-overlay {
+  opacity: 1;
+}
+
+.about-image-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center; 
+  text-align: center;
+  color: white;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+
+.about-image-container .group:hover .about-image-text {
+  transform: translateY(0);
 }
 
 /* End of About Section */
