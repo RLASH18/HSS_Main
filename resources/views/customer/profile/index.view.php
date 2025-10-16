@@ -1,21 +1,21 @@
 <?php layout('customer/header') ?>
 
 <!-- Header Section -->
-<div class="mb-8">
-    <div class="flex items-center justify-between">
+<div class="mb-4 sm:mb-8">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-black-900 mb-2">My Profile</h1>
-            <p class="text-black-600">Manage your details or continue shopping</p>
+            <h1 class="text-2xl sm:text-3xl font-bold text-black-900 mb-2">My Profile</h1>
+            <p class="text-sm sm:text-base text-black-600">Manage your details or continue shopping</p>
         </div>
-        <div class="flex space-x-2">
-            <a href="/customer/home" class="inline-flex items-center px-4 py-2 bg-[#815331] text-white font-medium rounded-lg hover:bg-[#6d4529] transition-colors">
+        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <a href="/customer/home" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-[#815331] text-white font-medium rounded-lg hover:bg-[#6d4529] transition-colors text-sm sm:text-base">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
                 Continue Shopping
             </a>
-            <div class="relative">
-                <button id="accountBtn" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition-colors">
+            <div class="relative w-full sm:w-auto">
+                <button id="accountBtn" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
@@ -54,11 +54,11 @@
 </div>
 
 <!-- Profile Info Section -->
-<div class="bg-white border border-gray-100 rounded-lg shadow-sm p-8 mb-6">
-    <div class="flex items-center space-x-6">
+<div class="bg-white border border-gray-100 rounded-lg shadow-sm p-4 sm:p-6 lg:p-8 mb-4 sm:mb-6">
+    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
         <!-- Avatar -->
         <div class="flex-shrink-0">
-            <div class="w-20 h-20 rounded-full bg-gray-300 overflow-hidden flex items-center justify-center text-gray-600 text-2xl font-semibold">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-300 overflow-hidden flex items-center justify-center text-gray-600 text-xl sm:text-2xl font-semibold">
                 <?php if (!empty($users->profile_picture)): ?>
                     <img src="/storage/profile-img/<?= $users->profile_picture ?>"
                         alt="Profile Picture"
@@ -70,13 +70,13 @@
         </div>
 
         <!-- User Info -->
-        <div class="flex-1">
-            <h2 class="text-xl font-semibold text-gray-900 mb-1">
+        <div class="flex-1 text-center sm:text-left">
+            <h2 class="text-lg sm:text-xl font-semibold text-gray-900 mb-1">
                 <?= $users->name ?? '' ?>
             </h2>
-            <p class="text-gray-500 mb-3">@<?= $users->username ?></p>
+            <p class="text-sm sm:text-base text-gray-500 mb-3">@<?= $users->username ?></p>
 
-            <div class="flex items-center space-x-4 text-sm text-gray-600">
+            <div class="flex items-center justify-center sm:justify-start flex-wrap gap-3 sm:gap-4 text-xs sm:text-sm text-gray-600">
                 <div class="flex items-center">
                     <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                     <span>Customer</span>
@@ -91,16 +91,16 @@
 </div>
 
 <!-- Information Grid -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
     <!-- Contact Information -->
-    <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-8">
-        <div class="flex items-center mb-6">
+    <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
+        <div class="flex items-center mb-4 sm:mb-6">
             <svg class="w-5 h-5 text-blue-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
                 </path>
             </svg>
-            <h3 class="text-lg font-medium text-gray-900">Contact Information</h3>
+            <h3 class="text-base sm:text-lg font-medium text-gray-900">Contact Information</h3>
         </div>
 
         <div class="space-y-4">
@@ -150,13 +150,13 @@
     </div>
 
     <!-- Personal Information -->
-    <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-8">
-        <div class="flex items-center mb-6">
+    <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
+        <div class="flex items-center mb-4 sm:mb-6">
             <svg class="w-5 h-5 text-purple-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
             </svg>
-            <h3 class="text-lg font-medium text-gray-900">Personal Information</h3>
+            <h3 class="text-base sm:text-lg font-medium text-gray-900">Personal Information</h3>
         </div>
 
         <div class="space-y-4">
@@ -188,13 +188,13 @@
     </div>
 
     <!-- Account Information -->
-    <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-8">
-        <div class="flex items-center mb-6">
+    <div class="bg-white border border-gray-100 rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
+        <div class="flex items-center mb-4 sm:mb-6">
             <svg class="w-5 h-5 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            <h3 class="text-lg font-medium text-gray-900">Account Information</h3>
+            <h3 class="text-base sm:text-lg font-medium text-gray-900">Account Information</h3>
         </div>
 
         <div class="space-y-4">

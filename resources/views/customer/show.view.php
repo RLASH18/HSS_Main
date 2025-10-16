@@ -1,14 +1,14 @@
 <?php layout('customer/header') ?>
 
 <!-- header section -->
-<div class="mb-8">
-    <div class="flex items-center justify-between">
+<div class="mb-4 sm:mb-8">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <h1 class="mb-2 text-3xl font-bold text-black-900">Product Highlights</h1>
-            <p class="text-black-600">Check the details and choose quantity to buy</p>
+            <h1 class="mb-2 text-2xl sm:text-3xl font-bold text-black-900">Product Highlights</h1>
+            <p class="text-sm sm:text-base text-black-600">Check the details and choose quantity to buy</p>
         </div>
         <a href="/customer/home"
-            class="inline-flex items-center px-4 py-2 bg-[#815331] text-white font-medium rounded-lg hover:bg-[#6d4529] transition-colors">
+            class="inline-flex items-center justify-center px-4 py-2 bg-[#815331] text-white font-medium rounded-lg hover:bg-[#6d4529] transition-colors text-sm sm:text-base">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
@@ -17,30 +17,30 @@
     </div>
 </div>
 
-<div class="w-full p-8 mt-6 bg-white border border-gray-200 rounded-lg shadow-sm">
+<div class="w-full p-4 sm:p-6 lg:p-8 mt-4 sm:mt-6 bg-white border border-gray-200 rounded-lg shadow-sm">
     <!-- Product Layout -->
-    <div class="grid grid-cols-1 gap-12 lg:grid-cols-2">
+    <div class="grid grid-cols-1 gap-6 sm:gap-8 lg:gap-12 lg:grid-cols-2">
         <!-- Product Images Gallery -->
-        <div class="space-y-4">
+        <div class="space-y-3 sm:space-y-4">
             <!-- Main Image Display -->
-            <div class="relative p-8 bg-gray-50 rounded-2xl">
+            <div class="relative p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-2xl">
                 <img id="mainImage" src="/storage/items-img/<?= $items->item_image_1 ?>" alt="<?= $items->item_name ?>"
-                    class="object-contain w-full transition-transform cursor-pointer h-96 hover:scale-105">
+                    class="object-contain w-full transition-transform cursor-pointer h-64 sm:h-80 lg:h-96 hover:scale-105">
             </div>
 
             <!-- Image Gallery Thumbnails -->
-            <div class="flex space-x-3">
-                <div class="flex items-center mr-4 text-sm text-gray-500">
+            <div class="flex flex-wrap gap-2 sm:space-x-3">
+                <div class="flex items-center mr-2 sm:mr-4 text-xs sm:text-sm text-gray-500">
                     <span id="currentImageIndex">1</span> / <span id="totalImages">3</span> images
                 </div>
                 <div class="flex space-x-2">
-                    <button onclick="selectImage(0)" class="thumbnail-btn border-2 border-[#815331] rounded-lg overflow-hidden w-16 h-16">
+                    <button onclick="selectImage(0)" class="thumbnail-btn border-2 border-[#815331] rounded-lg overflow-hidden w-12 h-12 sm:w-16 sm:h-16">
                         <img src="/storage/items-img/<?= $items->item_image ?>" alt="Image 1" class="object-cover w-full h-full">
                     </button>
-                    <button onclick="selectImage(1)" class="w-16 h-16 overflow-hidden border-2 border-gray-200 rounded-lg thumbnail-btn opacity-60">
+                    <button onclick="selectImage(1)" class="w-12 h-12 sm:w-16 sm:h-16 overflow-hidden border-2 border-gray-200 rounded-lg thumbnail-btn opacity-60">
                         <img src="/storage/items-img/<?= $items->item_image_2 ?>" alt="Image 2" class="object-cover w-full h-full">
                     </button>
-                    <button onclick="selectImage(2)" class="w-16 h-16 overflow-hidden border-2 border-gray-200 rounded-lg thumbnail-btn opacity-40">
+                    <button onclick="selectImage(2)" class="w-12 h-12 sm:w-16 sm:h-16 overflow-hidden border-2 border-gray-200 rounded-lg thumbnail-btn opacity-40">
                         <img src="/storage/items-img/<?= $items->item_image_3 ?>" alt="Image 3" class="object-cover w-full h-full">
                     </button>
                 </div>
@@ -48,10 +48,10 @@
         </div>
 
         <!-- Product Details -->
-        <div class="space-y-6">
+        <div class="space-y-4 sm:space-y-6">
             <!-- Category Badge -->
             <div class="flex items-center space-x-2">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#815331] text-white">
+                <span class="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-[#815331] text-white">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                     </svg>
@@ -60,7 +60,7 @@
             </div>
 
             <!-- Product Title -->
-            <h1 class="text-3xl font-bold text-gray-900"><?= ucfirst($items->item_name) ?></h1>
+            <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900"><?= ucfirst($items->item_name) ?></h1>
 
             <!-- Brand Info -->
             <div class="flex items-center text-sm text-gray-600">
@@ -91,9 +91,9 @@
             </div>
 
             <!-- Price -->
-            <div class="text-4xl font-bold text-[#815331]">
+            <div class="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#815331]">
                 ₱<?= number_format($items->unit_price, 2) ?>
-                <span class="text-lg font-normal text-gray-500">per unit</span>
+                <span class="text-sm sm:text-base lg:text-lg font-normal text-gray-500">per unit</span>
             </div>
 
             <!-- Form -->
@@ -102,21 +102,21 @@
                 <input type="hidden" name="item_id" value="<?= $items->id ?>">
 
                 <!-- Quantity Selector -->
-                <div class="space-y-3">
-                    <label class="text-lg font-semibold text-gray-900">Quantity:</label>
-                    <div class="flex items-center space-x-4">
+                <div class="space-y-2 sm:space-y-3">
+                    <label class="text-base sm:text-lg font-semibold text-gray-900">Quantity:</label>
+                    <div class="flex items-center space-x-3 sm:space-x-4">
                         <button type="button" onclick="decreaseQty()"
-                            class="w-12 h-12 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-[#815331] hover:text-[#815331] transition-colors">
+                            class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-[#815331] hover:text-[#815331] transition-colors">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
                             </svg>
                         </button>
 
-                        <input type="number" id="qtyInput" value="1" min="1" max="<?= $items->quantity ?>" class="w-24 text-lg text-center font-semibold border-2 border-gray-300 rounded-lg py-2 focus:border-[#815331] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        <input type="number" id="qtyInput" value="1" min="1" max="<?= $items->quantity ?>" class="w-20 sm:w-24 text-base sm:text-lg text-center font-semibold border-2 border-gray-300 rounded-lg py-2 focus:border-[#815331] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                             onchange="updateQtyFromInput()" oninput="updateQtyFromInput()">
 
                         <button type="button" onclick="increaseQty()"
-                            class="w-12 h-12 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-[#815331] hover:text-[#815331] transition-colors">
+                            class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-[#815331] hover:text-[#815331] transition-colors">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                             </svg>
@@ -126,9 +126,9 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="space-y-3">
+                <div class="space-y-2 sm:space-y-3">
                     <button type="button" onclick="buyNow()" id="buyNowBtn"
-                        class="w-full bg-[#815331] text-white font-semibold py-4 px-6 rounded-lg hover:bg-[#6d4529] transition-colors flex items-center justify-center space-x-2 <?= $items->quantity == 0 ? 'opacity-50 cursor-not-allowed' : '' ?>"
+                        class="w-full bg-[#815331] text-white font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-lg hover:bg-[#6d4529] transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base <?= $items->quantity == 0 ? 'opacity-50 cursor-not-allowed' : '' ?>"
                         <?= $items->quantity == 0 ? 'disabled' : '' ?>>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
@@ -137,7 +137,7 @@
                     </button>
 
                     <button type="submit" id="addToCartBtn"
-                        class="w-full bg-white border-2 border-[#815331] text-[#815331] font-semibold py-4 px-6 rounded-lg hover:bg-[#815331] hover:text-white transition-colors flex items-center justify-center space-x-2 <?= $items->quantity == 0 ? 'opacity-50 cursor-not-allowed' : '' ?>"
+                        class="w-full bg-white border-2 border-[#815331] text-[#815331] font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-lg hover:bg-[#815331] hover:text-white transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base <?= $items->quantity == 0 ? 'opacity-50 cursor-not-allowed' : '' ?>"
                         <?= $items->quantity == 0 ? 'disabled' : '' ?>>
                         <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M4.00488 16V4H2.00488V2H5.00488C5.55717 2 6.00488 2.44772 6.00488 3V15H18.4433L20.4433 7H8.00488V5H21.7241C22.2764 5 22.7241 5.44772 22.7241 6C22.7241 6.08176 22.7141 6.16322 22.6942 6.24254L20.1942 16.2425C20.083 16.6877 19.683 17 19.2241 17H5.00488C4.4526 17 4.00488 16.5523 4.00488 16ZM6.00488 23C4.90031 23 4.00488 22.1046 4.00488 21C4.00488 19.8954 4.90031 19 6.00488 19C7.10945 19 8.00488 19.8954 8.00488 21C8.00488 22.1046 7.10945 23 6.00488 23ZM18.0049 23C16.9003 23 16.0049 22.1046 16.0049 21C16.0049 19.8954 16.9003 19 18.0049 19C19.1095 19 20.0049 19.8954 20.0049 21C20.0049 22.1046 19.1095 23 18.0049 23Z" />
@@ -148,7 +148,7 @@
             </form>
 
             <!-- Product Features -->
-            <div class="grid grid-cols-2 gap-4 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-2 gap-3 sm:gap-4 pt-4 sm:pt-6 border-t border-gray-200">
                 <div class="flex items-center space-x-2 text-sm text-gray-600">
                     <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -178,25 +178,25 @@
     </div>
 
     <!-- Product Information Tabs -->
-    <div class="pt-4 mt-12 border-t border-gray-200">
+    <div class="pt-4 mt-6 sm:mt-8 lg:mt-12 border-t border-gray-200">
         <div class="border-b border-gray-200">
-            <nav class="flex -mb-px space-x-8">
-                <button onclick="showTab('description')" id="tab-description" class="tab-button border-transparent text-gray-500 hover:text-[#815331] hover:border-[#815331] whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm active">
+            <nav class="flex -mb-px space-x-4 sm:space-x-8">
+                <button onclick="showTab('description')" id="tab-description" class="tab-button border-transparent text-gray-500 hover:text-[#815331] hover:border-[#815331] whitespace-nowrap py-3 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm active">
                     Description
                 </button>
-                <button onclick="showTab('specifications')" id="tab-specifications" class="tab-button border-transparent text-gray-500 hover:text-[#815331] hover:border-[#815331] whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                <button onclick="showTab('specifications')" id="tab-specifications" class="tab-button border-transparent text-gray-500 hover:text-[#815331] hover:border-[#815331] whitespace-nowrap py-3 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm">
                     Specifications
                 </button>
-                <button onclick="showTab('delivery')" id="tab-delivery" class="tab-button border-transparent text-gray-500 hover:text-[#815331] hover:border-[#815331] whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                <button onclick="showTab('delivery')" id="tab-delivery" class="tab-button border-transparent text-gray-500 hover:text-[#815331] hover:border-[#815331] whitespace-nowrap py-3 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm">
                     Delivery Info
                 </button>
             </nav>
         </div>
 
-        <div class="mt-6">
+        <div class="mt-4 sm:mt-6">
             <!-- Description Tab -->
             <div id="content-description" class="tab-content">
-                <div class="p-6 prose max-w-none">
+                <div class="p-4 sm:p-6 prose max-w-none">
                     <h3 class="flex items-center mb-6 text-lg font-semibold text-gray-900">
                         <svg class="w-5 h-5 mr-2 text-[#815331]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6.2V5h11v1.2M8 5v14m-3 0h6m2-6.8V11h8v1.2M17 11v8m-1.5 0h3" />
@@ -211,10 +211,10 @@
 
             <!-- Specifications Tab -->
             <div id="content-specifications" class="hidden tab-content">
-                <div class="space-y-8">
-                    <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
-                        <div class="p-6 rounded-lg">
-                            <h3 class="flex items-center mb-6 text-lg font-semibold text-gray-900">
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                        <div class="p-4 rounded-lg">
+                            <h3 class="flex items-center mb-4 text-base font-semibold text-gray-900">
                                 <svg class="w-5 h-5 mr-2 text-[#815331]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
@@ -239,8 +239,8 @@
                                 </div>
                             </dl>
                         </div>
-                        <div class="p-6 rounded-lg">
-                            <h3 class="flex items-center mb-6 text-lg font-semibold text-gray-900">
+                        <div class="p-4 rounded-lg">
+                            <h3 class="flex items-center mb-4 text-base font-semibold text-gray-900">
                                 <svg class="w-5 h-5 mr-2 text-[#815331]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
@@ -267,7 +267,7 @@
 
             <!-- Delivery Info Tab -->
             <div id="content-delivery" class="hidden tab-content">
-                <div class="grid grid-cols-1 gap-8 p-6 md:grid-cols-2">
+                <div class="grid grid-cols-1 gap-6 sm:gap-8 p-4 sm:p-6 md:grid-cols-2">
                     <div>
                         <h3 class="flex items-center mb-6 text-lg font-semibold text-gray-900">
                             <svg class="w-5 h-5 mr-2 text-[#815331]" fill="none" stroke="currentColor" viewBox="0 0 24 24">

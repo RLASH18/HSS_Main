@@ -1,13 +1,13 @@
 <?php layout('customer/header') ?>
 
 <!-- Checkout Page -->
-<div class="mb-8">
-    <div class="flex items-center justify-between">
+<div class="mb-4 sm:mb-8">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <h1 class="mb-2 text-3xl font-bold text-gray-900">Checkout</h1>
-            <p class="text-gray-600">Review your order and complete your purchase</p>
+            <h1 class="mb-2 text-2xl sm:text-3xl font-bold text-gray-900">Checkout</h1>
+            <p class="text-sm sm:text-base text-gray-600">Review your order and complete your purchase</p>
         </div>
-        <a href="<?= isset($buyNow) ? '/customer/home' : '/customer/my-cart' ?>" class="inline-flex items-center px-4 py-2 font-medium text-white transition-colors bg-gray-600 rounded-lg hover:bg-gray-700">
+        <a href="<?= isset($buyNow) ? '/customer/home' : '/customer/my-cart' ?>" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 text-sm sm:text-base font-medium text-white transition-colors bg-gray-600 rounded-lg hover:bg-gray-700">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
@@ -19,12 +19,12 @@
 <form action="<?= isset($buyNow) ? '/customer/process-buy-now' : '/customer/place-order' ?>" method="post" id="checkoutForm">
     <?= csrf_token() ?>
 
-    <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-4 sm:gap-6 lg:gap-8 lg:grid-cols-3">
         <!-- Order Details & Forms -->
-        <div class="space-y-6 lg:col-span-2">
+        <div class="space-y-4 sm:space-y-6 lg:col-span-2">
             <!-- Order Items -->
-            <div class="p-6 bg-white rounded-lg shadow-sm">
-                <h3 class="mb-4 text-lg font-semibold text-gray-900">Order Items</h3>
+            <div class="p-4 sm:p-6 bg-white rounded-lg shadow-sm">
+                <h3 class="mb-3 sm:mb-4 text-base sm:text-lg font-semibold text-gray-900">Order Items</h3>
 
                 <?php
                 $cartIdsList = [];
@@ -40,18 +40,18 @@
                     }
                 ?>
 
-                    <div class="flex items-center py-4 space-x-4 border-b border-gray-200 last:border-b-0">
+                    <div class="flex items-center py-3 sm:py-4 gap-3 sm:gap-4 border-b border-gray-200 last:border-b-0">
                         <!-- Item Image -->
                         <div class="flex-shrink-0">
                             <img src="/storage/items-img/<?= $item->item->item_image_1 ?>"
                                 alt="<?= $item->item->item_name ?>"
-                                class="object-cover w-16 h-16 border border-gray-200 rounded-lg">
+                                class="object-cover w-12 h-12 sm:w-16 sm:h-16 border border-gray-200 rounded-lg">
                         </div>
 
                         <!-- Item Details -->
                         <div class="flex-1 min-w-0">
-                            <span class="text-sm font-medium text-gray-900"><?= $item->item->item_name ?></span>
-                            <div class="flex items-center mt-1 space-x-2">
+                            <span class="text-xs sm:text-sm font-medium text-gray-900 line-clamp-2"><?= $item->item->item_name ?></span>
+                            <div class="flex items-center mt-1 gap-2">
                                 <span class="text-sm text-gray-500">Qty: <?= $item->quantity ?></span>
                                 <span class="text-sm text-gray-500">×</span>
                                 <span class="text-sm font-medium text-[#815331]">₱<?= number_format($item->item->unit_price, 2) ?></span>
@@ -60,7 +60,7 @@
 
                         <!-- Item Total -->
                         <div class="text-right">
-                            <div class="text-lg font-semibold text-gray-900">₱<?= number_format($itemTotal, 2) ?></div>
+                            <div class="text-sm sm:text-lg font-semibold text-gray-900">₱<?= number_format($itemTotal, 2) ?></div>
                         </div>
                     </div>
                 <?php endforeach ?>
@@ -75,8 +75,8 @@
             </div>
 
             <!-- Delivery Information -->
-            <div class="p-6 bg-white rounded-lg shadow-sm">
-                <h3 class="mb-4 text-lg font-semibold text-gray-900">Delivery Information</h3>
+            <div class="p-4 sm:p-6 bg-white rounded-lg shadow-sm">
+                <h3 class="mb-3 sm:mb-4 text-base sm:text-lg font-semibold text-gray-900">Delivery Information</h3>
 
                 <div class="space-y-4">
                     <!-- Customer Info (Read-only) -->
@@ -84,12 +84,12 @@
                         <div>
                             <label class="block mb-1 text-sm font-medium text-gray-700">Full Name</label>
                             <input type="text" value="<?= $user->name ?>" readonly
-                                class="w-full px-3 py-2 text-gray-600 border border-gray-300 rounded-lg bg-gray-50">
+                                class="w-full px-3 py-2 text-sm sm:text-base text-gray-600 border border-gray-300 rounded-lg bg-gray-50">
                         </div>
                         <div>
                             <label class="block mb-1 text-sm font-medium text-gray-700">Phone Number</label>
                             <input type="text" value="<?= $user->contact_number ?? 'Not provided' ?>" readonly
-                                class="w-full px-3 py-2 text-gray-600 border border-gray-300 rounded-lg bg-gray-50">
+                                class="w-full px-3 py-2 text-sm sm:text-base text-gray-600 border border-gray-300 rounded-lg bg-gray-50">
                         </div>
                     </div>
 
@@ -100,7 +100,7 @@
                         </label>
                         <textarea name="delivery_address" id="delivery_address" rows="3" required
                             placeholder="Enter complete delivery address..."
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#815331] focus:border-[#815331]"><?= $user->address ?? '' ?></textarea>
+                            class="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-[#815331] focus:border-[#815331]"><?= $user->address ?? '' ?></textarea>
                     </div>
 
                     <!-- Delivery method -->
@@ -111,7 +111,7 @@
 
                         <div class="space-y-3">
                             <!-- Pickup Option -->
-                            <label class="flex items-center p-4 transition-colors border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                            <label class="flex items-center p-3 sm:p-4 transition-colors border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                                 <input type="radio" name="delivery_method" value="pickup" required
                                     class="w-4 h-4 text-[#815331] border-gray-300 focus:ring-[#815331]">
                                 <div class="flex-1 ml-3">
@@ -126,7 +126,7 @@
                             </label>
 
                             <!-- Delivery Option -->
-                            <label class="flex items-center p-4 transition-colors border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                            <label class="flex items-center p-3 sm:p-4 transition-colors border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                                 <input type="radio" name="delivery_method" value="delivery" required
                                     class="w-4 h-4 text-[#815331] border-gray-300 focus:ring-[#815331]">
                                 <div class="flex-1 ml-3">
@@ -145,12 +145,12 @@
             </div>
 
             <!-- Payment Method -->
-            <div class="p-6 bg-white rounded-lg shadow-sm">
-                <h3 class="mb-4 text-lg font-semibold text-gray-900">Payment Method</h3>
+            <div class="p-4 sm:p-6 bg-white rounded-lg shadow-sm">
+                <h3 class="mb-3 sm:mb-4 text-base sm:text-lg font-semibold text-gray-900">Payment Method</h3>
 
                 <div class="space-y-3">
                     <!-- Cash on Delivery -->
-                    <label class="flex items-center p-4 transition-colors border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                    <label class="flex items-center p-3 sm:p-4 transition-colors border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                         <input type="radio" name="payment_method" value="cash" required
                             class="w-4 h-4 text-[#815331] border-gray-300 focus:ring-[#815331]">
                         <div class="flex-1 ml-3">
@@ -165,7 +165,7 @@
                     </label>
 
                     <!-- Bank Transfer -->
-                    <label class="flex items-center p-4 transition-colors border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                    <label class="flex items-center p-3 sm:p-4 transition-colors border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                         <input type="radio" name="payment_method" value="bank_transfer" required
                             class="w-4 h-4 text-[#815331] border-gray-300 focus:ring-[#815331]">
                         <div class="flex-1 ml-3">
@@ -180,7 +180,7 @@
                     </label>
 
                     <!-- GCash -->
-                    <label class="flex items-center p-4 transition-colors border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
+                    <label class="flex items-center p-3 sm:p-4 transition-colors border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                         <input type="radio" name="payment_method" value="gcash" required
                             class="w-4 h-4 text-[#815331] border-gray-300 focus:ring-[#815331]">
                         <div class="flex-1 ml-3">
@@ -199,11 +199,11 @@
 
         <!-- Order Summary -->
         <div class="lg:col-span-1">
-            <div class="sticky p-6 bg-white rounded-lg shadow-sm top-8">
-                <h3 class="mb-4 text-lg font-semibold text-gray-900">Order Summary</h3>
+            <div class="sticky p-4 sm:p-6 bg-white rounded-lg shadow-sm top-4 sm:top-8">
+                <h3 class="mb-3 sm:mb-4 text-base sm:text-lg font-semibold text-gray-900">Order Summary</h3>
 
                 <!-- Summary Details -->
-                <div class="mb-6 space-y-3">
+                <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-600">Items (<?= isset($buyNow) ? count($orderItems) : count($cartItems) ?>):</span>
                         <span class="font-medium">₱<?= number_format($subtotal, 2) ?></span>
@@ -216,17 +216,17 @@
                         <span class="text-gray-600">Tax:</span>
                         <span class="font-medium">₱0.00</span>
                     </div>
-                    <div class="pt-3 border-t">
+                    <div class="pt-2 sm:pt-3 border-t">
                         <div class="flex justify-between">
-                            <span class="text-lg font-semibold text-gray-900">Total:</span>
-                            <span class="text-lg font-bold text-[#815331]">₱<?= number_format($total, 2) ?></span>
+                            <span class="text-base sm:text-lg font-semibold text-gray-900">Total:</span>
+                            <span class="text-base sm:text-lg font-bold text-[#815331]">₱<?= number_format($total, 2) ?></span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Place Order Button -->
                 <button type="submit"
-                    class="w-full bg-[#815331] text-white font-semibold py-3 px-4 rounded-lg hover:bg-[#6d4529] transition-colors focus:ring-2 focus:ring-[#815331] focus:ring-offset-2">
+                    class="w-full bg-[#815331] text-white font-semibold py-2 sm:py-3 px-4 text-sm sm:text-base rounded-lg hover:bg-[#6d4529] transition-colors focus:ring-2 focus:ring-[#815331] focus:ring-offset-2">
                     Place Order
                 </button>
 

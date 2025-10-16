@@ -918,6 +918,13 @@ footer {
   transition: border-color 0.2s;
 }
 
+@media (max-width: 767px) {
+  .search-input {
+    padding: 10px 14px 10px 40px;
+    font-size: 13px;
+  }
+}
+
 .search-input:focus {
   border-color: #815331;
 }
@@ -928,6 +935,12 @@ footer {
   top: 50%;
   transform: translateY(-50%);
   color: #9ca3af;
+}
+
+@media (max-width: 767px) {
+  .search-icon {
+    left: 12px;
+  }
 }
 
 .header-icon {
@@ -941,6 +954,13 @@ footer {
   text-decoration: none;
   color: inherit;
   min-width: 60px;
+}
+
+@media (max-width: 639px) {
+  .header-icon {
+    padding: 6px 8px;
+    min-width: 48px;
+  }
 }
 
 .header-icon:hover {

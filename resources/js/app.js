@@ -75,12 +75,22 @@ window.showSweetAlert = function (type, title, message) {
             .custom-toast {
                 background: ${config.bg} !important;
                 border: 2px solid ${config.border} !important;
-                border-radius: 12px !important;
+                border-radius: 10px !important;
                 box-shadow: 0 3px 6px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.08) !important;
                 backdrop-filter: blur(10px) !important;
                 animation: slideInBottomRight 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
-                min-width: 320px !important;
-                max-width: 400px !important;
+                min-width: 240px !important;
+                max-width: 280px !important;
+                width: 85vw !important;
+            }
+            
+            @media (min-width: 768px) {
+                .custom-toast {
+                    min-width: 320px !important;
+                    max-width: 400px !important;
+                    width: auto !important;
+                    border-radius: 12px !important;
+                }
             }
             
             .custom-toast.swal2-hide {
@@ -90,35 +100,66 @@ window.showSweetAlert = function (type, title, message) {
             .custom-toast .swal2-title {
                 color: #ffffff !important;
                 font-weight: 600 !important;
-                font-size: 16px !important;
-                margin-bottom: 8px !important;
+                font-size: 13px !important;
+                margin-bottom: 4px !important;
                 word-wrap: break-word !important;
                 white-space: normal !important;
             }
             
+            @media (min-width: 768px) {
+                .custom-toast .swal2-title {
+                    font-size: 16px !important;
+                    margin-bottom: 8px !important;
+                }
+            }
+            
             .custom-toast .swal2-html-container {
                 color: rgba(255,255,255,0.95) !important;
-                font-size: 14px !important;
-                line-height: 1.5 !important;
+                font-size: 11px !important;
+                line-height: 1.3 !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 word-wrap: break-word !important;
                 white-space: normal !important;
                 overflow-wrap: break-word !important;
                 max-width: 100% !important;
-                margin-left: 15px !important;
+                margin-left: 8px !important;
                 text-align: left !important;
             }
             
+            @media (min-width: 768px) {
+                .custom-toast .swal2-html-container {
+                    font-size: 14px !important;
+                    line-height: 1.5 !important;
+                    margin-left: 15px !important;
+                }
+            }
+            
             .custom-toast .swal2-content {
-                padding: 0 20px 20px 20px !important;
+                padding: 0 10px 10px 10px !important;
                 margin: 0 !important;
+            }
+            
+            @media (min-width: 768px) {
+                .custom-toast .swal2-content {
+                    padding: 0 20px 20px 20px !important;
+                }
             }
             
             .custom-toast .swal2-icon {
                 color: ${config.icon} !important;
                 border-color: ${config.icon} !important;
-                margin: 10px auto 15px auto !important;
+                margin: 6px auto 8px auto !important;
+                width: 1.8em !important;
+                height: 1.8em !important;
+            }
+            
+            @media (min-width: 768px) {
+                .custom-toast .swal2-icon {
+                    margin: 10px auto 15px auto !important;
+                    width: 2.5em !important;
+                    height: 2.5em !important;
+                }
             }
             
             .custom-toast .swal2-icon::before,

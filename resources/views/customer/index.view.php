@@ -1,14 +1,14 @@
 <?php layout('customer/header') ?>
 
 <div class="w-full bg-white border border-gray-100 rounded-lg shadow-sm" id="categories-section">
-    <div class="container w-[90%] mx-auto p-6">
+    <div class="container w-[90%] mx-auto p-4 sm:p-6">
         <div class="flex items-center justify-between -mb-4">
-            <h1 class="text-3xl font-bold">Categories</h1>
+            <h1 class="text-2xl sm:text-3xl font-bold">Categories</h1>
             <?php if (!empty($selectedCategory)): ?>
                 <div class="flex items-center">
                     <a href="/customer/home"
-                        class="inline-flex items-center text-base text-[#815331] hover:underline font-medium">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="inline-flex items-center text-sm sm:text-base text-[#815331] hover:underline font-medium">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
@@ -18,20 +18,20 @@
             <?php endif ?>
         </div>
     </div>
-    <div class="w-[80%] mx-auto p-6">
-        <div class="container grid grid-cols-1 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div class="w-[90%] sm:w-[80%] mx-auto p-4 sm:p-6">
+        <div class="container grid grid-cols-2 mx-auto sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4">
             <?php foreach ($categories as $category): ?>
                 <?php
                 $categorySlug = strtolower(str_replace([' ', '&'], '_', $category));
                 $imageName = $categorySlug . '.png';
                 $isSelected = ($selectedCategory === $category);
                 ?>
-                <div class="flex items-center justify-center flex-col gap-2 m-2 <?= $isSelected ? 'border-2 border-[#815331] rounded-lg p-2' : '' ?>">
+                <div class="flex items-center justify-center flex-col gap-1 sm:gap-2 p-2 <?= $isSelected ? 'border-2 border-[#815331] rounded-lg' : '' ?>">
                     <a href="/customer/home/category/<?= urlencode($category) ?>">
                         <img src="/assets/img/customer_page_categories/<?= $imageName ?>" alt="<?= $category ?>"
-                            class="transition-transform duration-300 hover:scale-95">
+                            class="transition-transform duration-300 hover:scale-95 w-full">
                     </a>
-                    <p class="<?= $isSelected ? 'text-[#815331] font-semibold' : 'text-gray-700 font-medium' ?>">
+                    <p class="text-xs sm:text-sm text-center <?= $isSelected ? 'text-[#815331] font-semibold' : 'text-gray-700 font-medium' ?>">
                         <?= $category ?>
                     </p>
                 </div>
@@ -40,15 +40,32 @@
     </div>
 </div>
 
-<div class="w-full mt-8 bg-white border border-gray-100 rounded-lg shadow-sm">
-    <div class="container p-6 mx-auto">
-        <div class="flex gap-6">
+<div class="w-full mt-4 sm:mt-8 bg-white border border-gray-100 rounded-lg shadow-sm">
+    <div class="container p-4 sm:p-6 mx-auto">
+        <!-- Mobile Filter Toggle Button -->
+        <button id="mobile-filter-toggle" class="lg:hidden w-full mb-4 px-4 py-2 bg-[#815331] text-white rounded-lg flex items-center justify-center gap-2 hover:bg-[#6d4429] transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+            </svg>
+            <span class="font-medium">Filters</span>
+        </button>
+
+        <div class="flex gap-4 lg:gap-6">
             <!-- Filter Sidebar -->
-            <div class="flex-shrink-0 w-64 bg-gray-100 border border-gray-100 rounded-lg">
-                <div class="p-4 ">
+            <div id="filter-sidebar" class="hidden lg:block flex-shrink-0 w-full lg:w-64 bg-gray-100 border border-gray-100 rounded-lg fixed lg:relative inset-0 lg:inset-auto z-40 lg:z-auto overflow-y-auto">
+                <!-- Mobile Close Button -->
+                <div class="lg:hidden flex justify-between items-center p-4 border-b border-gray-200 bg-white sticky top-0">
+                    <h2 class="text-lg font-bold text-gray-800">Filters</h2>
+                    <button id="close-filter" class="p-2 hover:bg-gray-100 rounded-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-4">
                     <!-- Availability Filter -->
-                    <div class="mb-8">
-                        <h3 class="mb-3 font-semibold text-gray-800">Availability</h3>
+                    <div class="mb-6 sm:mb-8">
+                        <h3 class="mb-2 sm:mb-3 font-semibold text-gray-800 text-sm sm:text-base">Availability</h3>
                         <div class="space-y-2">
                             <label class="flex items-center">
                                 <input type="checkbox" class="w-4 h-4 rounded-full focus:ring-[#815331] availability-filter" value="in-stock"
@@ -64,8 +81,8 @@
                     </div>
 
                     <!-- Price Filter -->
-                    <div class="mb-8">
-                        <h3 class="flex items-center justify-between mb-3 font-semibold text-gray-800">Price</h3>
+                    <div class="mb-6 sm:mb-8">
+                        <h3 class="flex items-center justify-between mb-2 sm:mb-3 font-semibold text-gray-800 text-sm sm:text-base">Price</h3>
                         <div class="space-y-3">
                             <p class="text-sm text-gray-600">The highest price is <span class="text-[#815331] font-bold">₱</span><span class="text-[#815331] font-bold" id="max-price">0.00</span></p>
                             <div class="relative">
@@ -98,8 +115,8 @@
                     </div>
 
                     <!-- Brand Filter -->
-                    <div class="mb-8">
-                        <h3 class="flex items-center justify-between mb-3 font-semibold text-gray-800">Brand</h3>
+                    <div class="mb-6 sm:mb-8">
+                        <h3 class="flex items-center justify-between mb-2 sm:mb-3 font-semibold text-gray-800 text-sm sm:text-base">Brand</h3>
                         <div class="space-y-2" id="brand-filters">
                             <!-- Brands will be populated dynamically -->
                         </div>
@@ -110,35 +127,35 @@
 
             <!-- Products Grid -->
             <div class="flex-1" id="item-list">
-                <div class="grid grid-cols-1 gap-6 list sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <div class="grid grid-cols-2 gap-4 list sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     <?php foreach ($items as $item): ?>
                         <a href="/customer/item/<?= $item->id ?>" class="block-group">
                             <div class="overflow-hidden transition-all duration-300 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-lg hover:-translate-y-1">
                                 <!-- Product Image Container -->
-                                <div class="flex items-center justify-center h-48 p-2 bg-gray-100">
+                                <div class="flex items-center justify-center h-40 sm:h-48 p-2 bg-gray-100">
                                     <img src="/storage/items-img/<?= $item->item_image_1 ?>" alt="<?= $item->item_name ?>"
                                         class="object-contain max-w-full max-h-full transition-transform duration-300 group-hover:scale-105">
                                 </div>
 
-                                <div class="p-4 space-y-2">
+                                <div class="p-3 sm:p-4 space-y-2">
                                     <!-- Name -->
-                                    <h3 class="text-base font-semibold text-gray-900 truncate item-name line-clamp-2">
+                                    <h3 class="text-sm sm:text-base font-semibold text-gray-900 truncate item-name line-clamp-2">
                                         <?= $item->item_name ?>
                                     </h3>
 
                                     <!-- Price -->
-                                    <div class="flex items-center justify-between">
-                                        <span class="item-price text-[#815331] font-bold text-lg" data-price="<?= $item->unit_price ?>">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <span class="item-price text-[#815331] font-bold text-sm sm:text-base" data-price="<?= $item->unit_price ?>">
                                             ₱<?= number_format($item->unit_price, 2) ?>
                                         </span>
 
                                         <!-- Stock status badge -->
                                         <?php if ($item->quantity > 0): ?>
-                                            <span class="px-2 py-1 text-xs font-medium text-white bg-green-600 rounded-full">
+                                            <span class="px-1.5 py-0.5 text-[10px] sm:text-xs font-medium text-white bg-green-600 rounded-full whitespace-nowrap">
                                                 In Stock
                                             </span>
                                         <?php else: ?>
-                                            <span class="px-2 py-1 text-xs font-medium text-white bg-red-600 rounded-full">
+                                            <span class="px-1.5 py-0.5 text-[10px] sm:text-xs font-medium text-white bg-red-600 rounded-full whitespace-nowrap">
                                                 Out of Stock
                                             </span>
                                         <?php endif ?>
@@ -155,7 +172,7 @@
                                     </span>
 
                                     <!-- Stock Quantity -->
-                                    <div class="flex justify-end text-sm text-gray-500">
+                                    <div class="flex justify-end text-xs sm:text-sm text-gray-500">
                                         <span class="text-right">(<?= $item->quantity ?>) available</span>
                                     </div>
                                 </div>
@@ -173,6 +190,36 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Mobile filter toggle functionality
+        const mobileFilterToggle = document.getElementById('mobile-filter-toggle');
+        const filterSidebar = document.getElementById('filter-sidebar');
+        const closeFilter = document.getElementById('close-filter');
+
+        if (mobileFilterToggle && filterSidebar) {
+            mobileFilterToggle.addEventListener('click', function() {
+                filterSidebar.classList.remove('hidden');
+                filterSidebar.classList.add('block');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            });
+
+            if (closeFilter) {
+                closeFilter.addEventListener('click', function() {
+                    filterSidebar.classList.add('hidden');
+                    filterSidebar.classList.remove('block');
+                    document.body.style.overflow = ''; // Restore scrolling
+                });
+            }
+
+            // Close filter when clicking outside on mobile
+            filterSidebar.addEventListener('click', function(e) {
+                if (e.target === filterSidebar) {
+                    filterSidebar.classList.add('hidden');
+                    filterSidebar.classList.remove('block');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+
         // Initialize List.js with proper configuration
         var options = {
             valueNames: [
