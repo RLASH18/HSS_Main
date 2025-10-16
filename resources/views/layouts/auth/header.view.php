@@ -11,3 +11,7 @@
 </head>
 
 <body>
+    <!-- Page Loading Overlay -->
+    <div id="page-loader">
+        <div class="loader-spinner"></div>
+    </div>

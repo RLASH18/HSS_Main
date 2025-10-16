@@ -9,9 +9,14 @@
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="/assets/js/script.js"></script>
 </head>
 
 <body>
+    <!-- Page Loading Overlay -->
+    <div id="page-loader">
+        <div class="loader-spinner"></div>
+    </div>
     <header class="container px-4 py-4 mx-auto lg:px-8">
         <div class="flex items-center justify-between">
             <div class="logo-container">

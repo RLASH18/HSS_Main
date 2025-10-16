@@ -35,6 +35,11 @@
 </head>
 
 <body class="grid grid-cols-[250px_1fr]">
+    <!-- Page Loading Overlay -->
+    <div id="page-loader">
+        <div class="loader-spinner"></div>
+    </div>
+
     <!-- sidebar and navbar will go here -->
     <section class="sidebar row-span-full min-h-screen p-4">
         <div class="sidebar-company-logo-container flex items-center justify-center mb-14 p-1">

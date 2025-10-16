@@ -199,3 +199,25 @@ document.addEventListener('DOMContentLoaded', function () {
         showSweetAlert(window.swalData.type, window.swalData.title, window.swalData.message);
     }
 });
+
+// Page Loading Overlay
+window.PageLoader = {
+    show: function() {
+        const loader = document.getElementById('page-loader');
+        if (loader) {
+            loader.classList.remove('hidden');
+        }
+    },
+    hide: function() {
+        const loader = document.getElementById('page-loader');
+        if (loader) {
+            loader.classList.add('hidden');
+        }
+    }
+};
+
+// Hide loader only when ALL resources are fully loaded (images, CSS, JS, fonts, etc.)
+window.addEventListener('load', function() {
+    // This fires when the entire page including all dependent resources has finished loading
+    PageLoader.hide();
+});

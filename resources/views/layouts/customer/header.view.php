@@ -15,6 +15,11 @@
 </head>
 
 <body class="bg-gray-50">
+    <!-- Page Loading Overlay -->
+    <div id="page-loader">
+        <div class="loader-spinner"></div>
+    </div>
+
     <!-- Header -->
     <header class="w-full bg-[#ECE5DF] shadow-sm border-b border-gray-200">
         <div class="container mx-auto px-4 lg:px-8 py-4">
