@@ -23,11 +23,11 @@
         <!-- Profile picture section -->
         <div class="mb-6 sm:mb-8 text-center">
             <div class="relative inline-block">
-                <div class="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 overflow-hidden bg-gray-200 rounded-full">
-                    <?php if ($users->profile_picture): ?>
-                        <img src="/storage/profile-img/<?= $users->profile_picture ?>" alt="Profile Picture" class="object-cover w-full h-full">
+                <div id="profile_picture_container" class="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-1 overflow-hidden bg-gray-200 rounded-full">
+                    <?php if (!empty($users->profile_picture)): ?>
+                        <img id="profile_preview" src="/storage/profile-img/<?= $users->profile_picture ?>" alt="Profile Picture" class="object-cover w-full h-full">
                     <?php else: ?>
-                        <div class="flex items-center justify-center w-full h-full text-xl sm:text-2xl font-bold text-gray-600 bg-gray-300">
+                        <div id="profile_initial" class="flex items-center justify-center w-full h-full text-xl sm:text-2xl font-bold text-gray-600 bg-gray-300">
                             <?= strtoupper(substr($users->name ?? 'U', 0, 1)) ?>
                         </div>
                     <?php endif ?>
@@ -40,6 +40,13 @@
                     </label>
                 </div>
                 <input type="file" id="profile_picture" name="profile_picture" accept="image/*" class="hidden">
+                <!-- Cancel button (hidden by default) -->
+                <button type="button" id="cancel_picture" class="hidden mt-1 mb-1 px-3 py-1 text-xs font-medium text-red-600 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-colors">
+                    <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Cancel Selection
+                </button>
             </div>
             <p class="text-sm text-gray-500">Click the camera to update your profile picture</p>
         </div>
@@ -196,7 +203,7 @@
                 <div class="p-4 text-center rounded-lg bg-gray-50">
                     <span class="mb-2 text-sm font-medium text-gray-900">Account Status</span>
                     <div class="flex items-center">
-                        <?php if ($users->email_verified_at): ?>
+                        <?php if (!empty($users->email_verified_at)): ?>
                             <div class="flex items-center text-green-600">
                                 <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
@@ -232,22 +239,70 @@
 </div>
 
 <script>
+    // Store original profile picture state
+    const originalProfilePicture = <?= !empty($users->profile_picture) ? "'" . $users->profile_picture . "'" : 'null' ?>;
+    const userInitial = '<?= strtoupper(substr($users->name ?? 'U', 0, 1)) ?>';
+    
     // Profile picture preview
-    document.getElementById('profile_picture').addEventListener('change', function(e) {
+    const profileInput = document.getElementById('profile_picture');
+    const cancelButton = document.getElementById('cancel_picture');
+    const container = document.getElementById('profile_picture_container');
+
+    profileInput.addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                const img = document.querySelector('.w-20.h-20 img, .w-24.h-24 img') || document.createElement('img');
-                img.src = e.target.result;
-                img.className = 'w-full h-full object-cover';
-
-                const container = document.querySelector('.w-20.h-20, .w-24.h-24');
-                container.innerHTML = '';
-                container.appendChild(img);
+                // Clear container and add new image
+                container.innerHTML = `
+                    <img id="profile_preview" src="${e.target.result}" alt="Profile Picture" class="w-full h-full object-cover">
+                    <label for="profile_picture" class="absolute inset-0 flex items-center justify-center transition-opacity bg-black bg-opacity-50 rounded-full opacity-0 cursor-pointer hover:opacity-100">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </label>
+                `;
+                
+                // Show cancel button
+                cancelButton.classList.remove('hidden');
             }
             reader.readAsDataURL(file);
         }
+    });
+
+    // Cancel picture selection
+    cancelButton.addEventListener('click', function() {
+        // Clear the file input
+        profileInput.value = '';
+        
+        // Restore original profile picture or initial
+        if (originalProfilePicture) {
+            container.innerHTML = `
+                <img id="profile_preview" src="/storage/profile-img/${originalProfilePicture}" alt="Profile Picture" class="w-full h-full object-cover">
+                <label for="profile_picture" class="absolute inset-0 flex items-center justify-center transition-opacity bg-black bg-opacity-50 rounded-full opacity-0 cursor-pointer hover:opacity-100">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </label>
+            `;
+        } else {
+            container.innerHTML = `
+                <div id="profile_initial" class="flex items-center justify-center w-full h-full text-xl sm:text-2xl font-bold text-gray-600 bg-gray-300">
+                    ${userInitial}
+                </div>
+                <label for="profile_picture" class="absolute inset-0 flex items-center justify-center transition-opacity bg-black bg-opacity-50 rounded-full opacity-0 cursor-pointer hover:opacity-100">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </label>
+            `;
+        }
+        
+        // Hide cancel button
+        cancelButton.classList.add('hidden');
     });
 
     // Password confirmation validation

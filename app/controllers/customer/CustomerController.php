@@ -170,12 +170,14 @@ class CustomerController extends Controller
         unset($data['current_password'], $data['password_confirmation'], $data['_token']);
 
         // Handle profile picture upload and replace old one if exists
+        $uploadedFileName = null;
         $profile = FileHandler::fromRequest('profile_picture');
         if ($profile) {
             if (!empty($user->profile_picture)) {
                 FileHandler::delete('public/storage/profile-img/', $user->profile_picture);
             }
-            $data['profile_picture'] = $profile->store('public/storage/profile-img');
+            $uploadedFileName = $profile->store('public/storage/profile-img');
+            $data['profile_picture'] = $uploadedFileName;
         } else {
             // Keep existing profile picture, don't include in change detection
             unset($data['profile_picture']);
@@ -198,11 +200,6 @@ class CustomerController extends Controller
         if (!$hasChanges) {
             setSweetAlert('info', 'No Changes', 'No changes were made to your profile.');
             redirect('/customer/edit-profile');
-        }
-
-        // Add back profile picture if it was uploaded
-        if ($profile) {
-            $data['profile_picture'] = $profile->store('public/storage/profile-img');
         }
 
         if (User::update($user->id, $data)) {

@@ -127,7 +127,13 @@
                     </svg>
                     <span class="text-sm font-medium text-gray-700">Phone:</span>
                 </div>
-                <p class="text-gray-900 ml-6"><?= $users->contact_number ?></p>
+                <p class="text-gray-900 ml-6">
+                    <?php if (!empty($users->contact_number)): ?>
+                        <?= $users->contact_number ?>
+                    <?php else: ?>
+                        <span class="text-gray-400 italic">Not set</span>
+                    <?php endif; ?>
+                </p>
             </div>
 
             <div>
@@ -143,7 +149,11 @@
                     <span class="text-sm font-medium text-gray-700">Address:</span>
                 </div>
                 <div class="text-gray-900 ml-6">
-                    <p><?= $users->address ?></p>
+                    <?php if (!empty($users->address)): ?>
+                        <p><?= $users->address ?></p>
+                    <?php else: ?>
+                        <p><span class="text-gray-400 italic">Not set</span></p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -170,7 +180,13 @@
                     </svg>
                     <span class="text-sm font-medium text-gray-700">Birthdate:</span>
                 </div>
-                <p class="text-gray-900 ml-6"><?= date("F j, Y", strtotime($users->birthdate)) ?></p>
+                <p class="text-gray-900 ml-6">
+                    <?php if (!empty($users->birthdate)): ?>
+                        <?= date("F j, Y", strtotime($users->birthdate)) ?>
+                    <?php else: ?>
+                        <span class="text-gray-400 italic">Not set</span>
+                    <?php endif; ?>
+                </p>
             </div>
 
             <div>
@@ -182,7 +198,13 @@
                     </svg>
                     <span class="text-sm font-medium text-gray-700">Gender:</span>
                 </div>
-                <p class="text-gray-900 ml-6"><?= $users->gender ?></p>
+                <p class="text-gray-900 ml-6">
+                    <?php if (!empty($users->gender)): ?>
+                        <?= ucfirst($users->gender) ?>
+                    <?php else: ?>
+                        <span class="text-gray-400 italic">Not set</span>
+                    <?php endif; ?>
+                </p>
             </div>
         </div>
     </div>
