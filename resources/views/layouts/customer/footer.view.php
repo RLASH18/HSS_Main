@@ -29,17 +29,17 @@
                             <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:text-[#815331] -mt-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                             </svg>
-                            Account
+                            Profile
                         </a>
                         <a href="/customer/my-cart" class="flex items-center hover:text-[#815331] transition-colors group text-sm sm:text-base">
                             <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:text-[#815331] -mt-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
                             </svg>
-                            Cart
+                            My Cart
                         </a>
                         <a href="/customer/my-orders" class="flex items-center hover:text-[#815331] transition-colors group text-sm sm:text-base">
-                            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:text-[#815331] -mt-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M4.5 7.65311V16.3469L12 20.689L19.5 16.3469V7.65311L12 3.311L4.5 7.65311ZM12 1L21.5 6.5V17.5L12 23L2.5 17.5V6.5L12 1ZM6.49896 9.97065L11 12.5765V17.625H13V12.5765L17.501 9.97066L16.499 8.2398L12 10.8445L7.50104 8.2398L6.49896 9.97065Z" />
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:text-[#815331] -mt-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10V6a3 3 0 0 1 3-3v0a3 3 0 0 1 3 3v4m3-2 .917 11.923A1 1 0 0 1 17.92 21H6.08a1 1 0 0 1-.997-1.077L6 8h12Z" />
                             </svg>
                             Orders
                         </a>
