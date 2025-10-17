@@ -154,6 +154,12 @@ class CustomerController extends Controller
                 redirect('/customer/edit-profile');
             }
 
+            // Check if password confirmation matches
+            if (empty($data['password_confirmation']) || $data['password'] !== $data['password_confirmation']) {
+                setSweetAlert('error', 'Validation Error', 'Password confirmation does not match.');
+                redirect('/customer/edit-profile');
+            }
+
             // Check if current password matches
             if (!password_verify($data['current_password'], $user->password)) {
                 setSweetAlert('error', 'Invalid Password', 'Your current password is incorrect.');
