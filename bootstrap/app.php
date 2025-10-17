@@ -17,6 +17,9 @@ require_once __DIR__ . '/helpers.php';
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
+// Set global timezone for consistent timestamps
+date_default_timezone_set('Asia/Manila');
+
 $config = [
     'userModel'  => app\models\User::class,
     'db'         => require __DIR__ . '/../config/database.php',
