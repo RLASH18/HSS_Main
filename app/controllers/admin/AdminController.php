@@ -89,11 +89,11 @@ class AdminController extends Controller
             }
 
             // Check if password confirmation matches
-            if (empty($data['password_confirmation']) || $data['password'] !== $data['password_confirmation']) {
+            if (empty($data['confirm_password']) || $data['new_password'] !== $data['confirm_password']) {
                 setSweetAlert('error', 'Validation Error', 'Password confirmation does not match.');
-                redirect('/customer/edit-profile');
+                redirect('/admin/settings');
             }
-            
+
             // Check if current password matches
             if (!password_verify($data['current_password'], $admin->password)) {
                 setSweetAlert('error', 'Invalid Password', 'Your current password is incorrect.');
