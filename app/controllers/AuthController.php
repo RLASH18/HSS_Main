@@ -88,11 +88,18 @@ class AuthController extends Controller
     {
         // Validate input fields
         $data = $request->validate([
-            'username' => 'required',
+            'username' => 'required|unique:users,username|min:3|max:20',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'confirmPassword' => 'required|match:password'
         ]);
+
+        // Validate username format (alphanumeric and underscores only)
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $data['username'])) {
+            setFlash('error', 'Username can only contain letters, numbers, and underscores (no spaces or special characters).');
+            redirect('/register');
+            return;
+        }
 
         if (!$this->isValidRealEmail($data['email'])) {
             setFlash('error', 'Please provide a valid email address from a real email provider.');

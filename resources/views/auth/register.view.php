@@ -17,7 +17,7 @@
 
             <div class="register-input-label">
                 <div>
-                    <input type="text" name="username" id="username" placeholder="Username" value="<?= old('username') ?>" <?= isInvalid('username') ?> class="focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-all">
+                    <input type="text" name="username" id="username" placeholder="Username" value="<?= old('username') ?>" <?= isInvalid('username') ?> class="focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-all" pattern="[a-zA-Z0-9_]{3,20}" minlength="3" maxlength="20" title="Username must be 3-20 characters and can only contain letters, numbers, and underscores (no spaces)">
                     <div class="text-red-500 text-xs text-left mb-2">
                         <p><?= error('username') ?></p>
                     </div>
@@ -59,5 +59,12 @@
         </form>
     </div>
 </div>
+
+<script>
+    // Username validation - remove invalid characters
+    document.getElementById('username').addEventListener('input', function(e) {
+        e.target.value = e.target.value.replace(/[^a-zA-Z0-9_]/g, '');
+    });
+</script>
 
 <?php layout('auth/footer') ?>
