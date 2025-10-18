@@ -1464,3 +1464,69 @@ input[type="checkbox"] {
     }
 }
 /* End Page Loading Overlay */
+
+/* Orders grid layout fixes for List.js */
+.list.grid {
+    grid-auto-rows: max-content !important;
+}
+
+.list.grid > div {
+    height: auto !important;
+}
+
+/* Progress Modal Styling */
+#progress-modal {
+    animation: fadeIn 0.2s ease-out;
+}
+
+#progress-modal .bg-white {
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Timeline styling improvements */
+#modal-timeline .flex {
+    position: relative;
+}
+
+/* Ensure timeline lines are properly positioned */
+#modal-timeline .absolute {
+    z-index: 1;
+}
+
+/* Status circle improvements */
+#modal-timeline .w-10.h-10 {
+    z-index: 2;
+    position: relative;
+    border: 2px solid white;
+}
+
+/* Better spacing for timeline content */
+#modal-timeline h4 {
+    line-height: 1.2;
+    margin: 0;
+}
+
+#modal-timeline p {
+    margin: 0;
+    line-height: 1.5;
+}
