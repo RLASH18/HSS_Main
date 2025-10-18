@@ -402,8 +402,12 @@
         theme: 'snow'
     });
 
-    // Set initial value
-    quill.root.innerHTML = '<?= addslashes($inventory->description) ?>';
+    // Set initial value - properly handle HTML content
+    const descriptionContent = <?= json_encode(html_entity_decode($inventory->description ?? '')) ?>;
+    if (descriptionContent) {
+        // Use Quill's clipboard to properly parse and set HTML content
+        quill.clipboard.dangerouslyPasteHTML(descriptionContent);
+    }
 
     // Update hidden textarea on change
     quill.on('text-change', function(delta, oldDelta, source) {
