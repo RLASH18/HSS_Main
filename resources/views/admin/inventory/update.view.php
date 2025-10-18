@@ -60,12 +60,9 @@
                 <label for="description" class="block mb-2 text-sm font-medium text-gray-700">
                     Description
                 </label>
-                <!-- Hidden textarea for form submission -->
-                <textarea name="description" id="description" class="hidden"><?= htmlspecialchars($inventory->description) ?></textarea>
-                <!-- Quill editor container -->
-                <div id="description-editor"
-                    class="bg-white border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-[#815331] focus-within:border-[#815331] transition-colors <?= isInvalid('description') ? 'border-red-300 bg-red-50' : '' ?>"
-                    style="min-height: 150px;"></div>
+                <textarea name="description" id="description" rows="6"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-colors <?= isInvalid('description') ? 'border-red-300 bg-red-50' : '' ?>"
+                    placeholder="Enter item description"><?= htmlspecialchars($inventory->description) ?></textarea>
                 <div class="mt-2 text-xs text-left text-red-500">
                     <p><?= error('description') ?></p>
                 </div>
@@ -382,43 +379,5 @@
     }
 </script>
 
-<script>
-    var quill = new Quill('#description-editor', {
-        modules: {
-            toolbar: [
-                [{
-                    header: [1, 2, false]
-                }],
-                ['bold', 'italic', 'underline'],
-                ['link', 'image'],
-                [{
-                    list: 'ordered'
-                }, {
-                    list: 'bullet'
-                }]
-            ]
-        },
-        placeholder: 'Enter item description',
-        theme: 'snow'
-    });
-
-    // Set initial value - properly handle HTML content
-    const descriptionContent = <?= json_encode(html_entity_decode($inventory->description ?? '')) ?>;
-    if (descriptionContent) {
-        // Use Quill's clipboard to properly parse and set HTML content
-        quill.clipboard.dangerouslyPasteHTML(descriptionContent);
-    }
-
-    // Update hidden textarea on change
-    quill.on('text-change', function(delta, oldDelta, source) {
-        if (source === 'user') {
-            document.getElementById('description').value = quill.root.innerHTML;
-        }
-    });
-
-    document.querySelector('form').addEventListener('submit', function() {
-        document.getElementById('description').value = quill.root.innerHTML;
-    });
-</script>
 
 <?php layout('admin/footer') ?>

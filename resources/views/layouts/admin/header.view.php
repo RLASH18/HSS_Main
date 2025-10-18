@@ -27,10 +27,6 @@
     <!-- List.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
 
-    <!-- Quill.js CDN for Rich Text Editor -->
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
-
     <script src="/assets/js/script.js"></script>
 </head>
 
