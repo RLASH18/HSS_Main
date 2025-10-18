@@ -196,8 +196,15 @@ class CheckoutController extends Controller
 
         $data = $request->validate([
             'item_id' => 'required',
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|min:1'
         ]);
+
+        // Cast quantity to integer for validation
+        $data['quantity'] = (int)$data['quantity'];
+        if ($data['quantity'] < 1) {
+            setSweetAlert('error', 'Invalid Quantity', 'Quantity must be at least 1.');
+            redirect('/customer/home');
+        }
 
         // Get the item
         $item = Inventory::find($data['item_id']);
@@ -241,11 +248,18 @@ class CheckoutController extends Controller
     {
         $data = $request->validate([
             'item_id' => 'required',
-            'quantity' => 'required|integer|min:1',
+            'quantity' => 'required|min:1',
             'delivery_address' => 'required',
             'delivery_method' => 'required',
             'payment_method' => 'required'
         ]);
+
+        // Cast quantity to integer for validation
+        $data['quantity'] = (int)$data['quantity'];
+        if ($data['quantity'] < 1) {
+            setSweetAlert('error', 'Invalid Quantity', 'Quantity must be at least 1.');
+            redirect('/customer/home');
+        }
 
         // Get and validate item
         $item = Inventory::find($data['item_id']);
