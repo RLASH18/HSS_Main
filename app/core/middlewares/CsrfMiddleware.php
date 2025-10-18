@@ -40,9 +40,11 @@ class CsrfMiddleware extends BaseMiddleware
             // Check if this is a JSON request
             $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
             if (strpos($contentType, 'application/json') !== false) {
-                // For JSON requests, check the X-CSRF-TOKEN header
+                // For JSON requests, check the X-CSRF-TOKEN header (case-insensitive)
                 $headers = getallheaders();
-                $token = $headers['X-CSRF-TOKEN'] ?? null;
+                // Convert all header keys to lowercase for case-insensitive comparison
+                $headers = array_change_key_case($headers, CASE_LOWER);
+                $token = $headers['x-csrf-token'] ?? null;
             } else {
                 // For form requests, check POST data
                 $token = $_POST['_token'] ?? null;

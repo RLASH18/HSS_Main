@@ -85,8 +85,21 @@ class CartController extends Controller
     {
         $data = $request->validate([
             'id' => 'required',
-            'quantity' => 'required|min:1'
+            'quantity' => 'required'
         ]);
+
+        // Convert quantity to integer for proper numeric comparison
+        $quantity = (int)$data['quantity'];
+
+        // Validate quantity is at least 1
+        if ($quantity < 1) {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'Quantity must be at least 1.'
+            ]);
+            exit;
+        }
 
         $carts = $this->findCartOrFail($data['id']);
 
@@ -102,7 +115,7 @@ class CartController extends Controller
         }
 
         // Ensure requested quantity does not exceed available stock
-        if ($data['quantity'] > $carts->item->quantity) {
+        if ($quantity > (int)$carts->item->quantity) {
             header('Content-Type: application/json');
             echo json_encode([
                 'success' => false,
@@ -111,8 +124,8 @@ class CartController extends Controller
             exit;
         }
 
-        Cart::update($carts->id, ['quantity' => $data['quantity']]);
-        $itemTotal = $carts->item->unit_price * $data['quantity'];
+        Cart::update($carts->id, ['quantity' => $quantity]);
+        $itemTotal = $carts->item->unit_price * $quantity;
 
         // Return updated item total in JSON
         header('Content-Type: application/json');
