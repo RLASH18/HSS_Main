@@ -383,12 +383,13 @@ class CheckoutController extends Controller
         // Create checkout session with order metadata
         $orderRef = 'ORD-' . $this->userId . '-' . date('YmdHis');
         $orderId = $this->userId . time();
+        $appUrl = env('APP_URL') ?? 'http://localhost:8000';
         $session = $paymongo->createCheckoutSession(
             $lineItems,
             $orderRef,
             $paymentType,
-            'http://localhost:8000/customer/payment-success',
-            'http://localhost:8000/customer/payment-failed',
+            $appUrl . '/customer/payment-success',
+            $appUrl . '/customer/payment-failed',
             ['order_id' => $orderId, 'user_id' => $this->userId]
         );
 
