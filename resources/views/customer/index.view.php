@@ -84,18 +84,18 @@
                     <div class="mb-6 sm:mb-8">
                         <h3 class="flex items-center justify-between mb-2 sm:mb-3 font-semibold text-gray-800 text-sm sm:text-base">Price</h3>
                         <div class="space-y-3">
-                            <p class="text-sm text-gray-600">The highest price is <span class="text-[#815331] font-bold">₱</span><span class="text-[#815331] font-bold" id="max-price">0.00</span></p>
+                            <p class="text-sm text-gray-600">The highest price is <span class="text-[#815331] font-bold">₱</span><span class="text-[#815331] font-bold" id="max-price"><?= number_format($maxPrice ?? 0, 2) ?></span></p>
                             <div class="relative">
                                 <input type="range" id="price-range"
                                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" min="0"
-                                    max="1449" value="1449" step="1">
+                                    max="<?= $maxPrice ?? 0 ?>" value="<?= $maxPrice ?? 0 ?>" step="1">
                             </div>
                             <div class="flex justify-between mt-2 text-center">
                                 <span class="text-sm font-medium text-gray-700">
                                     Min: ₱
                                     <input type="number" id="current-min-price"
                                         class="w-20 text-sm border border-gray-300 focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-all rounded px-2 py-1 ml-1 mt-1"
-                                        value="0" min="0" max="1449">
+                                        value="0" min="0" max="<?= $maxPrice ?? 0 ?>">
                                 </span>
                                 <div class="flex flex-col items-center justify-center mt-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mt-4" viewBox="0 0 24 24" fill="currentColor">
@@ -108,7 +108,7 @@
                                     Max: ₱
                                     <input type="number" id="current-max-price"
                                         class="w-20 text-sm border border-gray-300 focus:ring-2 focus:ring-[#815331] focus:border-[#815331] transition-all rounded px-2 py-1 mt-1"
-                                        value="1449" min="0" max="1449">
+                                        value="<?= $maxPrice ?? 0 ?>" min="0" max="<?= $maxPrice ?? 0 ?>">
                                 </span>
                             </div>
                         </div>
@@ -220,7 +220,7 @@
             });
         }
 
-        // Initialize List.js with proper configuration
+        // Initialize List.js WITHOUT pagination (we'll handle it manually)
         var options = {
             valueNames: [
                 'item-name',
@@ -239,33 +239,68 @@
                 }
             ],
             page: 16, // Items per page
-            pagination: true,
+            pagination: false, // Disable List.js pagination
         }
 
         window.itemList = new List('item-list', options);
 
-        // Get unique categories and brands from items - wait for List.js to initialize
+        // Custom pagination with URL query parameters
+        function setupCustomPagination() {
+            const itemsPerPage = 16;
+            const totalItems = itemList.matchingItems.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            // Get current page from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentPage = parseInt(urlParams.get('page')) || 1;
+            
+            // Show items for current page
+            itemList.show((currentPage - 1) * itemsPerPage + 1, itemsPerPage);
+            
+            // Generate pagination HTML
+            const paginationContainer = document.querySelector('.pagination');
+            if (!paginationContainer) return;
+            
+            let paginationHTML = '';
+            
+            // Previous button
+            if (currentPage > 1) {
+                const prevPage = currentPage - 1;
+                const prevUrl = prevPage === 1 ? window.location.pathname : `?page=${prevPage}`;
+                paginationHTML += `<a href="${prevUrl}" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Previous</a>`;
+            }
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHTML += `<span class="px-3 py-2 text-sm font-medium text-white bg-[#815331] border border-[#815331] rounded-md">${i}</span>`;
+                } else {
+                    // For page 1, use clean URL without query parameter
+                    const pageUrl = i === 1 ? window.location.pathname : `?page=${i}`;
+                    paginationHTML += `<a href="${pageUrl}" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">${i}</a>`;
+                }
+            }
+            
+            // Next button
+            if (currentPage < totalPages) {
+                paginationHTML += `<a href="?page=${currentPage + 1}" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Next</a>`;
+            }
+            
+            paginationContainer.innerHTML = paginationHTML;
+        }
+        
+        // Initial pagination setup
+        setupCustomPagination();
+
+        // Get unique brands from items - wait for List.js to initialize
         setTimeout(() => {
             const items = document.querySelectorAll('.list .block-group');
             const brands = new Set();
-            let maxPrice = 0;
 
             items.forEach(item => {
                 const brand = item.querySelector('.item-brand')?.dataset.brand;
-                const price = parseFloat(item.querySelector('.item-price')?.dataset.price || 0);
-
                 if (brand) brands.add(brand);
-                if (price > maxPrice) maxPrice = price;
             });
-
-            // Update max price display
-            document.getElementById('max-price').textContent = maxPrice.toLocaleString('en-PH', {
-                minimumFractionDigits: 2
-            });
-            document.getElementById('price-range').max = maxPrice;
-            document.getElementById('current-max-price').value = maxPrice;
-            document.getElementById('current-max-price').max = maxPrice;
-
 
             // Populate brand filters
             const brandContainer = document.getElementById('brand-filters');
@@ -322,6 +357,9 @@
                     item.style.display = 'none';
                 }
             });
+            
+            // Update pagination after filtering
+            setupCustomPagination();
         }
 
         // Price range inputs

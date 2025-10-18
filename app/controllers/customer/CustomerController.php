@@ -31,11 +31,20 @@ class CustomerController extends Controller
             'Chemicals'
         ];
 
+        // Calculate max price from all items
+        $maxPrice = 0;
+        foreach ($items as $item) {
+            if ($item->unit_price > $maxPrice) {
+                $maxPrice = $item->unit_price;
+            }
+        }
+
         $data = [
             'title' => 'ABG Prime Builders Supplies Inc. | Customer Dashboard',
             'items' => $items,
             'categories' => $categories,
             'selectedCategory' => null,
+            'maxPrice' => $maxPrice,
         ];
 
         return $this->view('customer/index', $data);
@@ -61,11 +70,20 @@ class CustomerController extends Controller
             'Chemicals'
         ];
 
+        // Calculate max price from filtered items
+        $maxPrice = 0;
+        foreach ($items as $item) {
+            if ($item->unit_price > $maxPrice) {
+                $maxPrice = $item->unit_price;
+            }
+        }
+
         $data = [
             'title' => "ABG Prime Builders Supplies Inc. | Category: $decodedCategory",
             'items' => $items,
             'categories' => $categories,
-            'selectedCategory' => $decodedCategory
+            'selectedCategory' => $decodedCategory,
+            'maxPrice' => $maxPrice,
         ];
 
         return $this->view('customer/index', $data);
