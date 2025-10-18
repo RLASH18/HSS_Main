@@ -52,7 +52,7 @@
 
             <!-- Brand Name -->
             <div class="form-group">
-                <label class="block mb-2 text-sm font-medium text-gray-700">brand Name</label>
+                <label class="block mb-2 text-sm font-medium text-gray-700">Brand Name</label>
                 <div class="w-full px-4 py-3 text-gray-900 border border-gray-200 rounded-lg bg-gray-50">
                     <?= $inventory->brand_name ?>
                 </div>

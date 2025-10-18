@@ -30,7 +30,7 @@
             <!-- Brand Name -->
             <div class="form-group">
                 <label for="brand_name" class="block mb-2 text-sm font-medium text-gray-700">
-                    brand Name <span class="text-red-500">*</span>
+                    Brand Name <span class="text-red-500">*</span>
                 </label>
                 <input type="text" name="brand_name" id="brand_name"
                     value="<?= htmlspecialchars($inventory->brand_name) ?>"
