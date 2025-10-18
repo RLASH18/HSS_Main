@@ -145,7 +145,9 @@ abstract class Model
         
         // Invalidate cache after update
         if ($result) {
-            static::clearModelCache();
+            // Clear cache for the specific ID if available
+            $cacheId = is_array($dataOrId) ? ($conditions[static::primaryKey()] ?? null) : $dataOrId;
+            static::clearModelCache($cacheId);
         }
         
         return $result;
@@ -170,7 +172,7 @@ abstract class Model
         
         // Invalidate cache after delete
         if ($result) {
-            static::clearModelCache();
+            static::clearModelCache($id);
         }
         
         return $result;
@@ -709,9 +711,10 @@ abstract class Model
     /**
      * Clears all cache entries for this model
      *
+     * @param mixed $id Optional specific ID to clear from cache
      * @return void
      */
-    public static function clearModelCache(): void
+    public static function clearModelCache($id = null): void
     {
         if (!class_exists('app\core\Cache')) {
             return;
@@ -719,12 +722,13 @@ abstract class Model
 
         $table = static::tableName();
         
-        // Clear common cache patterns for this model
+        // Clear the all() cache
         Cache::delete("model:{$table}:all");
         
-        // Note: Individual find() caches will expire naturally based on TTL
-        // For immediate invalidation of all model caches, you could implement
-        // a more sophisticated cache key tracking system
+        // If specific ID provided, clear that find() cache
+        if ($id !== null) {
+            Cache::delete("model:{$table}:find:{$id}");
+        }
     }
 
     /**
