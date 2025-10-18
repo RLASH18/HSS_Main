@@ -71,6 +71,9 @@ abstract class Model
         }
 
         if ($stmt->execute()) {
+            // Invalidate cache after insert
+            static::clearModelCache();
+            
             return $returnId ? Application::$app->db->pdo->lastInsertId() : true;
         }
 
@@ -138,7 +141,14 @@ abstract class Model
             }
         }
 
-        return $stmt->execute();
+        $result = $stmt->execute();
+        
+        // Invalidate cache after update
+        if ($result) {
+            static::clearModelCache();
+        }
+        
+        return $result;
     }
 
     /**
@@ -156,23 +166,48 @@ abstract class Model
         $stmt = static::prepare($sql);
         $stmt->bindValue(':id', $id);
 
-        return $stmt->execute();
+        $result = $stmt->execute();
+        
+        // Invalidate cache after delete
+        if ($result) {
+            static::clearModelCache();
+        }
+        
+        return $result;
     }
 
     /**
      * Fetches all records from the model's table.
      *
+     * @param bool $useCache Whether to use cache (default: true)
+     * @param int $cacheTtl Cache TTL in seconds (default: 300 = 5 minutes)
      * @return array List of model objects
      */
-    public static function all(): array
+    public static function all(bool $useCache = true, int $cacheTtl = 300): array
     {
         $table = static::tableName();
+        $cacheKey = "model:{$table}:all";
+
+        // Try to get from cache if enabled
+        if ($useCache && class_exists('app\core\Cache')) {
+            $cached = Cache::get($cacheKey);
+            if ($cached !== null) {
+                return $cached;
+            }
+        }
 
         $sql = "SELECT * FROM $table";
         $stmt = static::prepare($sql);
         $stmt->execute();
 
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
+        $results = $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
+
+        // Cache the results if caching is enabled
+        if ($useCache && class_exists('app\core\Cache')) {
+            Cache::set($cacheKey, $results, $cacheTtl);
+        }
+
+        return $results;
     }
 
     /**
@@ -230,19 +265,37 @@ abstract class Model
      * Finds a record by primary key.
      *
      * @param mixed $id
+     * @param bool $useCache Whether to use cache (default: true)
+     * @param int $cacheTtl Cache TTL in seconds (default: 300 = 5 minutes)
      * @return static|null
      */
-    public static function find($id)
+    public static function find($id, bool $useCache = true, int $cacheTtl = 300)
     {
         $table = static::tableName();
         $primaryKey = static::primaryKey();
+        $cacheKey = "model:{$table}:find:{$id}";
+
+        // Try to get from cache if enabled
+        if ($useCache && class_exists('app\core\Cache')) {
+            $cached = Cache::get($cacheKey);
+            if ($cached !== null) {
+                return $cached;
+            }
+        }
 
         $sql = "SELECT * FROM $table WHERE $primaryKey = :id LIMIT 1";
         $stmt = static::prepare($sql);
         $stmt->bindValue(':id', $id);
         $stmt->execute();
 
-        return $stmt->fetchObject(static::class) ?: null;
+        $result = $stmt->fetchObject(static::class) ?: null;
+
+        // Cache the result if caching is enabled
+        if ($useCache && class_exists('app\core\Cache') && $result !== null) {
+            Cache::set($cacheKey, $result, $cacheTtl);
+        }
+
+        return $result;
     }
 
     /**
@@ -651,6 +704,27 @@ abstract class Model
     {
         $parts = explode('\\', $class);
         return end($parts);
+    }
+
+    /**
+     * Clears all cache entries for this model
+     *
+     * @return void
+     */
+    public static function clearModelCache(): void
+    {
+        if (!class_exists('app\core\Cache')) {
+            return;
+        }
+
+        $table = static::tableName();
+        
+        // Clear common cache patterns for this model
+        Cache::delete("model:{$table}:all");
+        
+        // Note: Individual find() caches will expire naturally based on TTL
+        // For immediate invalidation of all model caches, you could implement
+        // a more sophisticated cache key tracking system
     }
 
     /**

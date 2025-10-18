@@ -53,12 +53,22 @@ class Application
         $this->userModel         = $config['userModel'];
         $this->middlewareAliases = $config['middleware'];
 
+        // Get performance, session, and cache configs (passed from bootstrap)
+        $performanceConfig = $config['performance'] ?? [];
+        $sessionConfig = $config['session'] ?? [];
+        $cacheConfig = $config['cache'] ?? [];
+
+        // Merge performance config with database config
+        $dbConfig = array_merge($config['db'], [
+            'performance' => $performanceConfig
+        ]);
+
         // Core services
         $this->request  = new Request();
         $this->response = new Response();
-        $this->session  = new Session();
+        $this->session  = new Session($sessionConfig);
         $this->router   = new Router($this->request, $this->response);
-        $this->db       = new Database($config['db']);
+        $this->db       = new Database($dbConfig);
 
         // Load logged-in user if session exists
         $userId = $this->session->get('user');

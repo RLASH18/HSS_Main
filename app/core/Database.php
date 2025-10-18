@@ -30,9 +30,24 @@ class Database
         $dsn      = $config['dsn'] ?? '';
         $username = $config['user'] ?? '';
         $password = $config['password'] ?? '';
+        
+        // Get performance configuration
+        $perfConfig = $config['performance'] ?? [];
 
-        $this->pdo = new PDO($dsn, $username, $password);
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        // PDO options for optimal performance
+        $options = [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => $perfConfig['db_fetch_mode'] ?? PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => $perfConfig['db_emulate_prepares'] ?? false,
+            PDO::ATTR_PERSISTENT         => $perfConfig['db_persistent'] ?? true,
+        ];
+
+        $this->pdo = new PDO($dsn, $username, $password, $options);
+        
+        // Set charset for proper UTF-8 support
+        $charset = $perfConfig['db_charset'] ?? 'utf8mb4';
+        $collation = $perfConfig['db_collation'] ?? 'utf8mb4_unicode_ci';
+        $this->pdo->exec("SET NAMES '{$charset}' COLLATE '{$collation}'");
     }
 
     /**
