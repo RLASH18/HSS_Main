@@ -29,7 +29,7 @@
             </div>
 
             <!-- Image Gallery Thumbnails -->
-            <div class="flex flex-wrap gap-2 sm:space-x-3">
+            <div class="flex flex-wrap gap-2 sm:space-x-3" id="thumbnailGallery">
                 <div class="flex items-center mr-2 sm:mr-4 text-xs sm:text-sm text-gray-500">
                     <span id="currentImageIndex">1</span> / <span id="totalImages">3</span> images
                 </div>
@@ -112,8 +112,8 @@
                             </svg>
                         </button>
 
-                        <input type="number" id="qtyInput" value="1" min="1" max="<?= $items->quantity ?>" class="w-20 sm:w-24 text-base sm:text-lg text-center font-semibold border-2 border-gray-300 rounded-lg py-2 focus:border-[#815331] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            onchange="updateQtyFromInput()" oninput="updateQtyFromInput()">
+                        <input type="number" id="qtyInput" value="1" min="0" max="<?= $items->quantity ?>" class="w-20 sm:w-24 text-base sm:text-lg text-center font-semibold border-2 border-gray-300 rounded-lg py-2 focus:border-[#815331] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            onchange="updateQtyFromInput()" oninput="updateQtyFromInput()" onblur="validateQtyOnBlur()">
 
                         <button type="button" onclick="increaseQty()"
                             class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-600 hover:border-[#815331] hover:text-[#815331] transition-colors">
@@ -377,7 +377,7 @@
 
     // Hide thumbnails if less than 2 images
     if (totalImages < 2) {
-        const thumbnailContainer = document.querySelector('.flex.space-x-3');
+        const thumbnailContainer = document.getElementById('thumbnailGallery');
         if (thumbnailContainer) {
             thumbnailContainer.style.display = 'none';
         }
@@ -447,12 +447,12 @@
 
     function updateBtnState() {
         const isOutOfStock = maxQty === 0;
-        const isOverStock = qty > maxQty;
+        const isInvalidQty = qty < 1 || qty > maxQty || isNaN(qty);
 
-        addBtn.disabled = isOutOfStock || isOverStock;
-        buyBtn.disabled = isOutOfStock || isOverStock;
+        addBtn.disabled = isOutOfStock || isInvalidQty;
+        buyBtn.disabled = isOutOfStock || isInvalidQty;
 
-        if (isOutOfStock) {
+        if (isOutOfStock || isInvalidQty) {
             addBtn.classList.add('opacity-50', 'cursor-not-allowed');
             buyBtn.classList.add('opacity-50', 'cursor-not-allowed');
         } else {
@@ -481,17 +481,34 @@
 
     function updateQtyFromInput() {
         let inputValue = parseInt(qtyElement.value);
+        
+        // Allow empty or 0 while typing, but disable buttons
+        if (qtyElement.value === '' || isNaN(inputValue) || inputValue < 1) {
+            qty = NaN; // Mark as invalid
+            qtyInput.value = qtyElement.value; // Keep the typed value
+            updateBtnState();
+            return;
+        }
 
-        if (isNaN(inputValue) || inputValue < 1) {
-            inputValue = 1;
-        } else if (inputValue > maxQty) {
+        // Cap at max quantity
+        if (inputValue > maxQty) {
             inputValue = maxQty;
+            qtyElement.value = maxQty;
         }
 
         qty = inputValue;
-        qtyElement.value = qty;
         qtyInput.value = qty;
         updateBtnState();
+    }
+
+    function validateQtyOnBlur() {
+        // When user leaves the input, if it's empty or invalid, reset to 1
+        if (qtyElement.value === '' || isNaN(parseInt(qtyElement.value)) || parseInt(qtyElement.value) < 1) {
+            qty = 1;
+            qtyElement.value = 1;
+            qtyInput.value = 1;
+            updateBtnState();
+        }
     }
 
     function buyNow() {
