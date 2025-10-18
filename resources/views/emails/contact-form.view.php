@@ -3,14 +3,46 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Form Message</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                padding: 20px !important;
+            }
+            .email-body {
+                padding: 20px !important;
+            }
+            h2 {
+                font-size: 20px !important;
+            }
+            h3 {
+                font-size: 16px !important;
+            }
+            .info-box {
+                padding: 12px !important;
+            }
+            blockquote {
+                padding: 12px !important;
+                font-size: 14px !important;
+            }
+        }
+        @media only screen and (min-width: 601px) and (max-width: 768px) {
+            .email-container {
+                padding: 30px !important;
+            }
+            .email-body {
+                padding: 30px !important;
+            }
+        }
+    </style>
 </head>
 
-<body style="font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.8; color: #333; margin: 0; padding: 40px; background-color: #f5f5f5;">
+<body style="font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.8; color: #333; margin: 0; padding: 40px; background-color: #f5f5f5;" class="email-container">
 
     <!-- Center container -->
-    <div style="max-width: 700px; margin: 0 auto; background-color: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <div style="max-width: 700px; margin: 0 auto; background-color: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);" class="email-body">
 
         <!-- Letterhead / Header -->
         <div style="text-align: center; margin-bottom: 30px;">
@@ -32,7 +64,7 @@
         </p>
 
         <!-- Customer Information -->
-        <div style="margin: 20px 0; padding: 15px; border: 1px solid #815331; border-radius: 6px; background: #FDFDFD;">
+        <div style="margin: 20px 0; padding: 15px; border: 1px solid #815331; border-radius: 6px; background: #FDFDFD;" class="info-box">
             <h3 style="margin-top: 0;">Customer Information</h3>
             <p style="margin: 5px 0;">
                 <strong>Name:</strong> <?= htmlspecialchars($name) ?><br>
@@ -48,7 +80,7 @@
         </div>
 
         <!-- Message Summary -->
-        <div style="margin: 20px 0; padding: 15px; border: 1px solid #815331; border-radius: 6px; background: #FDFDFD;">
+        <div style="margin: 20px 0; padding: 15px; border: 1px solid #815331; border-radius: 6px; background: #FDFDFD;" class="info-box">
             <h3 style="margin-top: 0;">Message Summary</h3>
             <p style="margin: 5px 0;">
                 <strong>Subject:</strong> <?= htmlspecialchars($subject) ?><br>
