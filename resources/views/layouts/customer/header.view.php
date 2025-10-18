@@ -35,7 +35,12 @@
                     </div>
                 </a>
 
-                <!-- Search Bar -->
+                <!-- Search Bar (Only on Home Page) -->
+                <?php
+                $currentPath = $_SERVER['REQUEST_URI'] ?? '';
+                $isHomePage = (strpos($currentPath, '/customer/home') === 0);
+                ?>
+                <?php if ($isHomePage): ?>
                 <div class="search-container hidden md:block">
                     <div class="relative">
                         <svg class="search-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -44,6 +49,7 @@
                         <input type="text" class="search-input" placeholder="Search Item" id="searchInput">
                     </div>
                 </div>
+                <?php endif; ?>
 
                 <!-- Right Side Icons -->
                 <div class="flex items-center gap-3 flex-shrink-0">
@@ -164,7 +170,8 @@
             </div>
         </div>
 
-        <!-- Mobile Search Bar -->
+        <!-- Mobile Search Bar (Only on Home Page) -->
+        <?php if ($isHomePage): ?>
         <div class="md:hidden bg-white border-b border-gray-200">
             <div class="container mx-auto px-4 py-2">
                 <div class="relative">
@@ -175,6 +182,7 @@
                 </div>
             </div>
         </div>
+        <?php endif; ?>
 
         <!-- Breadcrumb Navigation -->
         <div class="bg-white">
