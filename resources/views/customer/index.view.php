@@ -28,8 +28,9 @@
                 ?>
                 <div class="flex items-center justify-center flex-col gap-1 sm:gap-2 p-2 <?= $isSelected ? 'border-2 border-[#815331] rounded-lg' : '' ?>">
                     <a href="/customer/home/category/<?= urlencode($category) ?>">
-                        <img src="/assets/img/customer_page_categories/<?= $imageName ?>" alt="<?= $category ?>"
-                            class="transition-transform duration-300 hover:scale-95 w-full">
+                        <img data-src="/assets/img/customer_page_categories/<?= $imageName ?>" 
+                            alt="<?= $category ?>"
+                            class="lazy-image transition-transform duration-300 hover:scale-95 w-full opacity-0">
                     </a>
                     <p class="text-xs sm:text-sm text-center <?= $isSelected ? 'text-[#815331] font-semibold' : 'text-gray-700 font-medium' ?>">
                         <?= $category ?>
@@ -132,9 +133,14 @@
                         <a href="/customer/item/<?= $item->id ?>" class="block-group">
                             <div class="overflow-hidden transition-all duration-300 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-lg hover:-translate-y-1">
                                 <!-- Product Image Container -->
-                                <div class="flex items-center justify-center h-40 sm:h-48 p-2 bg-gray-100">
-                                    <img src="/storage/items-img/<?= $item->item_image_1 ?>" alt="<?= $item->item_name ?>"
-                                        class="object-contain max-w-full max-h-full transition-transform duration-300 group-hover:scale-105">
+                                <div class="flex items-center justify-center h-40 sm:h-48 p-2 bg-gray-100 relative overflow-hidden">
+                                    <!-- Shimmer Loading Placeholder -->
+                                    <div class="lazy-placeholder absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
+                                    
+                                    <!-- Lazy Loaded Image -->
+                                    <img data-src="/storage/items-img/<?= $item->item_image_1 ?>" 
+                                        alt="<?= $item->item_name ?>"
+                                        class="lazy-image object-contain max-w-full max-h-full transition-all duration-500 opacity-0 group-hover:scale-105">
                                 </div>
 
                                 <div class="p-3 sm:p-4 space-y-2">
@@ -390,6 +396,69 @@
             applyFilters();
         });
     });
+
+    // ============================================
+    // LAZY LOADING SYSTEM - Simple & Effective
+    // ============================================
+    
+    // Lazy Loading with Intersection Observer
+    const lazyImages = document.querySelectorAll('.lazy-image');
+    
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                const placeholder = img.previousElementSibling;
+                
+                // Load the image
+                img.src = img.dataset.src;
+                
+                // When image loads successfully
+                img.onload = () => {
+                    // Remove shimmer placeholder
+                    if (placeholder && placeholder.classList.contains('lazy-placeholder')) {
+                        placeholder.style.opacity = '0';
+                        setTimeout(() => placeholder.remove(), 300);
+                    }
+                    
+                    // Fade in the image with cool effect
+                    img.style.opacity = '1';
+                    img.classList.add('loaded');
+                };
+                
+                // Handle image load errors
+                img.onerror = () => {
+                    if (placeholder && placeholder.classList.contains('lazy-placeholder')) {
+                        placeholder.remove();
+                    }
+                    img.style.opacity = '0.5';
+                    img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Crect fill="%23f0f0f0" width="100" height="100"/%3E%3Ctext x="50" y="50" font-family="Arial" font-size="14" fill="%23999" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
+                };
+                
+                // Stop observing this image
+                observer.unobserve(img);
+            }
+        });
+    }, {
+        // Load images 200px before they enter viewport
+        rootMargin: '200px',
+        threshold: 0.01
+    });
+    
+    // Start observing all lazy images
+    lazyImages.forEach(img => imageObserver.observe(img));
+    
+    // Fallback for browsers without Intersection Observer
+    if (!('IntersectionObserver' in window)) {
+        lazyImages.forEach(img => {
+            img.src = img.dataset.src;
+            img.style.opacity = '1';
+            const placeholder = img.previousElementSibling;
+            if (placeholder && placeholder.classList.contains('lazy-placeholder')) {
+                placeholder.remove();
+            }
+        });
+    }
 </script>
 
 <?php layout('customer/footer') ?>

@@ -1412,3 +1412,54 @@ input[type="checkbox"] {
     margin: 0;
     line-height: 1.5;
 }
+
+/* ============================================ */
+/* LAZY LOADING STYLES - Cool Shimmer Effect */
+/* ============================================ */
+
+/* Shimmer animation keyframes */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+/* Apply shimmer animation */
+.animate-shimmer {
+    animation: shimmer 2s infinite linear;
+    background-size: 1000px 100%;
+}
+
+/* Lazy placeholder styling */
+.lazy-placeholder {
+    transition: opacity 0.3s ease-out;
+}
+
+/* Lazy image transitions */
+.lazy-image {
+    transition: opacity 0.5s ease-out, transform 0.3s ease-out;
+}
+
+.lazy-image.loaded {
+    animation: fadeInScale 0.5s ease-out;
+}
+
+/* Cool fade-in with slight scale effect */
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Smooth opacity transition */
+.lazy-image:not(.loaded) {
+    opacity: 0;
+}
