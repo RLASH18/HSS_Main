@@ -395,70 +395,79 @@
             document.getElementById('current-max-price').value = this.value;
             applyFilters();
         });
-    });
 
-    // ============================================
-    // LAZY LOADING SYSTEM - Simple & Effective
-    // ============================================
-    
-    // Lazy Loading with Intersection Observer
-    const lazyImages = document.querySelectorAll('.lazy-image');
-    
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                const placeholder = img.previousElementSibling;
-                
-                // Load the image
-                img.src = img.dataset.src;
-                
-                // When image loads successfully
-                img.onload = () => {
-                    // Remove shimmer placeholder
-                    if (placeholder && placeholder.classList.contains('lazy-placeholder')) {
-                        placeholder.style.opacity = '0';
-                        setTimeout(() => placeholder.remove(), 300);
+        // ============================================
+        // LAZY LOADING SYSTEM - Simple & Effective
+        // ============================================
+        
+        // Wait for pagination to be set up, then initialize lazy loading
+        setTimeout(() => {
+            const lazyImages = document.querySelectorAll('.lazy-image');
+            
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        
+                        // Check if the image's parent container is actually visible (not hidden by pagination)
+                        const parentCard = img.closest('.block-group');
+                        if (parentCard && window.getComputedStyle(parentCard).display === 'none') {
+                            return; // Skip loading if parent is hidden
+                        }
+                        
+                        const placeholder = img.previousElementSibling;
+                        
+                        // Load the image
+                        img.src = img.dataset.src;
+                        
+                        // When image loads successfully
+                        img.onload = () => {
+                            // Remove shimmer placeholder
+                            if (placeholder && placeholder.classList.contains('lazy-placeholder')) {
+                                placeholder.style.opacity = '0';
+                                setTimeout(() => placeholder.remove(), 300);
+                            }
+                            
+                            // Fade in the image with cool effect
+                            img.style.opacity = '1';
+                            img.classList.add('loaded');
+                        };
+                        
+                        // Handle image load errors
+                        img.onerror = () => {
+                            if (placeholder && placeholder.classList.contains('lazy-placeholder')) {
+                                placeholder.remove();
+                            }
+                            img.style.opacity = '0.5';
+                            img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Crect fill="%23f0f0f0" width="100" height="100"/%3E%3Ctext x="50" y="50" font-family="Arial" font-size="14" fill="%23999" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
+                        };
+                        
+                        // Stop observing this image
+                        observer.unobserve(img);
                     }
-                    
-                    // Fade in the image with cool effect
+                });
+            }, {
+                // Load images 200px before they enter viewport
+                rootMargin: '200px',
+                threshold: 0.01
+            });
+            
+            // Start observing all lazy images
+            lazyImages.forEach(img => imageObserver.observe(img));
+            
+            // Fallback for browsers without Intersection Observer
+            if (!('IntersectionObserver' in window)) {
+                lazyImages.forEach(img => {
+                    img.src = img.dataset.src;
                     img.style.opacity = '1';
-                    img.classList.add('loaded');
-                };
-                
-                // Handle image load errors
-                img.onerror = () => {
+                    const placeholder = img.previousElementSibling;
                     if (placeholder && placeholder.classList.contains('lazy-placeholder')) {
                         placeholder.remove();
                     }
-                    img.style.opacity = '0.5';
-                    img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Crect fill="%23f0f0f0" width="100" height="100"/%3E%3Ctext x="50" y="50" font-family="Arial" font-size="14" fill="%23999" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
-                };
-                
-                // Stop observing this image
-                observer.unobserve(img);
+                });
             }
-        });
-    }, {
-        // Load images 200px before they enter viewport
-        rootMargin: '200px',
-        threshold: 0.01
+        }, 200); // Wait 200ms for pagination to complete
     });
-    
-    // Start observing all lazy images
-    lazyImages.forEach(img => imageObserver.observe(img));
-    
-    // Fallback for browsers without Intersection Observer
-    if (!('IntersectionObserver' in window)) {
-        lazyImages.forEach(img => {
-            img.src = img.dataset.src;
-            img.style.opacity = '1';
-            const placeholder = img.previousElementSibling;
-            if (placeholder && placeholder.classList.contains('lazy-placeholder')) {
-                placeholder.remove();
-            }
-        });
-    }
 </script>
 
 <?php layout('customer/footer') ?>
