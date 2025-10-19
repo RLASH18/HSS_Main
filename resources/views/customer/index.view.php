@@ -134,13 +134,23 @@
                             <div class="overflow-hidden transition-all duration-300 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-lg hover:-translate-y-1">
                                 <!-- Product Image Container -->
                                 <div class="flex items-center justify-center h-40 sm:h-48 p-2 bg-gray-100 relative overflow-hidden">
-                                    <!-- Shimmer Loading Placeholder -->
-                                    <div class="lazy-placeholder absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
-                                    
-                                    <!-- Lazy Loaded Image -->
-                                    <img data-src="/storage/items-img/<?= $item->item_image_1 ?>" 
-                                        alt="<?= $item->item_name ?>"
-                                        class="lazy-image object-contain max-w-full max-h-full transition-all duration-500 opacity-0 group-hover:scale-105">
+                                    <?php if (!empty($item->item_image_1)): ?>
+                                        <!-- Shimmer Loading Placeholder (only for actual images) -->
+                                        <div class="lazy-placeholder absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
+                                        
+                                        <!-- Lazy Loaded Image -->
+                                        <img data-src="/storage/items-img/<?= $item->item_image_1 ?>" 
+                                            alt="<?= $item->item_name ?>"
+                                            class="lazy-image object-contain max-w-full max-h-full transition-all duration-500 opacity-0 group-hover:scale-105">
+                                    <?php else: ?>
+                                        <!-- No Image Placeholder -->
+                                        <div class="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                                            <svg class="w-12 h-12 sm:w-16 sm:h-16 mb-1 sm:mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                            <span class="text-[10px] sm:text-xs font-medium">No Image</span>
+                                        </div>
+                                    <?php endif ?>
                                 </div>
 
                                 <div class="p-3 sm:p-4 space-y-2">
@@ -188,7 +198,7 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="flex justify-center mt-6 pagination"></div>
+                <div class="flex flex-wrap justify-center gap-1 sm:gap-2 mt-6 pagination"></div>
             </div>
         </div>
     </div>
@@ -273,23 +283,50 @@
             if (currentPage > 1) {
                 const prevPage = currentPage - 1;
                 const prevUrl = prevPage === 1 ? window.location.pathname : `?page=${prevPage}`;
-                paginationHTML += `<a href="${prevUrl}" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Previous</a>`;
+                paginationHTML += `<a href="${prevUrl}" class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Previous</a>`;
             }
             
-            // Page numbers
-            for (let i = 1; i <= totalPages; i++) {
+            // Page numbers with limit of 5 visible pages
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            // Adjust start page if we're near the end
+            if (endPage - startPage < maxVisiblePages - 1) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            // First page + ellipsis if needed
+            if (startPage > 1) {
+                const pageUrl = window.location.pathname;
+                paginationHTML += `<a href="${pageUrl}" class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">1</a>`;
+                if (startPage > 2) {
+                    paginationHTML += `<span class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-500">...</span>`;
+                }
+            }
+            
+            // Visible page numbers
+            for (let i = startPage; i <= endPage; i++) {
                 if (i === currentPage) {
-                    paginationHTML += `<span class="px-3 py-2 text-sm font-medium text-white bg-[#815331] border border-[#815331] rounded-md">${i}</span>`;
+                    paginationHTML += `<span class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-white bg-[#815331] border border-[#815331] rounded-md">${i}</span>`;
                 } else {
                     // For page 1, use clean URL without query parameter
                     const pageUrl = i === 1 ? window.location.pathname : `?page=${i}`;
-                    paginationHTML += `<a href="${pageUrl}" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">${i}</a>`;
+                    paginationHTML += `<a href="${pageUrl}" class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">${i}</a>`;
                 }
+            }
+            
+            // Ellipsis + last page if needed
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    paginationHTML += `<span class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-500">...</span>`;
+                }
+                paginationHTML += `<a href="?page=${totalPages}" class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">${totalPages}</a>`;
             }
             
             // Next button
             if (currentPage < totalPages) {
-                paginationHTML += `<a href="?page=${currentPage + 1}" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Next</a>`;
+                paginationHTML += `<a href="?page=${currentPage + 1}" class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Next</a>`;
             }
             
             paginationContainer.innerHTML = paginationHTML;

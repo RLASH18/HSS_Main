@@ -23,9 +23,19 @@
         <!-- Product Images Gallery -->
         <div class="space-y-3 sm:space-y-4">
             <!-- Main Image Display -->
-            <div class="relative p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-2xl">
-                <img id="mainImage" src="/storage/items-img/<?= $items->item_image_1 ?>" alt="<?= $items->item_name ?>"
-                    class="object-contain w-full transition-transform cursor-pointer h-64 sm:h-80 lg:h-96 hover:scale-105">
+            <div class="relative p-4 sm:p-6 lg:p-8 bg-gray-50 rounded-2xl flex items-center justify-center">
+                <?php if (!empty($items->item_image_1)): ?>
+                    <img id="mainImage" src="/storage/items-img/<?= $items->item_image_1 ?>" alt="<?= $items->item_name ?>"
+                        class="object-contain w-full transition-transform cursor-pointer h-64 sm:h-80 lg:h-96 hover:scale-105">
+                <?php else: ?>
+                    <!-- No Image Placeholder -->
+                    <div class="flex flex-col items-center justify-center text-gray-400 h-64 sm:h-80 lg:h-96">
+                        <svg class="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 mb-3 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="text-sm sm:text-base lg:text-lg font-medium">No Image Available</span>
+                    </div>
+                <?php endif ?>
             </div>
 
             <!-- Image Gallery Thumbnails -->
@@ -34,15 +44,21 @@
                     <span id="currentImageIndex">1</span> / <span id="totalImages">3</span> images
                 </div>
                 <div class="flex space-x-2">
-                    <button onclick="selectImage(0)" class="thumbnail-btn border-2 border-[#815331] rounded-lg overflow-hidden w-12 h-12 sm:w-16 sm:h-16">
-                        <img src="/storage/items-img/<?= $items->item_image ?>" alt="Image 1" class="object-cover w-full h-full">
-                    </button>
-                    <button onclick="selectImage(1)" class="w-12 h-12 sm:w-16 sm:h-16 overflow-hidden border-2 border-gray-200 rounded-lg thumbnail-btn opacity-60">
-                        <img src="/storage/items-img/<?= $items->item_image_2 ?>" alt="Image 2" class="object-cover w-full h-full">
-                    </button>
-                    <button onclick="selectImage(2)" class="w-12 h-12 sm:w-16 sm:h-16 overflow-hidden border-2 border-gray-200 rounded-lg thumbnail-btn opacity-40">
-                        <img src="/storage/items-img/<?= $items->item_image_3 ?>" alt="Image 3" class="object-cover w-full h-full">
-                    </button>
+                    <?php if (!empty($items->item_image_1)): ?>
+                        <button onclick="selectImage(0)" class="thumbnail-btn border-2 border-[#815331] rounded-lg overflow-hidden w-12 h-12 sm:w-16 sm:h-16">
+                            <img src="/storage/items-img/<?= $items->item_image_1 ?>" alt="Image 1" class="object-cover w-full h-full">
+                        </button>
+                    <?php endif ?>
+                    <?php if (!empty($items->item_image_2)): ?>
+                        <button onclick="selectImage(1)" class="w-12 h-12 sm:w-16 sm:h-16 overflow-hidden border-2 border-gray-200 rounded-lg thumbnail-btn opacity-60">
+                            <img src="/storage/items-img/<?= $items->item_image_2 ?>" alt="Image 2" class="object-cover w-full h-full">
+                        </button>
+                    <?php endif ?>
+                    <?php if (!empty($items->item_image_3)): ?>
+                        <button onclick="selectImage(2)" class="w-12 h-12 sm:w-16 sm:h-16 overflow-hidden border-2 border-gray-200 rounded-lg thumbnail-btn opacity-40">
+                            <img src="/storage/items-img/<?= $items->item_image_3 ?>" alt="Image 3" class="object-cover w-full h-full">
+                        </button>
+                    <?php endif ?>
                 </div>
             </div>
         </div>

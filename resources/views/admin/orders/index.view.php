@@ -247,7 +247,7 @@
     </div>
 
     <!-- Pagination -->
-    <div class="pagination mt-6 flex justify-center"></div>
+    <div class="flex flex-wrap justify-center gap-1 sm:gap-2 mt-6 pagination"></div>
 </div>
 
 <!-- Progress Modal Overlay -->
@@ -320,23 +320,50 @@
             if (currentPage > 1) {
                 const prevPage = currentPage - 1;
                 const prevUrl = prevPage === 1 ? window.location.pathname : `?page=${prevPage}`;
-                paginationHTML += `<a href="${prevUrl}" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Previous</a>`;
+                paginationHTML += `<a href="${prevUrl}" class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Previous</a>`;
             }
             
-            // Page numbers
-            for (let i = 1; i <= totalPages; i++) {
+            // Page numbers with limit of 5 visible pages
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            // Adjust start page if we're near the end
+            if (endPage - startPage < maxVisiblePages - 1) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            // First page + ellipsis if needed
+            if (startPage > 1) {
+                const pageUrl = window.location.pathname;
+                paginationHTML += `<a href="${pageUrl}" class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">1</a>`;
+                if (startPage > 2) {
+                    paginationHTML += `<span class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-500">...</span>`;
+                }
+            }
+            
+            // Visible page numbers
+            for (let i = startPage; i <= endPage; i++) {
                 if (i === currentPage) {
-                    paginationHTML += `<span class="px-3 py-2 text-sm font-medium text-white bg-[#815331] border border-[#815331] rounded-md">${i}</span>`;
+                    paginationHTML += `<span class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-white bg-[#815331] border border-[#815331] rounded-md">${i}</span>`;
                 } else {
                     // For page 1, use clean URL without query parameter
                     const pageUrl = i === 1 ? window.location.pathname : `?page=${i}`;
-                    paginationHTML += `<a href="${pageUrl}" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">${i}</a>`;
+                    paginationHTML += `<a href="${pageUrl}" class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">${i}</a>`;
                 }
+            }
+            
+            // Ellipsis + last page if needed
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    paginationHTML += `<span class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-500">...</span>`;
+                }
+                paginationHTML += `<a href="?page=${totalPages}" class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">${totalPages}</a>`;
             }
             
             // Next button
             if (currentPage < totalPages) {
-                paginationHTML += `<a href="?page=${currentPage + 1}" class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Next</a>`;
+                paginationHTML += `<a href="?page=${currentPage + 1}" class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Next</a>`;
             }
             
             paginationContainer.innerHTML = paginationHTML;
