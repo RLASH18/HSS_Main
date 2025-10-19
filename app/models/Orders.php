@@ -67,8 +67,8 @@ class Orders extends Model
 
         // For each order item, load the associated inventory item
         foreach ($this->orderItems as $item) {
-            // Assign item relation manually
-            $item->item = $item->items();
+            // Assign item relation manually (use 'items' to match the view)
+            $item->items = $item->items();
         }
 
         return $this;

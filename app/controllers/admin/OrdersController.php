@@ -34,6 +34,9 @@ class OrdersController extends Controller
     public function show($id)
     {
         $order = $this->findOrderOrFail($id);
+        
+        // Load order items with their inventory details
+        $order->loadItems();
 
         $data = [
             'title' => 'Order Details',

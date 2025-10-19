@@ -219,7 +219,7 @@
                         <!-- Item Image -->
                         <div class="flex-shrink-0">
                             <?php if (isset($item->items) && !empty($item->items->item_image_1)): ?>
-                                <img src="/storage/items-img/<?= $item->items->item_image_1 ?>"
+                                <img src="/public/storage/items-img/<?= $item->items->item_image_1 ?>"
                                     alt="<?= $item->items->item_name ?? 'Item' ?>"
                                     class="object-cover w-16 h-16 border border-gray-200 rounded-lg">
                             <?php else: ?>

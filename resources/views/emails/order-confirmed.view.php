@@ -81,7 +81,7 @@
                     <tbody>
                         <?php foreach ($items as $item): ?>
                         <tr>
-                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><?= htmlspecialchars($item->item->item_name) ?></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><?= htmlspecialchars($item->items->item_name) ?></td>
                             <td style="padding: 10px; text-align: center; border-bottom: 1px solid #eee;"><?= htmlspecialchars($item->quantity) ?></td>
                             <td style="padding: 10px; text-align: right; border-bottom: 1px solid #eee;">₱<?= number_format($item->unit_price * $item->quantity, 2) ?></td>
                         </tr>
