@@ -53,6 +53,9 @@ class InventoryController extends Controller
             'restock_threshold' => 'required'
         ]);
 
+        // Generate item code based on category
+        $inventory['item_code'] = Inventory::generateItemCode($inventory['category']);
+
         // Handle image upload
         $image1 = FileHandler::fromRequest('item_image_1');
         $image2 = FileHandler::fromRequest('item_image_2');
@@ -123,6 +126,13 @@ class InventoryController extends Controller
 
         // Get existing inventory record
         $existing = $this->findInventoryOrFail($id);
+
+        // Regenerate item code if category changed
+        if ($inventory['category'] !== $existing->category) {
+            $inventory['item_code'] = Inventory::generateItemCode($inventory['category']);
+        } else {
+            $inventory['item_code'] = $existing->item_code;
+        }
 
         // Handle multiple image uploads
         $image1 = FileHandler::fromRequest('item_image_1');
