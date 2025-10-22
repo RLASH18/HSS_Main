@@ -7,11 +7,11 @@
             <h1 class="mb-2 text-2xl sm:text-3xl font-bold text-gray-900">Checkout</h1>
             <p class="text-sm sm:text-base text-gray-600">Review your order and complete your purchase</p>
         </div>
-        <a href="<?= isset($buyNow) ? '/customer/home' : '/customer/my-cart' ?>" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 text-sm sm:text-base font-medium text-white transition-colors bg-gray-600 rounded-lg hover:bg-gray-700">
+        <a href="<?= isset($buyNow) ? '/customer/item/' . ($itemId ?? '') : '/customer/my-cart' ?>" class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 text-sm sm:text-base font-medium text-white transition-colors bg-gray-600 rounded-lg hover:bg-gray-700">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
-            <?= isset($buyNow) ? 'Continue Shopping' : 'Back to Cart' ?>
+            <?= isset($buyNow) ? 'Back to Product' : 'Back to Cart' ?>
         </a>
     </div>
 </div>
@@ -224,9 +224,23 @@
                     </div>
                 </div>
 
+                <!-- Terms and Conditions -->
+                <div class="mb-4">
+                    <label class="flex items-start cursor-pointer">
+                        <input type="checkbox" id="termsCheckbox" required
+                            class="w-4 h-4 mt-1 text-[#815331] border-gray-300 rounded focus:ring-[#815331]">
+                        <span class="ml-2 text-sm text-gray-700">
+                            I agree to the 
+                            <button type="button" id="openTermsModal" class="text-[#815331] underline hover:text-[#6d4529] font-medium">
+                                Terms and Conditions
+                            </button>
+                        </span>
+                    </label>
+                </div>
+
                 <!-- Place Order Button -->
-                <button type="submit"
-                    class="w-full bg-[#815331] text-white font-semibold py-2 sm:py-3 px-4 text-sm sm:text-base rounded-lg hover:bg-[#6d4529] transition-colors focus:ring-2 focus:ring-[#815331] focus:ring-offset-2">
+                <button type="submit" id="placeOrderBtn" disabled
+                    class="w-full bg-[#815331] text-white font-semibold py-2 sm:py-3 px-4 text-sm sm:text-base rounded-lg hover:bg-[#6d4529] transition-colors focus:ring-2 focus:ring-[#815331] focus:ring-offset-2 opacity-50 cursor-not-allowed">
                     Place Order
                 </button>
 
@@ -244,10 +258,172 @@
     </div>
 </form>
 
+<!-- Terms and Conditions Modal -->
+<div id="termsModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 transition-opacity bg-black bg-opacity-50" id="termsBackdrop"></div>
+    
+    <!-- Modal Content -->
+    <div class="flex items-center justify-center min-h-screen px-4 py-6">
+        <div class="relative w-full max-w-3xl bg-white rounded-lg shadow-xl">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-4 border-b sm:p-6">
+                <h2 class="text-xl font-bold text-gray-900 sm:text-2xl">Terms and Conditions</h2>
+                <button type="button" id="closeTermsModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-4 overflow-y-auto sm:p-6 max-h-96 sm:max-h-[500px]">
+                <div class="space-y-4 text-sm text-gray-700 sm:text-base">
+                    <section>
+                        <h3 class="mb-2 text-base font-semibold text-gray-900 sm:text-lg">1. Order Acceptance</h3>
+                        <p>By placing an order through ABG Prime Builders Supplies Inc., you agree to purchase the products listed in your order. All orders are subject to acceptance and availability.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="mb-2 text-base font-semibold text-gray-900 sm:text-lg">2. Payment Terms</h3>
+                        <p>We accept Cash on Delivery, Bank Transfer, and GCash payments. For online payments (GCash/Bank Transfer), orders will be processed after payment confirmation. Cash on Delivery orders will be confirmed upon successful delivery.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="mb-2 text-base font-semibold text-gray-900 sm:text-lg">3. Delivery Policy</h3>
+                        <p>Delivery times are estimates and may vary based on location and product availability. We will notify you of any significant delays. You must provide accurate delivery information to ensure successful delivery.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="mb-2 text-base font-semibold text-gray-900 sm:text-lg">4. Product Information</h3>
+                        <p>We strive to provide accurate product descriptions and images. However, actual products may vary slightly from images shown. All measurements and specifications are approximate.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="mb-2 text-base font-semibold text-gray-900 sm:text-lg">5. Returns and Refunds</h3>
+                        <p>Returns are accepted within 7 days of delivery for defective or damaged items. Products must be unused and in original packaging. Refunds will be processed within 7-14 business days after return approval.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="mb-2 text-base font-semibold text-gray-900 sm:text-lg">6. Cancellation Policy</h3>
+                        <p>Orders can be cancelled before shipment. Once an order has been shipped, cancellation is not possible. Contact customer support immediately if you need to cancel an order.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="mb-2 text-base font-semibold text-gray-900 sm:text-lg">7. Privacy and Data Protection</h3>
+                        <p>Your personal information will be used solely for order processing and delivery. We do not share your information with third parties except as necessary to fulfill your order.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="mb-2 text-base font-semibold text-gray-900 sm:text-lg">8. Limitation of Liability</h3>
+                        <p>ABG Prime Builders Supplies Inc. is not liable for any indirect, incidental, or consequential damages arising from the use of our products or services.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="mb-2 text-base font-semibold text-gray-900 sm:text-lg">9. Changes to Terms</h3>
+                        <p>We reserve the right to modify these terms at any time. Continued use of our services after changes constitutes acceptance of the modified terms.</p>
+                    </section>
+
+                    <section>
+                        <h3 class="mb-2 text-base font-semibold text-gray-900 sm:text-lg">10. Contact Information</h3>
+                        <p>For questions about these terms, please contact us at abgprimebuilderssuppliesinc4@gmail.com or call us during business hours (Mon-Sat: 8AM-6PM).</p>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="flex justify-end gap-3 p-4 border-t sm:p-6">
+                <button type="button" id="declineTerms" class="px-4 py-2 text-sm font-medium text-gray-700 transition-colors bg-gray-100 rounded-lg hover:bg-gray-200 sm:text-base">
+                    Decline
+                </button>
+                <button type="button" id="acceptTerms" class="px-4 py-2 text-sm font-medium text-white transition-colors bg-[#815331] rounded-lg hover:bg-[#6d4529] sm:text-base">
+                    Accept Terms
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('checkoutForm');
+        const termsModal = document.getElementById('termsModal');
+        const termsCheckbox = document.getElementById('termsCheckbox');
+        const openTermsBtn = document.getElementById('openTermsModal');
+        const closeTermsBtn = document.getElementById('closeTermsModal');
+        const termsBackdrop = document.getElementById('termsBackdrop');
+        const acceptTermsBtn = document.getElementById('acceptTerms');
+        const declineTermsBtn = document.getElementById('declineTerms');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
 
+        // Function to check if all required fields are selected
+        function checkFormCompletion() {
+            const paymentMethod = document.querySelector('input[name="payment_method"]:checked');
+            const deliveryMethod = document.querySelector('input[name="delivery_method"]:checked');
+            const termsAccepted = termsCheckbox.checked;
+
+            // Enable button only if all three are selected
+            if (paymentMethod && deliveryMethod && termsAccepted) {
+                placeOrderBtn.disabled = false;
+                placeOrderBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                placeOrderBtn.disabled = true;
+                placeOrderBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        // Add event listeners to all required fields
+        document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+            radio.addEventListener('change', checkFormCompletion);
+        });
+
+        document.querySelectorAll('input[name="delivery_method"]').forEach(radio => {
+            radio.addEventListener('change', checkFormCompletion);
+        });
+
+        termsCheckbox.addEventListener('change', checkFormCompletion);
+
+        // Open modal when clicking "Terms and Conditions" link
+        openTermsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            termsModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        });
+
+        // Close modal function
+        function closeModal() {
+            termsModal.classList.add('hidden');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        // Close modal when clicking X button
+        closeTermsBtn.addEventListener('click', closeModal);
+
+        // Close modal when clicking backdrop
+        termsBackdrop.addEventListener('click', closeModal);
+
+        // Accept terms button
+        acceptTermsBtn.addEventListener('click', function() {
+            termsCheckbox.checked = true;
+            checkFormCompletion(); // Check if button should be enabled
+            closeModal();
+        });
+
+        // Decline terms button
+        declineTermsBtn.addEventListener('click', function() {
+            termsCheckbox.checked = false;
+            checkFormCompletion(); // Check if button should be disabled
+            closeModal();
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !termsModal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+        // Form validation
         form.addEventListener('submit', function(e) {
             const paymentMethod = document.querySelector('input[name="payment_method"]:checked');
             const deliveryAddress = document.getElementById('delivery_address').value.trim();
@@ -267,7 +443,13 @@
 
             if (!deliveryMethod) {
                 e.preventDefault();
-                alert('Please enter your address.');
+                alert('Please select a delivery method.');
+                return;
+            }
+
+            if (!termsCheckbox.checked) {
+                e.preventDefault();
+                alert('Please accept the Terms and Conditions to proceed.');
                 return;
             }
         });

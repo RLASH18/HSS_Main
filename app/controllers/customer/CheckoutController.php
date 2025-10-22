@@ -235,7 +235,8 @@ class CheckoutController extends Controller
             'subtotal' => $subtotal,
             'total' => $subtotal,
             'user' => auth(),
-            'buyNow' => true // Flag to indicate this is buy now flow
+            'buyNow' => true, // Flag to indicate this is buy now flow
+            'itemId' => $item->id // Store item ID for back button
         ];
 
         return $this->view('customer/checkout', $checkoutData);
