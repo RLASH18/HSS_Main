@@ -78,6 +78,14 @@
             <!-- Product Title -->
             <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900"><?= ucfirst($items->item_name) ?></h1>
 
+            <!-- Item Code -->
+            <div class="flex items-center text-sm text-gray-600">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path>
+                </svg>
+                Item Code: <span class="ml-1 font-medium text-gray-900"><?= $items->item_code ?></span>
+            </div>
+
             <!-- Brand Info -->
             <div class="flex items-center text-sm text-gray-600">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
