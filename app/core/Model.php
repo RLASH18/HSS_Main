@@ -489,6 +489,50 @@ abstract class Model
     }
 
     /**
+     * Find records with conditions, ordering, and limit.
+     * 
+     * @param array $conditions Key-value pairs for WHERE clause
+     * @param string $orderBy Column to order by
+     * @param string $direction Sort direction (ASC or DESC)
+     * @param int $limit Number of records to return
+     * @param bool $single If true, return single record or null
+     * @return static[]|static|null
+     */
+    public static function whereManyOrdered(array $conditions, string $orderBy, string $direction = 'DESC', int $limit = 1, bool $single = true)
+    {
+        $table = static::tableName();
+        $whereParts = [];
+
+        foreach ($conditions as $key => $value) {
+            if ($value === null) {
+                $whereParts[] = "$key IS NULL";
+            } else {
+                $whereParts[] = "$key = :$key";
+            }
+        }
+
+        $whereClause = implode(' AND ', $whereParts);
+        $sql = "SELECT * FROM $table WHERE $whereClause ORDER BY $orderBy $direction LIMIT :limit";
+
+        $stmt = self::prepare($sql);
+
+        foreach ($conditions as $key => $value) {
+            if ($value !== null) {
+                $stmt->bindValue(":$key", $value);
+            }
+        }
+        
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($single) {
+            return $stmt->fetchObject(static::class) ?: null;
+        }
+
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
+    }
+
+    /**
      * Get the sum of a column with optional conditions.
      *
      * @param string $column The column to sum.
