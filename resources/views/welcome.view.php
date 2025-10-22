@@ -119,7 +119,10 @@
                     </div>
                 </div>
                 <div class="flex justify-center about-image-container lg:justify-end">
-                    <div class="relative overflow-hidden group">
+                    <a href="https://www.google.com/maps/place/ABG+Prime+Builders+Supplies+Inc./@14.6875245,121.0867552,17z/data=!3m1!4b1!4m6!3m5!1s0x3397ba0401d59dfd:0xb410d8e61aa04983!8m2!3d14.6875245!4d121.0867552!16s%2Fg%2F11b8_x9k68?entry=ttu&g_ep=EgoyMDI1MTAyMC4wIKXMDSoASAFQAw%3D%3D" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       class="relative overflow-hidden group block cursor-pointer">
                         <img src="assets/img/about.jpg" alt="ABG Shop" class="about-image" />
                         <div class="about-image-overlay">
                             <div class="about-image-text">
@@ -128,9 +131,10 @@
                                 </svg>
                                 <p class="text-lg font-bold">Visit Our Store</p>
                                 <p class="text-sm">Lot 28 Blk 11 170 Commonwealth Avenue Quezon City 1127</p>
+                                <p class="text-xs mt-2 opacity-90">📍 Click to view on Google Maps</p>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
