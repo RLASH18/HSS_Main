@@ -1,15 +1,15 @@
-# 🏢 System Overview
+# System Overview
 
 ## About ABG Prime Builders Supplies Inc.
 
 **ABG Prime Builders Supplies Inc.**  
-📍 L28, Block 11, km 17 Commonwealth Ave, Quezon City, 1127 Metro Manila
+L28, Block 11, km 17 Commonwealth Ave, Quezon City, 1127 Metro Manila
 
 This Inventory and Order Management System was developed as a **thesis project** focusing on **Parallel and Distributed Systems**. The system demonstrates distributed architecture through its modular design, with separate functional modules handling different aspects of the business operations.
 
 ---
 
-## 🎓 Thesis Project Context
+## Thesis Project Context
 
 **Project Type**: Parallel and Distributed System  
 **Architecture**: Distributed Modular System
@@ -18,35 +18,35 @@ The system is designed as a **distributed system** with independent modules that
 
 ---
 
-## 🔧 System Architecture
+## System Architecture
 
 ### Admin Side Modules
 
 The administrative interface consists of five main modules:
 
-#### 1. 📦 Inventory Module
+#### 1. Inventory Module
 - **Items Management**: CRUD operations for product catalog
 - **Supplier Management**: Manage supplier information and relationships
 - Track stock levels and product details
 
-#### 2. 📋 Orders Module
+#### 2. Orders Module
 - View and manage customer orders
 - Order status tracking
 - Order processing workflow
 
-#### 3. 💰 Billing Module
+#### 3. Billing Module
 - Generate billing information for orders
 - Track payment status
 - Payment method management
 - Print receipts (bond paper format)
 
-#### 4. 🚚 Delivery Module
+#### 4. Delivery Module
 - Manage delivery schedules
 - Track delivery status
 - Proof of delivery uploads
 - Delivery status updates (Pending → Assembled → In Transit → Delivered)
 
-#### 5. 📊 Reports Module
+#### 5. Reports Module
 - Generate business reports
 - Analytics and insights
 - Order and inventory reporting
@@ -55,12 +55,12 @@ The administrative interface consists of five main modules:
 
 The customer-facing interface provides a complete e-commerce experience:
 
-#### 🛍️ Shopping Features
+#### Shopping Features
 - **Browse Items**: View product catalog with details
 - **Shopping Cart**: Add items to cart
 - **Checkout Process**: Complete purchase workflow
 
-#### 💳 Payment Options
+#### Payment Options
 - **Cash on Delivery (COD)**: Pay upon delivery
 - **GCash**: Mobile wallet payment
 - **Bank Transfer**: Direct bank payment
@@ -69,7 +69,7 @@ The customer-facing interface provides a complete e-commerce experience:
 
 ---
 
-## 🔌 Third-Party Integrations
+## Third-Party Integrations
 
 ### 1. Email Validation - Abstract API
 **Purpose**: User registration email verification  
@@ -107,7 +107,7 @@ The customer-facing interface provides a complete e-commerce experience:
 
 ---
 
-## 🎯 System Workflow
+## System Workflow
 
 ### Customer Registration Flow
 1. Customer fills out registration form
@@ -122,9 +122,9 @@ The customer-facing interface provides a complete e-commerce experience:
 3. Customer selects payment method (COD/GCash/Bank Transfer)
 4. Order is created with "Pending" status
 5. Admin confirms order → Status: "Confirmed"
-   - ✉️ Email sent to customer with order details
+   - Email sent to customer with order details
 6. Admin prepares order → Status: "Assembled"
-   - 📱 SMS sent to customer
+   - SMS sent to customer
 7. Order is shipped → Status: "In Transit"
 8. Order delivered → Status: "Delivered"
 
@@ -137,7 +137,7 @@ The customer-facing interface provides a complete e-commerce experience:
 
 ---
 
-## 🔐 Security Features
+## Security Features
 
 - **Email Validation**: Prevents fake account creation
 - **CSRF Protection**: Built-in token validation
@@ -146,7 +146,7 @@ The customer-facing interface provides a complete e-commerce experience:
 
 ---
 
-## 📱 Communication Channels
+## Communication Channels
 
 | Event | Channel | Provider | Recipient |
 |-------|---------|----------|-----------|
@@ -157,7 +157,7 @@ The customer-facing interface provides a complete e-commerce experience:
 
 ---
 
-## 🚀 Technology Stack
+## Technology Stack
 
 - **Backend Framework**: Custom PHP MVC Framework
 - **Database**: MySQL/MariaDB
@@ -169,7 +169,7 @@ The customer-facing interface provides a complete e-commerce experience:
 
 ---
 
-## 📝 Notes
+## Notes
 
 This system demonstrates distributed architecture principles through:
 - **Modular Design**: Independent functional modules

@@ -1,19 +1,19 @@
-# 🚀 Custom PHP MVC Framework
+# Custom PHP MVC Framework
 
 > Welcome to your very own PHP MVC Application — a modern, lightweight PHP MVC framework designed for rapid web application development.  
 > This framework is built from scratch, featuring a clean architecture, robust routing, session and flash messaging, CSRF protection, and a simple ORM-like model layer.
 
 ---
 
-## 🏢 About This System
+## About This System
 
 This framework powers the **Inventory and Order Management System** for **ABG Prime Builders Supplies Inc.**, developed as a thesis project demonstrating distributed system architecture.
 
-📖 For detailed information about the system, modules, and third-party integrations, see [SYSTEM_OVERVIEW.md](SYSTEM_OVERVIEW.md).
+For detailed information about the system, modules, and third-party integrations, see [SYSTEM_OVERVIEW.md](SYSTEM_OVERVIEW.md).
 
 ---
 
-## ✨ Features
+## Features
 
 - **MVC Architecture**: Clean separation of concerns with Controllers, Models, and Views.
 - **Elegant Routing**: Grouped routes, controller binding, and middleware support (auth, guest, CSRF).
@@ -30,7 +30,7 @@ This framework powers the **Inventory and Order Management System** for **ABG Pr
 
 ---
 
-## 📋 Requirements
+## Requirements
 
 Before you begin, ensure your development environment meets the following requirements:
 
@@ -42,7 +42,7 @@ Before you begin, ensure your development environment meets the following requir
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```plaintext
 Project_root/
@@ -76,7 +76,7 @@ Project_root/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. **Clone the Repository**
 
@@ -178,7 +178,7 @@ If using Apache, the included `.htaccess` in `public/` enables pretty URLs:
 
 ---
 
-## 🛠️ Application Overview
+## Application Overview
 
 ### Application Bootstrap
 - **public/index.php**: Entry point, loads the app and routes, then runs the application.
@@ -290,7 +290,7 @@ Cache settings can be configured in your config files:
 
 ---
 
-## 🧩 Example: Register Route
+## Example: Register Route
 
 ```php
 // GET /register → shows the registration form
@@ -299,7 +299,7 @@ Cache settings can be configured in your config files:
 
 ---
 
-## 🎨 Design & Philosophy
+## Design & Philosophy
 
 - **Minimalism**: Only what you need, clearly named.
 - **Readability**: Clear, well-documented code.
@@ -308,13 +308,13 @@ Cache settings can be configured in your config files:
 
 ---
 
-## 🧙 About the Framework
+## About the Framework
 
 This is a made-up, educational PHP MVC framework inspired by Laravel, CodeIgniter, and Symfony, but designed for learning and rapid prototyping.  
 
 ---
 
-## 👑 Author
+## Author
 
 - **RLASH18** (lacdangryan18@gmail.com)
 
